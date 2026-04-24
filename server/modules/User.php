@@ -2,11 +2,30 @@
 
     namespace app\modules;
 
-    use app\Db;
+    use app\core\Db;
 
     class User extends Runner {
+        public function __construct(private readonly Db $db) {}
 
+
+//        WHERE (product = 10 AND product = 20)
         protected function isAuth() {
+            $this->db->query()
+                ->where(function($qb) {
+                    $qb->where('product', '=', 10)
+                        ->where('product', '=', 20);
+                });
+
+
+
+
+
+
+
+
+
+
+
 
             exit(json_encode($this->isUserSessionIsset));
         }

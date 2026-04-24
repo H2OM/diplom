@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import './page.scss';
-import MiniSlider from "@/lib/basecomponents/miniSlider/miniSlider";
-import MainSlider from "@/components/mainSlider/client/MainSlider";
+import MiniSlider from "@/baseComps/miniSlider/miniSlider";
+import MainSlider from "@/comps/mainSlider/client/MainSlider";
 import GET_DATA from "@/lib/GETDATA/GET_DATA";
-export default async function Page() {
 
+export default async function Page() {
     const data = await GET_DATA({controller: 'media', action: 'main-info'});
 
     if(!data) {

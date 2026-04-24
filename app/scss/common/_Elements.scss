@@ -1,7 +1,9 @@
+@use "Vars";
+
 .btn  {
     color: white;
     font-size: 16px;
-    background-color: $dark-purple;
+    background-color: Vars.$dark-purple;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,7 +20,7 @@
         color: white;
     }
     &:active {
-        background-color: $dark-purple;
+        background-color: Vars.$dark-purple;
         transition: 0s all;
     }
     &_small {
@@ -50,10 +52,10 @@
     }
     &_disabled {
         &:hover {
-            background-color: $dark-purple;
+            background-color: Vars.$dark-purple;
         }
         &:active {
-            background-color: $dark-purple;
+            background-color: Vars.$dark-purple;
             transition: 0s all;
         }
     }
@@ -73,13 +75,13 @@
     &__count {
         text-indent: 10px;
         font-weight: 300;
-        color: $light-black;
+        color: Vars.$light-black;
         font-size: 24px;
     }
     &__type {
         font-size: 14px;
         font-weight: 400;
-        color: $light-black;
+        color: Vars.$light-black;
     }
     &_lite {
         font-size: 18px;
@@ -111,17 +113,17 @@
         display: flex;
         justify-content: center;
         align-items:center;
-        background-color: $dark-purple;
+        background-color: Vars.$dark-purple;
         height: 32px;
         width: 32px;
         border-radius: 5px;
         transition: 0.2s all;
         cursor: pointer;
         &:hover {
-            box-shadow: -4px 4px 0px 0px $suberblack-purple;
+            box-shadow: -4px 4px 0px 0px Vars.$suberblack-purple;
         }
         &:active {
-            box-shadow: 0px 0px 0px 0px $dark-purple;
+            box-shadow: 0px 0px 0px 0px Vars.$dark-purple;
         }
         &::before {
             content: "";
@@ -139,10 +141,10 @@
             margin-left: 5px;
             transform: rotate(180deg);
             &:hover {
-                box-shadow: -4px -4px 0px 0px $suberblack-purple;
+                box-shadow: -4px -4px 0px 0px Vars.$suberblack-purple;
             }
             &:active {
-                box-shadow: 0px 0px 0px 0px $dark-purple;
+                box-shadow: 0px 0px 0px 0px Vars.$dark-purple;
             }
         }
     }
@@ -162,7 +164,7 @@
             border-radius: 5px;
             cursor: pointer;
             &_active {
-                background-color: $light-purple;
+                background-color: Vars.$light-purple;
             }
         }
         &__dot {

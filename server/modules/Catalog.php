@@ -1,7 +1,7 @@
 <?php
     namespace app\modules;
 
-    use app\Db;
+    use app\core\Db;
 
     class Catalog extends Runner {
 
