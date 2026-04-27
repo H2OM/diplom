@@ -2,15 +2,19 @@
 
 namespace app\services;
 
-/** Сервис для авторизации и авторизационных данных */
-class AuthService {
+use app\core\Session;
+
+/** Сервис для управления авторизации и авторизационных данных */
+readonly class AuthService {
+    public function __construct(private Session $session) {}
+
     /**
      * Проверка существования пользователя
      *
      * @return bool
      */
     public function check(): bool {
-        return !empty($_SESSION['user']);
+        return !empty($this->session->has('user'));
     }
 
     /**
@@ -19,7 +23,17 @@ class AuthService {
      * @return array|null
      */
     public function user(): ?array {
-        return $_SESSION['user'] ?? null;
+        return $this->session->get('user');
+    }
+
+    /**
+     * Добавление пользователя в сессию
+     *
+     * @param array $userData
+     * @return void
+     */
+    public function login(array $userData): void {
+        $this->session->set('user', $userData);
     }
 
     /**
@@ -28,6 +42,6 @@ class AuthService {
      * @return int|null
      */
     public function id(): ?int {
-        return $_SESSION['user']['id'] ?? null;
+        return $this->session->get('user')['id'] ?? null;
     }
 }

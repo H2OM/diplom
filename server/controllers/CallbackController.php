@@ -6,8 +6,9 @@ use app\core\Request;
 use app\core\Response;
 use app\core\Validator;
 
-class CallbackController {
-    public function __construct(private readonly Validator $validator, private readonly Request $request) {}
+/** Контролер для управления обратной связи */
+readonly class CallbackController {
+    public function __construct(private Validator $validator, private Request $request) {}
 
     /**
      * Обработка формы подписки на новости

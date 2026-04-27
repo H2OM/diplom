@@ -63,6 +63,12 @@
             return $this->preparedExecute($sql, $params)->fetchColumn();
         }
 
+        public function fetchInsertId(string $sql, array $params = []): string|false {
+            $this->preparedExecute($sql, $params);
+
+            return $this->pdo->lastInsertId();
+        }
+
         /**
          * Выполнение запроса и возвращение состояния
          *

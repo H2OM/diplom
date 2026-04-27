@@ -198,6 +198,22 @@ class QueryBuilder {
     }
 
     /**
+     * Выполнение SQL запроса. Вставка значений
+     *
+     * @param array $insertData
+     * @return string|false
+     */
+    public function insert(array $insertData): string|false {
+
+        $columns = implode(', ', array_keys($insertData));
+        $placeholders = implode(', ', array_fill(0, count($insertData), '?'));
+
+        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
+
+        return $this->db->fetchInsertId($sql, $this->bindings);
+    }
+
+    /**
      * Выполнение SQL запроса. Получение всех строк
      *
      * @return array

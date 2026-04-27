@@ -6,8 +6,9 @@ use app\core\Db;
 use app\core\Response;
 use app\services\AuthService;
 
-class MediaController {
-    public function __construct(private readonly Db $db, private readonly AuthService $authService) {}
+/** Контролер для управления главной информацией */
+readonly class MediaController {
+    public function __construct(private Db $db, private AuthService $authService) {}
 
     /**
      * Получение основной информации

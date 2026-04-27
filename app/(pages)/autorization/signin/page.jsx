@@ -47,8 +47,8 @@ export default function Signin () {
                     <MaskInput className={"Autorization__content__form__input"} name={"number"} always={true} required/>
                     <label className="Autorization__content__form__label" htmlFor="password" required>Пароль:</label>
                     <input className="Autorization__content__form__input" type="password" name="password"/>
-                    <label className="Autorization__content__form__label" htmlFor="rePassword" required>Повторите пароль:</label>
-                    <input className="Autorization__content__form__input" type="password" name="rePassword" onKeyDown={(e)=>{
+                    <label className="Autorization__content__form__label" htmlFor="password_confirmed" required>Повторите пароль:</label>
+                    <input className="Autorization__content__form__input" type="password" name="password_confirmed" onKeyDown={(e)=>{
                         if(e.ctrlKey && e.code == 'KeyV') {
                             e.preventDefault();
                         }

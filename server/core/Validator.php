@@ -4,105 +4,162 @@ namespace app\core;
 
 /** Валидация данных */
 class Validator {
+    private array $errors = [];
+
     /**
-     * Валидация данных с формы
+     * Валидирует входные данные по заданным правилам.
      *
-     * @param array $data
-     * @return bool|array
+     * @param array $data  Входные данные (обычно $_POST)
+     * @param array $rules Правила валидации в формате:
+     *
+     *                     [
+     *                         'field' => ['rule1', 'rule2'],
+     *                     ]
+     *
+     * Доступные правила:
+     *
+     *                     - required   Поле обязательно
+     *                     - name       Только буквы, минимум 2 символа
+     *                     - phone      Проверка телефона (RU)
+     *                     - password   Проверка сложности пароля
+     *                     - confirmed  Совпадение с field_confirmation
+     *                     - age        Возраст (14–100)
+     *                     - gender     Проверка допустимых значений
+     *                     - email      Валидный email
+     *
+     * @return array|false Возвращает валидированные данные или false при ошибке
      */
-    public function validateData(array $data): bool|array {
-        $validatedData = [];
+    public function validate(array $data, array $rules): array|false {
+        $this->errors = [];
+        $validated = [];
 
-        foreach($data as $key => $value) {
-            $value = trim($value, " ");
+        foreach ($rules as $field => $fieldRules) {
+            $value = trim($data[$field] ?? '');
 
-            switch($key) {
-                case "number":
-                    if(!$this->phoneRUS($value)) {
-                        return false;
-                    }
+            foreach ($fieldRules as $rule) {
+                $result = $this->applyRule($field, $value, $rule, $data);
 
-                    $validatedData[$key] = $value;
-
+                if ($result === false) {
                     break;
-                case "password":
-                    if(!$this->password($value) || (isset($data["rePassword"]) && $data["rePassword"] !== $value)) {
-                        return false;
-                    }
+                }
+            }
 
-                    $validatedData[$key] = $value;
-
-                    break;
-                case "rePassword":
-                    if(!$this->password($value) || (isset($data["password"]) && $data['password'] !== $value)) {
-                        return false;
-                    }
-
-                    break;
-                case "secondName":
-                case "firstName":
-                    if(iconv_strlen($value) < 2 || !preg_match("/^[А-я]+$/u", $value) || str_contains($value, "'")) {
-                        return false;
-                    }
-
-                    $validatedData[$key] = $value;
-
-                    break;
-                case "age":
-                    if(!is_numeric($value) || $value < 14 || $value > 1000) {
-                        return false;
-                    }
-
-                    $validatedData[$key] = $value;
-
-                    break;
-                case "gender":
-                    if($gender = $this->gender($value)) {
-                        $validatedData[$key] = $gender;
-
-                    } else {
-                        return false;
-                    }
-
-                    break;
-                case "mail":
-                    if(!$this->email($value)) {
-                        return false;
-                    }
-
-                    $validatedData[$key] = $value;
-
-                    break;
-                case "agreement":
-                    if($value !== "on") {
-                        return false;
-                    }
-
-                    break;
-                case "title":
-                    if(iconv_strlen($value) > 30 || iconv_strlen($value) < 5) {
-                        return false;
-                    }
-
-                    $validatedData[$key] = $value;
-
-                    break;
-                case "message":
-                    if(iconv_strlen($value) > 300 || iconv_strlen($value) < 5) {
-                        return false;
-                    }
-
-                    $validatedData[$key] = $value;
-
-                    break;
-                default:
-                    break;
+            if (!isset($this->errors[$field])) {
+                $validated[$field] = $value;
             }
         }
 
-        ksort($validatedData);
+        return empty($this->errors) ? $validated : false;
+    }
 
-        return $validatedData;
+    /**
+     * Определитель правил валидации
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param string $rule
+     * @param array $data
+     * @return bool
+     */
+    private function applyRule(string $field, mixed $value, string $rule, array $data): bool {
+        switch ($rule) {
+            case 'required':
+                if ($value === '' || $value === null) {
+                    $this->errors[$field] = 'Поле обязательно для заполнения';
+                    return false;
+                }
+                break;
+
+            case 'email':
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL) || str_contains($value, "'")) {
+                    $this->errors[$field] = 'Некорректная почта';
+                    return false;
+                }
+                break;
+
+            case 'phone':
+                if (!$this->phoneRUS($value)) {
+                    $this->errors[$field] = 'Некорректный номер телефона';
+                    return false;
+                }
+                break;
+
+            case 'password':
+                if (!$this->password($value)) {
+                    $this->errors[$field] = 'Слабый пароль';
+                    return false;
+                }
+                break;
+
+            case 'confirmed':
+                if (($data[$field . '_confirmed'] ?? null) !== $value) {
+                    $this->errors[$field] = 'Пароли не совпадают';
+                    return false;
+                }
+                break;
+
+            case 'name':
+                if (iconv_strlen($value) < 2 || !preg_match("/^[А-я]+$/u", $value)) {
+                    $this->errors[$field] = 'Некорректное значение';
+                    return false;
+                }
+                break;
+
+            case 'age':
+                if (!is_numeric($value) || $value < 14 || $value > 100) {
+                    $this->errors[$field] = 'Некорректный возраст';
+                    return false;
+                }
+                break;
+
+            case 'gender':
+                if (!$this->gender($value)) {
+                    $this->errors[$field] = 'Некорректный пол';
+                    return false;
+                }
+                break;
+
+            case 'boolean':
+                if ($value !== 'on') {
+                    $this->errors[$field] = 'Должно быть подтвержденно';
+                    return false;
+                }
+                break;
+
+            case "text":
+                if(iconv_strlen($value) > 300 || iconv_strlen($value) < 5) {
+                    $this->errors[$field] = 'Некорректная длинна';
+                    return false;
+                }
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * Получение ошибок валидации
+     *
+     * @return array
+     */
+    public function errors(): array {
+        return $this->errors;
+    }
+
+
+    /**
+     * Формирование ошибок в строковый формат
+     *
+     * @return string
+     */
+    public function formatErrors(): string {
+        $errors = '';
+
+        foreach ($this->errors as $field => $error) {
+            $errors .= "$field: $error\n";
+        }
+
+        return $errors;
     }
 
     /**
@@ -153,15 +210,5 @@ class Validator {
             "Мужской", "male" => "male",
             default => false,
         };
-    }
-
-    /**
-     * Валидация почты
-     *
-     * @param string $email
-     * @return bool|string
-     */
-    public function email(string $email): bool|string {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) && !str_contains($email, "'");
     }
 }
