@@ -15,8 +15,8 @@ export default function InfoForm () {
     return (
         <form className="About__callback__form" onSubmit={formSubmit}>
             <div className="About__callback__form__block">
-                <label className="About__callback__form__block__wrap">Имя:<input className="About__callback__form__block__wrap__input" name="firstName" type="text" placeholder="Ваше имя..."/></label>
-                <label className="About__callback__form__block__wrap">Почта для ответа:<input className="About__callback__form__block__wrap__input" name="mail" type="text" placeholder="Ваша почта..."/></label>
+                <label className="About__callback__form__block__wrap">Имя:<input className="About__callback__form__block__wrap__input" name="first_name" type="text" placeholder="Ваше имя..."/></label>
+                <label className="About__callback__form__block__wrap">Почта для ответа:<input className="About__callback__form__block__wrap__input" name="email" type="text" placeholder="Ваша почта..."/></label>
             </div>
             <div className="About__callback__form__block">
                 <label className="About__callback__form__block__wrap">Тема вопроса:<input className="About__callback__form__block__wrap__input" name="title" type="text" placeholder="Тема..."/></label>

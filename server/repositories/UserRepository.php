@@ -32,4 +32,18 @@ readonly class UserRepository {
             ->table('users')
             ->insert($userData);
     }
+
+    /**
+     * Редактирование пользователя
+     *
+     * @param int $userId
+     * @param array $userData
+     * @return string|false
+     */
+    public function editUser(int $userId, array $userData): string|false {
+        return $this->db->query()
+            ->table('users')
+            ->where('id', '=', $userId)
+            ->update($userData);
+    }
 }

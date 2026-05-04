@@ -81,6 +81,18 @@ class QueryBuilder {
     /**
      * Сборка команды WHERE с заданной логикой
      *
+     * Пример Составного правила:
+     *
+     *                          // WHERE ((product_id = ? AND product_id = ?) OR article = ?)
+     *                          $this->db->query()
+     *                              ->where(function($q) {
+     *                                  $q->where(function($q) {
+     *                                      $q->where('product_id', '=', 10)
+     *                                          ->where('product_id', '=', 20);
+     *                                  })
+     *                                  ->orWhere('article', '=', 30);
+     *                              });
+     *
      * @param string|Closure $field
      * @param string $logic
      * @param string $operator
@@ -204,13 +216,45 @@ class QueryBuilder {
      * @return string|false
      */
     public function insert(array $insertData): string|false {
-
         $columns = implode(', ', array_keys($insertData));
         $placeholders = implode(', ', array_fill(0, count($insertData), '?'));
 
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
 
         return $this->db->fetchInsertId($sql, $this->bindings);
+    }
+
+    /**
+     * Выполнение SQL запроса. Обновление таблицы
+     *
+     * @param array $updateData
+     * @return string|false
+     */
+    public function update(array $updateData): string|false {
+        $sql = "UPDATE {$this->table} SET ";
+        $bindings = [];
+
+        foreach ($updateData as $field => $value) {
+            $sql .= "$field = ?,";
+            $bindings[] = $value;
+        }
+
+        $sql = rtrim($sql, ',');
+
+        $sql .= " WHERE " . $this->compileWheres($this->wheres);
+
+        return $this->db->fetchInsertId($sql, $bindings);
+    }
+
+    /**
+     * Выполнение SQL запроса. Удаление данных из таблицы
+     *
+     * @return bool
+     */
+    public function delete(): bool {
+        $sql = "DELETE FROM {$this->table} WHERE " . $this->compileWheres($this->wheres);
+
+        return (boolean)$this->db->fetchOne($sql, $this->bindings);
     }
 
     /**

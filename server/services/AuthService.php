@@ -23,7 +23,11 @@ readonly class AuthService {
      * @return array|null
      */
     public function user(): ?array {
-        return $this->session->get('user');
+        $user = $this->session->get('user');
+
+        unset($user['password']);
+
+        return $user;
     }
 
     /**
@@ -34,6 +38,15 @@ readonly class AuthService {
      */
     public function login(array $userData): void {
         $this->session->set('user', $userData);
+    }
+
+    /**
+     * Удаление данных пользователя из сессии
+     *
+     * @return void
+     */
+    public function logout(): void {
+        $this->session->remove('user');
     }
 
     /**

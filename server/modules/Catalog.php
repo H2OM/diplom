@@ -5,26 +5,6 @@
 
     class Catalog extends Runner {
 
-        protected function getCatalog() {
-
-            if(isset($_GET['fav']) && !$this->isUserSessionIsset) {
-
-                header("HTTP/1.0 400 Bad request");
-
-                die;
-            }
-
-            $catalog = HgetFilteredCatalog();
-
-            if(isset($catalog['id'])) {
-                $catalog = [$catalog];
-            }
-
-            $filters = HGetFilters();
-
-            exit(json_encode(["goods"=>$catalog, "count"=>count($catalog),"filters"=>$filters]));
-        }
-
         protected function getProduct() {
 
             if(!isset($_GET['category']) || !isset($_GET['article'])) {

@@ -40,18 +40,18 @@ export default function Edit () {
                 }}>
                     <div className="Personal__split__content__split">
                         <div className="Personal__split__content__split__block">
-                            <label className="Personal__split__content__split__block__label">Имя: <input type="text" name="firstName" defaultValue={userData.firstName} className="Personal__split__content__split__block__label__input"/></label>
+                            <label className="Personal__split__content__split__block__label">Имя: <input type="text" name="first_name" defaultValue={userData.first_name} className="Personal__split__content__split__block__label__input"/></label>
                             <label className="Personal__split__content__split__block__label">Дата рождения: <input type="number" name="age" defaultValue={userData.age} className="Personal__split__content__split__block__label__input"/></label>
-                            <label className="Personal__split__content__split__block__label">E-mail: <input type="mail" name="mail" defaultValue={userData.mail} className="Personal__split__content__split__block__label__input"/></label>
+                            <label className="Personal__split__content__split__block__label">E-mail: <input type="mail" name="email" defaultValue={userData.email} className="Personal__split__content__split__block__label__input"/></label>
                             
                         </div>
                         <div className="Personal__split__content__split__block">
-                            <label className="Personal__split__content__split__block__label">Фамилия: <input type="text" name="secondName" defaultValue={userData.secondName} className="Personal__split__content__split__block__label__input"/></label>
-                            <label className="Personal__split__content__split__block__label">Телефон: <MaskInput className={"Personal__split__content__split__block__label__input"} name={"number"} always={true} baseValue={userData.number} required={true}/></label>
+                            <label className="Personal__split__content__split__block__label">Фамилия: <input type="text" name="second_name" defaultValue={userData.second_name} className="Personal__split__content__split__block__label__input"/></label>
+                            <label className="Personal__split__content__split__block__label">Телефон: <MaskInput className={"Personal__split__content__split__block__label__input"} name="phone" always={true} baseValue={userData.phone} required={true}/></label>
                             <div className="Personal__split__content__split__block__label Personal__split__content__split__block__label_switch">
                                 Пол:
-                                <label className="Personal__split__content__split__block__label__switch"><input type="radio" name="gender" value={"Женский"} defaultChecked={userData.gender == "female" ? true : false} className="Personal__split__content__split__block__label__switch__radio"/> Женский</label> 
-                                <label className="Personal__split__content__split__block__label__switch"><input type="radio" name="gender" value={"Мужской"} defaultChecked={userData.gender == "male" ? true : false} className="Personal__split__content__split__block__label__switch__radio"/> Мужской</label>
+                                <label className="Personal__split__content__split__block__label__switch"><input type="radio" name="gender" value="female" defaultChecked={userData.gender === "female"} className="Personal__split__content__split__block__label__switch__radio"/> Женский</label>
+                                <label className="Personal__split__content__split__block__label__switch"><input type="radio" name="gender" value="male" defaultChecked={userData.gender === "male"} className="Personal__split__content__split__block__label__switch__radio"/> Мужской</label>
                             </div>
                         </div>
                         <div className="Personal__split__content__split__password"></div>

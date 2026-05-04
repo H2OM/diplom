@@ -44,7 +44,7 @@ export default function Basket () {
                             } else {
                                 dispatch(favsDataSlice.actions.set(favsData.filter((val)=>val != v.Article)));
                             }
-                            dispatch(basketFetch({url: '/api/user/change-fav?article='+v.Article+'&action='+(v.Fav ? 'unset' : 'set'), m: "GET"}));
+                            dispatch(basketFetch({url: `/api/user/change-favorites?product_id=${v.id}&action=${(v.Fav ? 'unset' : 'set')}`, m: "GET"}));
                         }}>
                             <Image
                                 className="Basket__split__content__cart__options__btn__svg"

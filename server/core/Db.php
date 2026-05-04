@@ -63,6 +63,13 @@
             return $this->preparedExecute($sql, $params)->fetchColumn();
         }
 
+        /**
+         * Выполнение запроса и возвращения id строки
+         *
+         * @param string $sql
+         * @param array $params
+         * @return string|false
+         */
         public function fetchInsertId(string $sql, array $params = []): string|false {
             $this->preparedExecute($sql, $params);
 

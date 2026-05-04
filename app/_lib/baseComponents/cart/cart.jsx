@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { basketFetch } from "@/lib/redux/thunks.js";
 import { favsDataSlice, favsSelector } from "@/lib/redux/slices";
 export default function Cart ({info, isSlide = false}) {
-    const {Image : img, Brand, Type, Title, Price, Price_old, Size : sizes, Article, Category} = info;
+    const {Image : img, id, Brand, Type, Title, Price, Price_old, Size : sizes, Article, Category} = info;
     const {favsData} = useSelector(favsSelector);
     const [modals, statusModals] = useState({
         show: false,
@@ -18,10 +18,12 @@ export default function Cart ({info, isSlide = false}) {
     const dispatch = useDispatch();
     const navigate = useRouter();
     const Size = sizes.split(".");
+
     useEffect(()=>{
         // console.log(favsData);
         if(favsData !== undefined) changeFavorite((Array.isArray(favsData) && favsData.includes(Article)) ? true : false);
     }, [favsData]);
+
     return (
         <div className={"cart-wrap" + (isSlide ? " cart-wrap_slide" : "")}>
             <div className="cart" onClick={({target})=>{
@@ -54,7 +56,7 @@ export default function Cart ({info, isSlide = false}) {
                 {
                     favsData !== undefined ?
                     <div className="cart__heart" onClick={async ()=>{
-                        await dispatch(basketFetch({url: '/api/user/change-fav?article='+Article+'&action='+(favorite ? 'unset' : 'set'), m: "GET"}))
+                        await dispatch(basketFetch({url: `/api/user/change-favorites?product_id=${id}&action=${(favorite ? 'unset' : 'set')}`, m: "GET"}))
                             .then(data=>{
                                 if(data.meta.requestStatus !== 'rejected') {
                                     if(!favorite) {

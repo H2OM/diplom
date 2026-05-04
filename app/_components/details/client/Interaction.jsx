@@ -5,19 +5,21 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Interaction ({Size, Article}) {
+export default function Interaction ({Size, article, product_id}) {
     const {favsData} = useSelector(favsSelector);
     const dispatch = useDispatch();
     const [favorite, changeFavorite] = useState(false);
     const [sizeValue, setSize] = useState(false);
     const [warning, setWarning] = useState(false);
+
     useEffect(()=>{
         if(warning) {
             setTimeout(()=>setWarning(false), 400);
         }
     }, [warning]);
+
     useEffect(()=>{
-        if(favsData !== undefined) changeFavorite((Array.isArray(favsData) && favsData.includes(Article)) ? true : false);
+        if(favsData !== undefined) changeFavorite((Array.isArray(favsData) && favsData.includes(article)) ? true : false);
     }, [favsData]);
 
     return (
@@ -50,7 +52,7 @@ export default function Interaction ({Size, Article}) {
             
             <div className="btn Details__split__content__btn" onClick={()=>{
                 if(sizeValue) {
-                    dispatch(basketFetch({url: '/api/basket/add-basket', m:"POST", b: {article: Article, size: sizeValue}}));
+                    dispatch(basketFetch({url: '/api/basket/add-basket', m:"POST", b: {article: article, size: sizeValue}}));
                 } else if (!warning) {
                     setWarning(true);
                 }
@@ -58,13 +60,13 @@ export default function Interaction ({Size, Article}) {
             {
                 favsData !== undefined ?
                 <div className="Details__split__content__favorite" onClick={()=>{
-                    dispatch(basketFetch({url: '/api/user/change-fav?article='+Article+'&action='+(favorite ? 'unset' : 'set'), m: "GET"}))
+                    dispatch(basketFetch({url: `/api/user/change-favorites?product_id=${product_id}&action=${(favorite ? 'unset' : 'set')}`, m: "GET"}))
                         .then(data=>{
                             if(data.meta.requestStatus !== 'rejected') {
                                 if(!favorite) {
-                                    dispatch(favsDataSlice.actions.set([...favsData, Article]));
+                                    dispatch(favsDataSlice.actions.set([...favsData, article]));
                                 } else {
-                                    dispatch(favsDataSlice.actions.set(favsData.filter((val)=>val != Article)));
+                                    dispatch(favsDataSlice.actions.set(favsData.filter((val)=>val != article)));
                                 }
                             } 
                         });

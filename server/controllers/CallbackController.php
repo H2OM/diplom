@@ -16,9 +16,11 @@ readonly class CallbackController {
      * @return Response
      */
     protected function mailSubscribeAction(): Response {
-        $data = $this->validator->validateData($this->request->post());
+        $data = $this->validator->validate(data: $this->request->post(), rules: [
+            'email' => ['required', 'email'],
+        ]);
 
-        if(empty($data) || count($data) != 1)
+        if(!$data)
             return Response::json(data: ['error'=> true, 'message' => 'Неверные данные'], status: 400);
 
         return Response::json(data: ['success' => true, 'message' => 'Успешно']);
@@ -30,9 +32,14 @@ readonly class CallbackController {
      * @return Response
      */
     protected function formCallbackAction(): Response {
-        $data = $this->validator->validateData($this->request->post());
+        $data = $this->validator->validate(data: $this->request->post(), rules: [
+            'email'      => ['required', 'email'],
+            'first_name' => ['required', 'name'],
+            'title'      => ['required', 'text'],
+            'message'    => ['required', 'text'],
+        ]);
 
-        if(empty($data) || count($data) != 4)
+        if(!$data)
             return Response::json(data: ['error'=> true, 'message' => 'Неверные данные'], status: 400);
 
         return Response::json(data: ['success' => true, 'message' => 'Успешная отправка']);

@@ -19,13 +19,14 @@ class Validator {
      * Доступные правила:
      *
      *                     - required   Поле обязательно
-     *                     - name       Только буквы, минимум 2 символа
+     *                     - name       Только буквы (2-100)
      *                     - phone      Проверка телефона (RU)
      *                     - password   Проверка сложности пароля
      *                     - confirmed  Совпадение с field_confirmation
      *                     - age        Возраст (14–100)
      *                     - gender     Проверка допустимых значений
      *                     - email      Валидный email
+     *                     - text       текст/сообщение (5-300)
      *
      * @return array|false Возвращает валидированные данные или false при ошибке
      */
@@ -99,7 +100,7 @@ class Validator {
                 break;
 
             case 'name':
-                if (iconv_strlen($value) < 2 || !preg_match("/^[А-я]+$/u", $value)) {
+                if (iconv_strlen($value) < 2 || iconv_strlen($value) > 100 || !preg_match("/^[А-я]+$/u", $value)) {
                     $this->errors[$field] = 'Некорректное значение';
                     return false;
                 }

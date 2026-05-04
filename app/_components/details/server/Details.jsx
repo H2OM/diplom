@@ -12,6 +12,7 @@ export default async function Details({data}) {
     const {product, related} = data;
 
     let {
+        id,
         Title,
         Type,
         Brand,
@@ -19,7 +20,7 @@ export default async function Details({data}) {
         Image: img,
         SliderImages,
         Price,
-        Article,
+        article,
         Color,
         Price_old: OldPrice,
         Category,
@@ -40,7 +41,7 @@ export default async function Details({data}) {
                             <div className="Details__split__content__price">{Price} ₽</div>
                             <div
                                 className="Details__split__content__subtitle Details__split__content__subtitle_art">Артикул
-                                - {Article}</div>
+                                - {article}</div>
                             <div
                                 className="Details__split__content__subtitle Details__split__content__subtitle_color">Цвет
                                 - {Color}</div>
@@ -53,7 +54,7 @@ export default async function Details({data}) {
                                         Colors.map(value => {
                                             value = value.split("#");
 
-                                            return value[0] == Article
+                                            return value[0] == article
                                                 ?
                                                 <Image
                                                     className="Details__split__content__colors__type Details__split__content__colors__type_active"
@@ -83,7 +84,7 @@ export default async function Details({data}) {
                             </>
                             : null
                         }
-                        <Interaction Size={Size} Article={Article}/>
+                        <Interaction Size={Size} article={article} product_id={id}/>
                     </div>
                     <DetailsSlider slider={(SliderImages != "" ? SliderImages.split(",") : null)} img={img}/>
 

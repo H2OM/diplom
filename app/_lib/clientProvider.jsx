@@ -47,7 +47,7 @@ export const ClientProvider = ({children}) => {
     }, [userStatus, fetchStatus, basketStatus, favsStatus]);
     useEffect(()=>{
         if(isAuth == true) {
-            dispatch(favsFetch({url: '/api/user/get-favs'}));
+            dispatch(favsFetch({url: '/api/user/get-favorites'}));
         }
     }, [isAuth]);
     useEffect(()=>{
