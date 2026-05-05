@@ -166,7 +166,7 @@ readonly class GoodsRepository {
     public function getProductByArticle(string $article, ?int $userId): array {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
 
-        $product = $this->db->fetchAll("SELECT goods.*, base.value AS color, categories.code AS category, $userQueryPart
+        $product = $this->db->fetchOne("SELECT goods.*, base.value AS color, categories.code AS category, $userQueryPart
                                                 GROUP_CONCAT(filters_values.value SEPARATOR '.') AS Size, mods.colors 
                                                 FROM (SELECT GROUP_CONCAT(CONCAT(goods.article, '#', categories.code, '#', goods.image) SEPARATOR ',') AS colors 
                                                 FROM goods_variations JOIN goods ON (goods_variations.base_id = goods.id OR goods_variations.variation_id = goods.id) 
@@ -193,6 +193,26 @@ readonly class GoodsRepository {
     }
 
     /**
+     * Получение товара по артикулу и размеру
+     *
+     * @param string $article
+     * @param string $size
+     * @param int|null $userId
+     * @return array|null
+     */
+    public function getProductByArticleAndSize(string $article, string $size, ?int $userId): array|null {
+        $userQueryPart = ($userId ? ", IF(favorites.goods_id = goods.id, true, false) AS favorites" : "");
+
+        return $this->db->fetchOne("SELECT goods.*, categories.code AS 'category' $userQueryPart
+                                                FROM goods JOIN filters_goods ON filters_goods.goods_id = goods.id 
+                                                JOIN filters_values ON filters_goods.filter_value_id = filters_values.id AND  filters_values.value = ?
+                                                JOIN filters ON filters_values.filter_id = filters.id JOIN categories ON goods.category_id = categories.id
+                                                LEFT JOIN favorites ON goods.id = favorites.goods_id
+                                                WHERE goods.article = ? AND filters.code = 'size'",
+            [$size, $article]);
+    }
+
+    /**
      * Получение связанных товаров по артикулу
      *
      * @param string $article
@@ -200,20 +220,21 @@ readonly class GoodsRepository {
      * @return array
      */
     public function getRelatedProductsByArticle(string $article, ?int $userId): array {
+        $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
         $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '$userId' " : "");
 
-        return $this->db->fetchAll("SELECT goods.id, goods.title, goods.Brand, goods.Type, goods.Article, goods.Price, goods.Price_old, 
-                            goods.Image, goods.SliderImages, categories.Code AS Category, $userQueryPart 
+        return $this->db->fetchAll("SELECT goods.id, goods.title, goods.brand, goods.type, goods.article, goods.price, goods.price_old, 
+                            goods.image, goods.slider_images, categories.code AS category, $userQueryPart 
                             GROUP_CONCAT(filters_values.value SEPARATOR '.') AS Size FROM goods_related 
-                            JOIN goods ON goods_related.Goods_id = goods.id OR goods_related.Related_id = goods.id 
+                            JOIN goods ON goods_related.goods_id = goods.id OR goods_related.related_id = goods.id 
                             JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
-                            AND filters.Code = 'size' AND filters_goods.goods_id = goods.id 
+                            AND filters.code = 'size' AND filters_goods.goods_id = goods.id 
                             AND filters_goods.goods_id = goods.id AND filters_goods.filter_value_id = filters_values.id 
                             JOIN categories ON goods.Category_id = categories.id 
                             LEFT JOIN favorites ON goods.id = favorites.Goods_id 
                             $userFavoritesQueryPart
-                            WHERE (goods_related.Goods_Article = ? OR goods_related.Related_Article = ?) 
-                            AND goods.Article != ? GROUP BY goods.id",
-            $prepaired, false, false);
+                            WHERE (goods_related.goods_article = ? OR goods_related.related_article = ?) 
+                            AND goods.article != ? GROUP BY goods.id",
+            array_fill(0, 3, $article));
     }
 }

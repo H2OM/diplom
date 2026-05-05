@@ -102,6 +102,16 @@ readonly class GoodsService {
      * @return array
      */
     public function getProductByArticle(string $article): array {
+        return $this->goodsRepository->getProductByArticle($article, $this->authService->id());
+    }
 
+    /**
+     * Получение связанных товаров по артикулу
+     *
+     * @param string $article
+     * @return array
+     */
+    public function getRelatedProductsByArticle(string $article): array {
+        return $this->goodsRepository->getRelatedProductsByArticle($article, $this->authService->id());
     }
 }

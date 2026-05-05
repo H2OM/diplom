@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\core\enums\ResponseMessage;
+
 /** Формирование ответов сервера */
 class Response {
     protected string $content;
@@ -28,6 +30,56 @@ class Response {
         }
 
         echo $this->content;
+    }
+
+    /**
+     * Формирование успешного ответа с enum-сообщением
+     *
+     * @param array|null $data
+     * @param ResponseMessage|null $message
+     * @return Response
+     */
+    public static function jsonSuccess(array $data = null, ResponseMessage $message = null): Response {
+        $response = ['success' => true];
+
+        if($message) $response['message'] = $message->value;
+        if($data)    $response['data']    = $data;
+
+        return self::json(data: $response);
+    }
+
+    /**
+     * Формирование ошибки с enum-сообщением
+     *
+     * @param array|null $data
+     * @param ResponseMessage|null $message
+     * @param int $status
+     * @return Response
+     */
+    public static function jsonError(array $data = null, ResponseMessage $message = null, int $status = 400): Response {
+        $response = ['error' => true];
+
+        if($message) $response['message'] = $message->value;
+        if($data)    $response['data']    = $data;
+
+        return self::json(data: $response, status: $status);
+    }
+
+    /**
+     * Формирование ответа с enum-сообщением
+     *
+     * @param array|null $data
+     * @param ResponseMessage|null $message
+     * @param int $status
+     * @return self
+     */
+    public static function jsonEnum(array $data = null, ResponseMessage $message = null, int $status = 200): self {
+        $response = [];
+
+        if($message) $response['message'] = $message->value;
+        if($data)    $response['data']    = $data;
+
+        return self::json(data: $response, status: $status);
     }
 
     /**

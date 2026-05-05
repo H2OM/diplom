@@ -42,6 +42,25 @@ readonly class CatalogController {
      * @return Response
      */
     protected function getProductAction(): Response {
+        $article = $this->request->get('article');
 
+        if(!$article) {
+            return Response::json(data: ['error' => true, 'message' => 'Недостаточно данных'], status: 403);
+        }
+
+        try {
+            $product = $this->goodsService->getRelatedProductsByArticle($article);
+            $relatedProducts = $this->goodsService->getRelatedProductsByArticle($article);
+
+            return Response::json(data: ['success' => true, 'data' => [
+                'product' => $product,
+                'related' => $relatedProducts,
+            ]]);
+        } catch (\Exception $e) {
+            return Response::json(data: [
+                'error' => true,
+                'message' => $e->getMessage()
+            ], status: $e->getCode() ?: 400);
+        }
     }
 }

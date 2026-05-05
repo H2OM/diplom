@@ -4,12 +4,10 @@ namespace app\repositories;
 
 
 use app\core\Db;
-
+//TODO Убрать во всех репозиториях проверку на favorite, проверять на фронте через контекст на избранное
 /** Репозиторий по управлению избранными товарами */
 readonly class FavoritesRepository {
-    public function __construct(private Db $db) {
-
-    }
+    public function __construct(private Db $db) {}
 
     /**
      * Получение 'избранного' пользователя
