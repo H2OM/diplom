@@ -15,9 +15,13 @@ readonly class MediaController {
      * @return Response
      */
     public function mainInfoAction(): Response {
-        $news = $this->mediaService->getMainNews();
-        $goods = $this->goodsService->getHitAndSalesGoods();
+        $news = $this->mediaService->getNews();
+        $goods = $this->goodsService->getHitAndSales();
 
-        return Response::json(['slider' => $news, 'popular' => $goods['hit'] ?? [], 'sales' => $goods['sales'] ?? []]);
+        return Response::jsonSuccess(data: [
+            'slider' => $news,
+            'popular' => $goods['hit'] ?? [],
+            'sales' => $goods['sales'] ?? []
+        ]);
     }
 }

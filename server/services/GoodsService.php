@@ -3,6 +3,8 @@
 namespace app\services;
 
 use app\core\Db;
+use app\core\enums\ResponseMessage;
+use app\core\exceptions\ResponseException;
 use app\repositories\FiltersRepository;
 use app\repositories\GoodsRepository;
 
@@ -19,8 +21,8 @@ readonly class GoodsService {
      *
      * @return array[]
      */
-    public function getHitAndSalesGoods(): array {
-        $result = $this->goodsRepository->getHitAndSalesGoods($this->authService->id());
+    public function getHitAndSales(): array {
+        $result = $this->goodsRepository->getHitAndSales($this->authService->id());
 
         $hit = [];
         $sales = [];
@@ -42,9 +44,16 @@ readonly class GoodsService {
      *
      * @param array $filters
      * @return array
+     * @throws ResponseException
      */
     public function getCatalogByFilters(array $filters): array {
-        return $this->goodsRepository->getGoodsByFilters($filters, $this->authService->id());
+        $catalog = $this->goodsRepository->getByFilters($filters, $this->authService->id());
+
+        if(count($catalog) === 0) {
+            throw new ResponseException(ResponseMessage::ERROR_DATA, 403);
+        }
+
+        return $catalog;
     }
 
     /**
@@ -52,9 +61,14 @@ readonly class GoodsService {
      *
      * @param array $filters
      * @return array
+     * @throws ResponseException
      */
     public function getFilters(array $filters): array {
         $filters = $this->filtersRepository->getFilters($filters);
+
+        if(count($filters) === 0) {
+            throw new ResponseException(ResponseMessage::ERROR_DATA, 403);
+        }
 
         foreach($filters as $filter) {
             if($filter['name'] === "" && $filter['value_code'] === "") {
@@ -100,9 +114,20 @@ readonly class GoodsService {
      *
      * @param string $article
      * @return array
+     * @throws ResponseException
      */
     public function getProductByArticle(string $article): array {
-        return $this->goodsRepository->getProductByArticle($article, $this->authService->id());
+        $product = $this->goodsRepository->getProductByArticle($article, $this->authService->id());
+
+        if(!$product) {
+            throw new ResponseException(ResponseMessage::ERROR_GET_DATA);
+        }
+
+        if(count($product) === 0) {
+            throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND, 404);
+        }
+
+        return $product;
     }
 
     /**
@@ -111,7 +136,7 @@ readonly class GoodsService {
      * @param string $article
      * @return array
      */
-    public function getRelatedProductsByArticle(string $article): array {
-        return $this->goodsRepository->getRelatedProductsByArticle($article, $this->authService->id());
+    public function getRelatedByArticle(string $article): array {
+        return $this->goodsRepository->getRelatedByArticle($article, $this->authService->id());
     }
 }

@@ -2,17 +2,17 @@
 
 namespace app\services;
 
+use app\core\enums\ResponseMessage;
+use app\core\exceptions\ResponseException;
 use app\core\Validator;
-use app\repositories\FavoritesRepository;
 use app\repositories\OrdersRepository;
 use app\repositories\UserRepository;
 use Exception;
 
-/** Сервис для управления с пользователями */
+/** Сервис для управления пользователями */
 readonly class UserService {
     public function __construct(
         private UserRepository $userRepository,
-        private FavoritesRepository $favoritesRepository,
         private OrdersRepository $ordersRepository,
         private Validator $validator,
     ) {}
@@ -23,6 +23,7 @@ readonly class UserService {
      * @param string $password
      * @param string $phone
      * @return array
+     * @throws ResponseException
      * @throws Exception
      */
     public function signIn(string $password, string $phone): array {
@@ -38,13 +39,13 @@ readonly class UserService {
         );
 
         if (!$validateData) {
-            throw new Exception('Ошибка валидации');
+            throw new Exception(message: $this->validator->formatErrors(), code: 403);
         }
 
-        $user = $this->userRepository->getUserByPhone($phone);
+        $user = $this->userRepository->getByPhone($phone);
 
         if(empty($user) || !password_verify($validateData['password'], $user['password'])) {
-            throw new Exception('Неверный логин или пароль');
+            throw new ResponseException(ResponseMessage::ERROR_AUTH);
         }
 
         return $user;
@@ -55,6 +56,7 @@ readonly class UserService {
      *
      * @param array $userData
      * @return array
+     * @throws ResponseException
      * @throws Exception
      */
     public function signUp(array $userData): array {
@@ -74,12 +76,12 @@ readonly class UserService {
             throw new Exception($this->validator->formatErrors());
         }
 
-        $prepareUserData = $this->prepareUserData($validateData);
+        $prepareUserData = $this->prepareData($validateData);
 
-        $insertId = $this->userRepository->insertNewUser($prepareUserData);
+        $insertId = $this->userRepository->insert($prepareUserData);
 
         if(!$insertId) {
-            throw new Exception('Произошла ошибка при добавлении нового пользователя');
+            throw new ResponseException(ResponseMessage::ERROR_NEW_USER);
         }
 
         return [
@@ -94,9 +96,10 @@ readonly class UserService {
      * @param array $userData
      * @param int $userId
      * @return array
+     * @throws ResponseException
      * @throws Exception
      */
-    public function editUser(array $userData, int $userId): array {
+    public function edit(array $userData, int $userId): array {
         $validateData = $this->validator->validate(data: $userData, rules: [
             'first_name'  => ['required', 'name'],
             'second_name' => ['required', 'name'],
@@ -110,52 +113,25 @@ readonly class UserService {
             throw new Exception($this->validator->formatErrors());
         }
 
-        $prepareUserData = $this->prepareUserData($validateData);
+        $prepareUserData = $this->prepareData($validateData);
 
-        $result = $this->userRepository->editUser($userId, $prepareUserData);
+        $result = $this->userRepository->edit($userId, $prepareUserData);
 
         if(!$result) {
-            throw new Exception('Не удалось обновить данные пользователя');
+            throw new ResponseException(ResponseMessage::ERROR_UPDATE);
         }
 
         return $prepareUserData;
     }
 
     /**
-     * Получение 'избранного' пользователя
+     * Получение всех заказов
      *
      * @param int $userId
      * @return array
      */
-    public function getFavorites(int $userId): array {
-        return $this->favoritesRepository->getFavorites($userId);
-    }
-
-    /**
-     * Редактирование 'избранного' пользователя
-     *
-     * @param int $userId
-     * @param string $productId
-     * @param string $action
-     * @return string|false
-     * @throws Exception
-     */
-    public function changeFavorites(int $userId, string $productId, string $action): string|false {
-        return match ($action) {
-            'set' => $this->favoritesRepository->setFavorite($userId, $productId),
-            'unset' => $this->favoritesRepository->unsetFavorite($userId, $productId),
-            default => throw new \Exception('Не известное действие'),
-        };
-    }
-
-    /**
-     * Получение всех заказов пользователя
-     *
-     * @param int $userId
-     * @return array
-     */
-    public function getUserOrders(int $userId): array {
-        $orders = $this->ordersRepository->getOrdersByUserId($userId);
+    public function getOrders(int $userId): array {
+        $orders = $this->ordersRepository->getByUserId($userId);
 
         $result = [];
 
@@ -183,12 +159,12 @@ readonly class UserService {
     }
 
     /**
-     * Подготовка данных для вставки пользователя
+     * Подготовка данных для вставки
      *
      * @param array $data
      * @return array
      */
-    private function prepareUserData(array $data): array {
+    private function prepareData(array $data): array {
         return [
             'first_name'  => ucfirst($data['first_name']),
             'second_name' => ucfirst($data['second_name']),

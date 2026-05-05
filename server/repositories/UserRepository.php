@@ -14,7 +14,7 @@ readonly class UserRepository {
      * @param string $phone
      * @return array
      */
-    public function getUserByPhone(string $phone): array {
+    public function getByPhone(string $phone): array {
         return $this->db->query()
             ->table('users')
             ->where('phone', $phone)
@@ -27,7 +27,7 @@ readonly class UserRepository {
      * @param array $userData
      * @return string|false
      */
-    public function insertNewUser(array $userData): string|false {
+    public function insert(array $userData): string|false {
         return $this->db->query()
             ->table('users')
             ->insert($userData);
@@ -40,7 +40,7 @@ readonly class UserRepository {
      * @param array $userData
      * @return string|false
      */
-    public function editUser(int $userId, array $userData): string|false {
+    public function edit(int $userId, array $userData): string|false {
         return $this->db->query()
             ->table('users')
             ->where('id', '=', $userId)

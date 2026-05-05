@@ -15,7 +15,7 @@ readonly class FavoritesRepository {
      * @param int $userId
      * @return array
      */
-    public function getFavorites(int $userId): array {
+    public function get(int $userId): array {
         return $this->db->fetchAll("SELECT goods.article FROM goods 
                     JOIN favorites ON goods.id = favorites.goods_id 
                     JOIN users ON favorites.user_id = users.id WHERE users.id = ?", [$userId]);
@@ -28,7 +28,7 @@ readonly class FavoritesRepository {
      * @param string $productId
      * @return string|false
      */
-    public function setFavorite(int $userId, string $productId): string|false {
+    public function set(int $userId, string $productId): string|false {
         return $this->db->query()
             ->table('favorites')
             ->insert(['user_id' => $userId, 'product_id' => $productId]);
@@ -41,7 +41,7 @@ readonly class FavoritesRepository {
      * @param string $productId
      * @return bool
      */
-    public function unsetFavorite(int $userId, string $productId): bool {
+    public function remove(int $userId, string $productId): bool {
         return $this->db->query()
             ->table('favorites')
                 ->where('user_id', '=', $userId)

@@ -13,7 +13,7 @@ readonly class OrdersRepository {
      * @param int $userId
      * @return array
      */
-    public function getOrdersByUserId(int $userId): array {
+    public function getByUserId(int $userId): array {
         return $this->db->fetchAll("SELECT orders.*, goods.*, orders_goods.size, categories.title as category 
                                                 FROM orders JOIN orders_goods ON orders.id = orders_goods.order_id 
                                                 JOIN goods ON orders_goods.goods_id = goods.id JOIN categories 

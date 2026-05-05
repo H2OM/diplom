@@ -14,7 +14,7 @@ readonly class GoodsRepository {
      * @param int|null $userId
      * @return array
      */
-    public function getHitAndSalesGoods(int|null $userId): array {
+    public function getHitAndSales(int|null $userId): array {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
         $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '".$userId."' " : "");
 
@@ -36,7 +36,7 @@ readonly class GoodsRepository {
      * @param int|null $userId
      * @return array
      */
-    public function getGoodsByFilters(array $filters, int|null $userId): array {
+    public function getByFilters(array $filters, int|null $userId): array {
         $sqlPartSelect = "";
         $sqlPartCondition = "";
         $prepareSelectedValue = [];
@@ -50,10 +50,10 @@ readonly class GoodsRepository {
             switch($key) {
                 case "category":
                     $sqlPartCondition .= match (strtolower($value)) {
-                        "man" => "(categories.Code = 'Man' OR categories.Code = 'All') AND ",
-                        "woman" => "(categories.Code = 'Woman' OR categories.Code = 'All') AND ",
-                        "kids" => "categories.Code = 'Kids' AND ",
-                        "all" => "categories.Code = 'All' AND ",
+                        "man" => "(categories.code = 'man' OR categories.code = 'all') AND ",
+                        "woman" => "(categories.code = 'woman' OR categories.code = 'all') AND ",
+                        "kids" => "categories.Code = 'kids' AND ",
+                        "all" => "categories.Code = 'all' AND ",
                         default => ''
                     };
 
@@ -144,7 +144,7 @@ readonly class GoodsRepository {
             };
         }
 
-        $userQueryPart = ($userId ? ", IF(favorites.Goods_id = goods.id, true, false) AS 'favorites'" : "");
+        $userQueryPart = ($userId ? ", IF(favorites.goods_id = goods.id, true, false) AS 'favorites'" : "");
 
         return $this->db->fetchAll("SELECT goods.*, categories.code AS category, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size 
                                             $userQueryPart 
@@ -161,9 +161,9 @@ readonly class GoodsRepository {
      *
      * @param string $article
      * @param int|null $userId
-     * @return array
+     * @return array|null
      */
-    public function getProductByArticle(string $article, ?int $userId): array {
+    public function getProductByArticle(string $article, ?int $userId): array|null {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
 
         $product = $this->db->fetchOne("SELECT goods.*, base.value AS color, categories.code AS category, $userQueryPart
@@ -219,7 +219,7 @@ readonly class GoodsRepository {
      * @param int|null $userId
      * @return array
      */
-    public function getRelatedProductsByArticle(string $article, ?int $userId): array {
+    public function getRelatedByArticle(string $article, ?int $userId): array {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
         $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '$userId' " : "");
 

@@ -2,10 +2,13 @@
 
 namespace app\controllers;
 
+use app\core\enums\ResponseMessage;
+use app\core\exceptions\ResponseException;
 use app\core\Request;
 use app\core\Response;
 use app\services\AuthService;
 use app\services\UserService;
+use Exception;
 
 /** Контролер для управления пользователями */
 readonly class UserController {
@@ -16,22 +19,22 @@ readonly class UserController {
     ) {}
 
     /**
-     * Проверка авторизации пользователя
+     * Проверка авторизации
      *
      * @return Response
      */
     public function isAuthAction(): Response {
-        return Response::json(data: $this->authService->check());
+        return Response::jsonSuccess(data: ['authorized' => $this->authService->check()]);
     }
 
     /**
-     * Авторизация пользователя
+     * Авторизация
      *
      * @return Response
      */
     protected function signInAction(): Response {
         if($this->authService->check()) {
-            return Response::json(data: ['success' => true, 'message' => 'Пользователь уже авторизован']);
+            return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
         }
 
         try {
@@ -40,10 +43,13 @@ readonly class UserController {
                 phone: $this->request->post('phone')
             );
 
-            $this->authService->login($user);
+            $this->authService->login(userData: $user);
 
-            return Response::json(data: ['success' => true, 'data' => $this->authService->user()]);
-        } catch (\Exception $e) {
+            return Response::jsonSuccess(data: $this->authService->user(), message: ResponseMessage::SUCCESS_AUTH);
+        } catch (ResponseException $e) {
+            return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
+
+        } catch (Exception $e) {
             return Response::json(data: [
                 'error' => true,
                 'message' => $e->getMessage()
@@ -52,22 +58,26 @@ readonly class UserController {
     }
 
     /**
-     * Регистрация пользователя
+     * Регистрация
      *
      * @return Response
+     * @throws Exception
      */
     protected function signUpAction(): Response {
         if($this->authService->check()) {
-            return Response::json(data: ['success' => true, 'message' => 'Пользователь уже авторизован']);
+            return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
         }
 
         try {
-            $userData = $this->userService->signUp($this->request->post());
+            $user = $this->userService->signUp($this->request->post());
 
-            $this->authService->login(userData: $userData);
+            $this->authService->login(userData: $user);
 
-            return Response::json(data: ['success' => true, 'data' => $this->authService->user()]);
-        } catch (\Exception $e) {
+            return Response::jsonSuccess(data: $this->authService->user(), message: ResponseMessage::SUCCESS_AUTH);
+        } catch (ResponseException $e) {
+            return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
+
+        } catch (Exception $e) {
             return Response::json(data: [
                 'error' => true,
                 'message' => $e->getMessage()
@@ -76,49 +86,55 @@ readonly class UserController {
     }
 
     /**
-     * Деавторизация пользователя
+     * Деавторизация
      *
      * @return Response
      */
     protected function logOutAction(): Response {
         if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
 
         $this->authService->logout();
 
-        return Response::json(data: ['success' => true, 'message' => 'Успешная деавторизация']);
+        return Response::jsonSuccess(message: ResponseMessage::SUCCESS_LOGOUT);
     }
 
     /**
-     * Получение данных пользователя
+     * Получение
      *
      * @return Response
      */
-    protected function getUserAction(): Response {
+    protected function getAction(): Response {
         if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
 
-        return Response::json(data: ['success' => true, 'data' => $this->authService->user()]);
+        return Response::jsonSuccess(data: $this->authService->user());
     }
 
     /**
-     * Редактирование данных пользователя
+     * Редактирование
      *
      * @return Response
      */
-    protected function editUserAction(): Response {
+    protected function editAction(): Response {
         if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
 
         try {
-            $updateUser = $this->userService->editUser(userData: $this->request->post(), userId: $this->authService->id());
+            $updatedUser = $this->userService->edit(
+                userData: $this->request->post(),
+                userId: $this->authService->id()
+            );
 
-            $this->authService->login(userData: $updateUser + $this->authService->user());
+            $this->authService->login(userData: $updatedUser + $this->authService->user());
 
-            return Response::json(data: ['success' => true, 'data' => $this->authService->user()]);
+            return Response::jsonSuccess(data: $this->authService->user());
+        } catch (ResponseException $e) {
+            return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
+
         } catch (\Exception $e) {
             return Response::json(data: [
                 'error' => true,
@@ -128,79 +144,17 @@ readonly class UserController {
     }
 
     /**
-     * Получение избранных товаров пользователя
-     *
-     * @return Response
-     */
-    protected function getFavoritesAction(): Response {
-        if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
-        }
-
-        try {
-            $favorites = $this->userService->getFavorites(userId: $this->authService->id());
-
-            return Response::json(data: ['success' => true, 'data' => $favorites]);
-        } catch (\Exception $e) {
-            return Response::json(data: [
-                'error' => true,
-                'message' => $e->getMessage()
-            ], status: $e->getCode() ?: 400);
-        }
-    }
-
-    /**
-     * Изменение 'избранного' пользователя
-     *
-     * @return Response
-     */
-    protected function changeFavoriteAction(): Response {
-        if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
-        }
-
-        $productId = $this->request->get('product_id');
-        $action = $this->request->get('action');
-
-        if(empty($productId) || empty($action)) {
-            return Response::json(data: ['error' => true, 'message' => 'Не достаточно данных'], status: 403);
-        }
-
-        try {
-            $result = $this->userService->changeFavorites(userId: $this->authService->id(), productId: $productId, action: $action);
-
-            if(!$result) {
-                throw new \Exception('Ошибка при изменении данных', 500);
-            }
-
-            return Response::json(data: ['success' => true, 'message' => 'Успешно']);
-        } catch (\Exception $e) {
-            return Response::json(data: [
-                'error' => true,
-                'message' => $e->getMessage()
-            ], status: $e->getCode() ?: 400);
-        }
-    }
-
-    /**
-     * Получение всех заказов пользователя
+     * Получение всех заказов
      *
      * @return Response
      */
     protected function getOrdersAction(): Response {
         if(!$this->authService->check()) {
-            return Response::json(data: ['error' => true, 'message' => 'Не авторизирован'], status: 401);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
 
-        try {
-            $orders = $this->userService->getUserOrders(userId: $this->authService->id());
+        $orders = $this->userService->getOrders(userId: $this->authService->id());
 
-            return Response::json(data: ['success' => true, 'data' => $orders]);
-        } catch (\Exception $e) {
-            return Response::json(data: [
-                'error' => true,
-                'message' => $e->getMessage()
-            ], status: $e->getCode() ?: 400);
-        }
+        return Response::jsonSuccess(data: $orders);
     }
 }

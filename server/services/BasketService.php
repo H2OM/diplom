@@ -67,7 +67,7 @@ class BasketService {
         $product = $this->goodsRepository->getProductByArticleAndSize($article, $size, $userId);
 
         if(!$product || count($product) === 0) {
-            throw new ResponseException(responseMessage: ResponseMessage::PRODUCT_NOT_FOUND, code: 404);
+            throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
         $product['size'] = $size;
@@ -92,7 +92,7 @@ class BasketService {
         $index = $this->findProductIndex(article: $article, size: $size);
 
         if($index === false) {
-            throw new ResponseException(responseMessage: ResponseMessage::PRODUCT_NOT_FOUND, code: 404);
+            throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
         $this->basket[$index]['value'] = $count;
@@ -112,7 +112,7 @@ class BasketService {
         $index = $this->findProductIndex(article: $article, size: $size);
 
         if($index === false) {
-            throw new ResponseException(responseMessage: ResponseMessage::PRODUCT_NOT_FOUND, code: 404);
+            throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
         if($this->basket[$index]['value'] === 1) {
@@ -137,7 +137,7 @@ class BasketService {
         $index = $this->findProductIndex(article: $article, size: $size);
 
         if($index === false) {
-            throw new ResponseException(responseMessage: ResponseMessage::PRODUCT_NOT_FOUND, code: 404);
+            throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
         unset($this->basket[$index]);

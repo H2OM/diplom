@@ -87,7 +87,7 @@ class Validator {
 
             case 'password':
                 if (!$this->password($value)) {
-                    $this->errors[$field] = 'Слабый пароль';
+                    $this->errors[$field] = 'Некорректный пароль';
                     return false;
                 }
                 break;

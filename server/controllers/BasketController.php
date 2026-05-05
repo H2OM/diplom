@@ -6,7 +6,6 @@ use app\core\enums\ResponseMessage;
 use app\core\exceptions\ResponseException;
 use app\core\Request;
 use app\core\Response;
-use app\core\Session;
 use app\services\AuthService;
 use app\services\BasketService;
 
@@ -38,7 +37,7 @@ readonly class BasketController {
         $count   = (int)$this->session->post('count');
 
         if(!$article || !$size) {
-            return Response::jsonError(message: ResponseMessage::NOT_ENOUGH_DATA, status: 403);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
         if($count <= 0) {
@@ -69,7 +68,7 @@ readonly class BasketController {
         $size    = $this->session->post('size');
 
         if(!$article || !$size) {
-            return Response::jsonError(message: ResponseMessage::NOT_ENOUGH_DATA, status: 403);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
         try {
@@ -110,7 +109,7 @@ readonly class BasketController {
         $count   = (int)$this->session->post('count');
 
         if(!$article || !$size || $count <= 0) {
-            return Response::jsonError(message: ResponseMessage::NOT_ENOUGH_DATA, status: 403);
+            return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
         try {

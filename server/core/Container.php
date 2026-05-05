@@ -51,7 +51,9 @@ class Container {
      * Получение класса
      *
      * @param string $key
+     * @param array $manualParams
      * @return mixed
+     * @throws Exception
      */
     public function get(string $key, array $manualParams = []): mixed {
         if (isset($this->instances[$key])) {
