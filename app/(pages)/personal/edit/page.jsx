@@ -1,7 +1,7 @@
 'use client';
-import MaskInput from "@/lib/baseComponents/maskInput/maskInput";
-import Spinner from "@/lib/baseComponents/spinner/spiner";
-import ClientContext from "@/lib/clientProvider";
+import MaskInput from "@/comps/ui/maskInput/maskInput";
+import Spinner from "@/comps/ui/spinner/spiner";
+import ClientContext from "@/lib/ClientProvider";
 import { userSelector } from "@/lib/redux/slices";
 import { fetchRequest, userFetch } from "@/lib/redux/thunks";
 import { useRouter } from "next/navigation";

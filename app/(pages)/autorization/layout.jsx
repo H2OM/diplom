@@ -1,12 +1,12 @@
 'use client';
 import { useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import ClientContext from "@/lib/clientProvider.jsx";
+import ClientContext from "@/lib/ClientProvider.jsx";
 import { useRouter } from "next/navigation";
 import './autorization.scss';
 import Link from "next/link";
-import Spinner from "@/lib/baseComponents/spinner/spiner";
-import Loadscreen from "@/lib/baseComponents/loadScreen/loadscreen";
+import Spinner from "@/comps/ui/spinner/spiner";
+import Loadscreen from "@/comps/ui/loadScreen/loadscreen";
 
 export default function Autorization ({children}) {
     const { isAuth, loading } = useContext(ClientContext);

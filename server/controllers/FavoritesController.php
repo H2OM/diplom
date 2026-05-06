@@ -38,7 +38,7 @@ readonly class FavoritesController {
      *
      * @return Response
      */
-    protected function setAction(): Response {
+    protected function addAction(): Response {
         if(!$this->authService->check()) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
@@ -50,7 +50,7 @@ readonly class FavoritesController {
         }
 
         try {
-            $this->favoritesService->set(userId: $this->authService->id(), productId: $productId);
+            $this->favoritesService->add(userId: $this->authService->id(), productId: $productId);
 
             return Response::jsonSuccess(message: ResponseMessage::SUCCESS_ADD);
         } catch (ResponseException $e) {

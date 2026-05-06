@@ -1,6 +1,6 @@
 'use client';
 
-import SetQueryParams from "@/lib/hooks/SetQueryParams";
+import SetQueryParams from "@/app/_hooks/SetQueryParams";
 import { useEffect, useState } from "react";
 
 export default function DialogMulti ({content, name, cords, close}) {

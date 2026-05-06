@@ -1,8 +1,8 @@
 'use client';
-import Cart from "@/lib/baseComponents/cart/cart";
-import Filters from "@/lib/baseComponents/filters/filters";
-import Spinner from "@/lib/baseComponents/spinner/spiner";
-import ClientContext from "@/lib/clientProvider.jsx";
+import Cart from "@/comps/ui/cart/Cart";
+import Filters from "@/comps/ui/filters/filters";
+import Spinner from "@/comps/ui/spinner/spiner";
+import ClientContext from "@/lib/ClientProvider.jsx";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 export default function Favorites ({searchParams}) {

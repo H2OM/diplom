@@ -2,7 +2,7 @@ import Link from 'next/link';
 import '../details.scss';
 import {notFound} from "next/navigation";
 import Image from "next/image";
-import MiniSlider from '@/lib/baseComponents/miniSlider/miniSlider';
+import MiniSlider from '@/comps/ui/miniSlider/MiniSlider';
 import Interaction from '../client/Interaction';
 import TabsNavigation from '../client/TabsNavigation';
 import DetailsSlider from '../client/DetailsSlider';

@@ -28,10 +28,10 @@ readonly class GoodsService {
         $sales = [];
 
         foreach($result as $k => $v) {
-            if($v['Hit']) {
+            if($v['hit']) {
                 $hit[] = $v;
             }
-            if($v['Sale']) {
+            if($v['sale']) {
                 $sales[] = $v;
             }
         }

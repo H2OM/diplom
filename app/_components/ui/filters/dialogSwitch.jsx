@@ -1,5 +1,5 @@
 'use client';
-import SetQueryParams from "@/lib/hooks/SetQueryParams";
+import SetQueryParams from "@/app/_hooks/SetQueryParams";
 import { useSearchParams } from "next/navigation";
 export default function DialogSwitch ({content, name, cords, close}) {
     const {set, unset, confirm} = SetQueryParams();

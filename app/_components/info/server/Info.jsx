@@ -1,4 +1,4 @@
-import ClientImage from '@/baseComps/clientImage/clientImage';
+import ClientImage from '@/comps/ui/clientImage/clientImage';
 import '../info.scss';
 import Image from "next/image";
 import InfoForm from '../client/InfoForm';

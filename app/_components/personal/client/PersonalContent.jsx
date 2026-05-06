@@ -1,7 +1,7 @@
 'use client';
 import { useContext } from "react";
-import ClientContext from "@/lib/clientProvider";
-import Loadscreen from "@/lib/baseComponents/loadScreen/loadscreen";
+import ClientContext from "@/lib/ClientProvider";
+import Loadscreen from "@/comps/ui/loadScreen/loadscreen";
 
 export default function PersonalContent ({children}) {
     const {isAuth} = useContext(ClientContext);

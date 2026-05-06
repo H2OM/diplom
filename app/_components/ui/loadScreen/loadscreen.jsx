@@ -1,6 +1,6 @@
 'use client';
 import './loadscreen.scss';
-import ClientContext from "@/lib/clientProvider";
+import ClientContext from "@/lib/ClientProvider";
 import { useContext } from "react";
 
 export default function Loadscreen() {

@@ -10,32 +10,32 @@ readonly class FavoritesRepository {
     public function __construct(private Db $db) {}
 
     /**
-     * Получение 'избранного' пользователя
+     * Получение
      *
      * @param int $userId
      * @return array
      */
     public function get(int $userId): array {
-        return $this->db->fetchAll("SELECT goods.article FROM goods 
+        return $this->db->fetchAll("SELECT goods.id FROM goods 
                     JOIN favorites ON goods.id = favorites.goods_id 
                     JOIN users ON favorites.user_id = users.id WHERE users.id = ?", [$userId]);
     }
 
     /**
-     * Добавление 'избранное' пользователя
+     * Добавление
      *
      * @param int $userId
      * @param string $productId
      * @return string|false
      */
-    public function set(int $userId, string $productId): string|false {
+    public function add(int $userId, string $productId): string|false {
         return $this->db->query()
             ->table('favorites')
             ->insert(['user_id' => $userId, 'product_id' => $productId]);
     }
 
     /**
-     * Удаление 'избранного' пользователя
+     * Удаление
      *
      * @param int $userId
      * @param string $productId

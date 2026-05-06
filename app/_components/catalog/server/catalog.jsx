@@ -1,7 +1,7 @@
-import Cart from "@/lib/baseComponents/cart/cart";
+import Cart from "@/comps/ui/cart/Cart";
 import {notFound} from "next/navigation";
 import '../catalog.scss';
-import Filters from "@/lib/baseComponents/filters/filters";
+import Filters from "@/comps/ui/filters/filters";
 import GET_DATA from "@/lib/GETDATA/GET_DATA";
 
 export default async function Catalog({params, searchParams}) {

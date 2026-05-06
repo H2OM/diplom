@@ -28,8 +28,8 @@ readonly class FavoritesService {
      * @return bool
      * @throws ResponseException
      */
-    public function set(int $userId, string $productId): bool {
-        $result = $this->favoritesRepository->set($userId, $productId);
+    public function add(int $userId, string $productId): bool {
+        $result = $this->favoritesRepository->add($userId, $productId);
 
         if(!$result) {
             throw new ResponseException(ResponseMessage::ERROR_UPDATE);

@@ -1,6 +1,6 @@
 'use client';
 
-import ClientContext from "@/lib/clientProvider";
+import ClientContext from "@/lib/ClientProvider";
 import { basketSelector, favsDataSlice, favsSelector } from "@/lib/redux/slices";
 import { basketFetch } from "@/lib/redux/thunks";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import './basket.scss';
 import Link from "next/link";
-import Spinner from "@/lib/baseComponents/spinner/spiner";
+import Spinner from "@/comps/ui/spinner/spiner";
 
 export default function Basket () {
     const {basketData, status} = useSelector(basketSelector);

@@ -18,9 +18,8 @@ readonly class GoodsRepository {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
         $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '".$userId."' " : "");
 
-        return $this->db->fetchAll("SELECT goods.id, goods.title, goods.brand, goods.type, goods.article, goods.price, goods.price_old, goods.image, goods.slider_images, 
-                                    GROUP_CONCAT(filters_values.value SEPARATOR '.') AS Size, $userQueryPart
-                                    IF(goods.hit = '1', true, false) AS hit, IF(goods.price_old > 0, true, false) AS sale, categories.code AS category 
+        return $this->db->fetchAll("SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, $userQueryPart
+                                    IF(goods.price_old > 0, 1, 0) AS sale, categories.code AS category 
                                     FROM goods JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
                                     AND filters.code = 'size' AND filters_goods.goods_id = goods.id AND filters_goods.goods_id = goods.id 
                                     AND filters_goods.filter_value_id = filters_values.id JOIN categories ON goods.category_id = categories.id 
@@ -195,12 +194,12 @@ readonly class GoodsRepository {
     /**
      * Получение товара по артикулу и размеру
      *
-     * @param string $article
+     * @param string $id
      * @param string $size
      * @param int|null $userId
      * @return array|null
      */
-    public function getProductByArticleAndSize(string $article, string $size, ?int $userId): array|null {
+    public function getProductByIdAndSize(string $id, string $size, ?int $userId): array|null {
         $userQueryPart = ($userId ? ", IF(favorites.goods_id = goods.id, true, false) AS favorites" : "");
 
         return $this->db->fetchOne("SELECT goods.*, categories.code AS 'category' $userQueryPart
@@ -208,8 +207,8 @@ readonly class GoodsRepository {
                                                 JOIN filters_values ON filters_goods.filter_value_id = filters_values.id AND  filters_values.value = ?
                                                 JOIN filters ON filters_values.filter_id = filters.id JOIN categories ON goods.category_id = categories.id
                                                 LEFT JOIN favorites ON goods.id = favorites.goods_id
-                                                WHERE goods.article = ? AND filters.code = 'size'",
-            [$size, $article]);
+                                                WHERE goods.id = ? AND filters.code = 'size'",
+            [$size, $id]);
     }
 
     /**

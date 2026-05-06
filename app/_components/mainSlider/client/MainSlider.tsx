@@ -2,24 +2,24 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import {SliderMain} from "@/_types/sliders";
 
-
-export default function MainSlider ({slides}) {
-    const [infoSlide, moveInfoSlide]= useState(0);
+export default function MainSlider ({slides} : {slides: SliderMain[]}) {
+    const [infoSlide, moveInfoSlide]= useState<number>(0);
 
     return (
         <div className="Slider__sections">
             <div className="Slider__sections__desc">
                 <h2 className="title">Новости</h2>
                 <p className="Slider__sections__desc__text">
-                    {slides[infoSlide].Text}
+                    {slides[infoSlide].text}
                 </p>
                 <div className="Slider__sections__desc__nav">
-                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=>{
+                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=> {
                         if(infoSlide == 0) {
-                            moveInfoSlide(slides.length-1);
-                        }else {
-                            moveInfoSlide(slide=>slide-1);
+                            moveInfoSlide(slides.length - 1);
+                        } else {
+                            moveInfoSlide(slide=> slide - 1);
                         }
                     }}>
                         <Image
@@ -34,21 +34,21 @@ export default function MainSlider ({slides}) {
                         />
                     </div>  
                     <div className="Slider__sections__desc__nav__bars">
-                        {
-                            slides.map((sl,i)=>{
-                                return (
-                                    <div key={sl.id} className={"Slider__sections__desc__nav__bars__bar"+(i==infoSlide ? " Slider__sections__desc__nav__bars__bar_active": "")} onClick={()=>{
+                        {slides.map((slide,i)=> {
+                            return (
+                                <div key={slide.id}
+                                     className={"Slider__sections__desc__nav__bars__bar" + (i === infoSlide ? " Slider__sections__desc__nav__bars__bar_active": "")}
+                                     onClick={()=> {
                                         moveInfoSlide(i);
                                     }}></div>
-                                )
-                            })
-                        }
+                            )
+                        })}
                     </div>
-                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=>{
-                        if(infoSlide == slides.length-1) {
+                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=> {
+                        if(infoSlide === slides.length - 1) {
                             moveInfoSlide(0);
-                        }else {
-                            moveInfoSlide(slide=>slide+1);
+                        } else {
+                            moveInfoSlide(slide=> slide + 1);
                         }
                     }}>
                         <Image
@@ -66,7 +66,7 @@ export default function MainSlider ({slides}) {
             </div>
             <div className="Slider__sections__slide">
                 <Image
-                    src={"/" + slides[infoSlide].Image.trim()}
+                    src={"/" + slides[infoSlide].image.trim()}
                     alt={"КАРТИНКА К ТЕКСТУ"}
                     className={"Slider__sections__slide__img"}
                     height={550}

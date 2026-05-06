@@ -1,6 +1,6 @@
 'use client';
-import Spinner from "@/lib/baseComponents/spinner/spiner";
-import ClientContext from "@/lib/clientProvider";
+import Spinner from "@/comps/ui/spinner/spiner";
+import ClientContext from "@/lib/ClientProvider";
 import { userSelector } from "@/lib/redux/slices";
 import { userFetch } from "@/lib/redux/thunks";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 'use client';
-import MaskInput from "@/lib/baseComponents/maskInput/maskInput";
-import ClientContext from "@/lib/clientProvider";
+import MaskInput from "@/comps/ui/maskInput/maskInput";
+import ClientContext from "@/lib/ClientProvider";
 import { fetchRequest } from "@/lib/redux/thunks";
 import { useContext } from "react";
 import { useDispatch } from "react-redux";
