@@ -1,4 +1,4 @@
-import './page.scss';
+import "@/page.scss";
 import {mediaAPI} from "@api";
 import MainSlider from "@components/mainSlider/client/MainSlider";
 import MiniSlider from "@components/ui/miniSlider/MiniSlider";

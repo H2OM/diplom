@@ -166,7 +166,7 @@ readonly class GoodsRepository {
         $userQueryPart = ($userId ? " IF(favorites.goods_id = goods.id, true, false) AS favorites, " : "");
 
         $product = $this->db->fetchOne("SELECT goods.*, base.value AS color, categories.code AS category, $userQueryPart
-                                                GROUP_CONCAT(filters_values.value SEPARATOR '.') AS Size, mods.colors 
+                                                GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, mods.colors 
                                                 FROM (SELECT GROUP_CONCAT(CONCAT(goods.article, '#', categories.code, '#', goods.image) SEPARATOR ',') AS colors 
                                                 FROM goods_variations JOIN goods ON (goods_variations.base_id = goods.id OR goods_variations.variation_id = goods.id) 
                                                 JOIN categories ON goods.category_id = categories.id 
@@ -202,7 +202,7 @@ readonly class GoodsRepository {
     public function getProductByIdAndSize(string $id, string $size, ?int $userId): array|null {
         $userQueryPart = ($userId ? ", IF(favorites.goods_id = goods.id, true, false) AS favorites" : "");
 
-        return $this->db->fetchOne("SELECT goods.*, categories.code AS 'category' $userQueryPart
+        return $this->db->fetchOne("SELECT goods.*, categories.code AS category $userQueryPart
                                                 FROM goods JOIN filters_goods ON filters_goods.goods_id = goods.id 
                                                 JOIN filters_values ON filters_goods.filter_value_id = filters_values.id AND  filters_values.value = ?
                                                 JOIN filters ON filters_values.filter_id = filters.id JOIN categories ON goods.category_id = categories.id

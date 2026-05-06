@@ -1,8 +1,8 @@
 import {useContext} from "react";
-import FavoritesContext from "@providers/FavoritesProvider";
+import BasketContext from "@providers/BasketProvider";
 
-export function useFavorites(productId?: number) {
-    const context = useContext<FavoritesContext | null>(FavoritesContext);
+export function useBasket(productId?: number) {
+    const context = useContext<FavoritesContext | null>(BasketContext);
 
     if (!context) {
         throw new Error('Favorites provider is missing');
