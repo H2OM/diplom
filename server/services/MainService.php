@@ -2,11 +2,11 @@
 
 namespace app\services;
 
-use app\repositories\MediaRepository;
+use app\repositories\MainRepository;
 
-/** Сервис для управления медиа-информацией */
-class MediaService {
-    public function __construct(private readonly MediaRepository $mediaRepository) {}
+/** Сервис для управления главной информацией */
+class MainService {
+    public function __construct(private readonly MainRepository $mediaRepository) {}
 
     /**
      * Получение данных из таблицы 'новости'

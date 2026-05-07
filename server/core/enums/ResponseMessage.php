@@ -4,6 +4,7 @@ namespace app\core\enums;
 
 enum ResponseMessage: string {
     case ERROR_PRODUCT_NOT_FOUND = 'Товар не найден';
+    case ERROR_CATALOG_NOT_FOUND = 'Товары не найдены';
     case ERROR_NOT_ENOUGH_DATA = 'Не достаточно данных';
     case ERROR_DATA = 'Некорректные данные';
     case ERROR_GET_DATA = 'Ошибка при получении данных';

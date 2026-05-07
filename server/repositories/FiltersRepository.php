@@ -26,11 +26,6 @@ class FiltersRepository {
                 default => ''
             };
         }
-        // TODO Как передается favorites string или boolean?
-        $userFavoritesQueryPart = ((isset($filters['favorites']) && $filters['favorites'] == 'true')
-            ? "JOIN favorites ON favorites.product_id = goods.id "
-            : ""
-        );
 
         return $this->db->fetchAll("SELECT filters.filter, filters.code, filters.type, filters_values.id,
                                 IF(filters.type = 'multi' AND filters_goods.filter_value_id = filters_values.id, filters_values.value, 
@@ -40,7 +35,7 @@ class FiltersRepository {
                                 COALESCE(filters_values.code, filters_values.id, categories.code)))) AS value_code 
                                 FROM filters JOIN categories LEFT JOIN filters_values ON filters.id = filters_values.filter_id JOIN goods 
                                 LEFT JOIN filters_goods ON filters_values.id = filters_goods.filter_value_id AND goods.id = filters_goods.goods_id 
-                                AND categories.id = goods.category_id ".$sqlPartCondition." $userFavoritesQueryPart
+                                AND categories.id = goods.category_id ".$sqlPartCondition." 
                                 WHERE IF(filters.code = 'price', goods.category_id = categories.id ".$sqlPartCondition.", filters.code is NOT null) 
                                 GROUP BY Name, code ORDER BY Type, id ASC, Name DESC;");
     }

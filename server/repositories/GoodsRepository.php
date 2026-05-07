@@ -11,20 +11,14 @@ class GoodsRepository {
     /**
      * Получение популярных и скидочных товаров
      *
-     * @param int|null $userId
      * @return array
      */
-    public function getHitAndSales(?int $userId): array {
-        $userQueryPart = ($userId ? " IF(favorites.product_id = goods.id, true, false) AS favorites, " : "");
-        $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '".$userId."' " : "");
-
-        return $this->db->fetchAll("SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, $userQueryPart
+    public function getHitAndSales(): array {
+        return $this->db->fetchAll("SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, 
                                     IF(goods.price_old > 0, 1, 0) AS sale, categories.code AS category 
                                     FROM goods JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
                                     AND filters.code = 'size' AND filters_goods.goods_id = goods.id AND filters_goods.goods_id = goods.id 
                                     AND filters_goods.filter_value_id = filters_values.id JOIN categories ON goods.category_id = categories.id 
-                                    LEFT JOIN favorites ON goods.id = favorites.product_id 
-                                    $userFavoritesQueryPart
                                     WHERE (goods.hit = '1' OR goods.price_old > 0) GROUP BY goods.id");
     }
 
@@ -32,10 +26,9 @@ class GoodsRepository {
      * Получение товаров по фильтрам
      *
      * @param array $filters
-     * @param int|null $userId
      * @return array
      */
-    public function getByFilters(array $filters, int|null $userId): array {
+    public function getByFilters(array $filters): array {
         $sqlPartSelect = "";
         $sqlPartCondition = "";
         $prepareSelectedValue = [];
@@ -90,12 +83,6 @@ class GoodsRepository {
                     }
 
                     break;
-                case "favorites":
-                    if($userId && $value === 'true') {
-                        $sqlPartCondition .= "favorites.user_id = '$userId' AND ";
-                    }
-
-                    break;
                 case "brand":
                 case "size":
                 case "color":
@@ -143,42 +130,36 @@ class GoodsRepository {
             };
         }
 
-        $userQueryPart = ($userId ? ", IF(favorites.product_id = goods.id, true, false) AS 'favorites'" : "");
-
         return $this->db->fetchAll("SELECT goods.*, categories.code AS category, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size 
-                                            $userQueryPart 
                                             FROM ".$sqlPartSelect."filters_goods JOIN goods 
                                             JOIN filters_values ON filters_goods.goods_id = goods.id 
                                             AND filters_goods.filter_value_id = filters_values.id 
                                             JOIN filters ON filters_values.filter_id = filters.id AND filters.code = 'size' JOIN 
-                                            categories ON goods.category_id = categories.id LEFT JOIN favorites ON goods.id = favorites.product_id".$sqlPartCondition,
+                                            categories ON goods.category_id = categories.id".$sqlPartCondition,
         [...$prepareSelectedValue, ...$prepareConditionedValue]);
     }
 
     /**
-     * Получение отдельного товара по артикулу
+     * Получение отдельного товара по id
      *
-     * @param string $article
-     * @param int|null $userId
+     * @param int $id
      * @return array|null
      */
-    public function getProductByArticle(string $article, ?int $userId): array|null {
-        $userQueryPart = ($userId ? " IF(favorites.product_id = goods.id, true, false) AS favorites, " : "");
-
-        $product = $this->db->fetchOne("SELECT goods.*, base.value AS color, categories.code AS category, $userQueryPart
+    public function getProductById(int $id): array|null {
+        $product = $this->db->fetchOne("SELECT goods.*, base.value AS color, categories.code AS category, 
                                                 GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, mods.colors 
                                                 FROM (SELECT GROUP_CONCAT(CONCAT(goods.article, '#', categories.code, '#', goods.image) SEPARATOR ',') AS colors 
                                                 FROM goods_variations JOIN goods ON (goods_variations.base_id = goods.id OR goods_variations.variation_id = goods.id) 
                                                 JOIN categories ON goods.category_id = categories.id 
-                                                WHERE (goods_variations.base_article = ? OR goods_variations.variation_article = ?) ORDER BY goods_variations.base_article DESC) AS mods, 
+                                                WHERE (goods_variations.base_id = ? OR goods_variations.variation_id = ?) ORDER BY goods_variations.base_article DESC) AS mods, 
                                                 (SELECT filters_values.value FROM goods JOIN filters_goods ON filters_goods.goods_id = goods.id 
                                                 JOIN filters_values ON filters_goods.filter_value_id = filters_values.id JOIN filters ON filters_values.filter_id = filters.id 
-                                                AND filters.code = 'color' WHERE goods.article = ?) AS base, 
+                                                AND filters.code = 'color' WHERE goods.id = ?) AS base, 
                                                 goods JOIN categories ON goods.category_id = categories.id JOIN filters_goods ON filters_goods.goods_id = goods.id 
                                                 JOIN filters_values ON filters_goods.filter_value_id = filters_values.id 
                                                 JOIN filters ON filters_values.filter_id = filters.id AND filters.code = 'size' 
-                                                LEFT JOIN favorites ON favorites.product_id = goods.id AND favorites.user_id = 5 WHERE goods.article = ?",
-            array_fill(0, 4, $article));
+                                                WHERE goods.id = ?",
+            array_fill(0, 4, $id));
 
         if(!empty($product['colors'])) {
             $colors = array_unique(explode(',', $product['colors']));
@@ -192,49 +173,39 @@ class GoodsRepository {
     }
 
     /**
-     * Получение товара по артикулу и размеру
+     * Получение товара по id и размеру
      *
      * @param string $id
      * @param string $size
-     * @param int|null $userId
      * @return array|null
      */
-    public function getProductByIdAndSize(string $id, string $size, ?int $userId): array|null {
-        $userQueryPart = ($userId ? ", IF(favorites.product_id = goods.id, true, false) AS favorites" : "");
-
-        return $this->db->fetchOne("SELECT goods.*, categories.code AS category $userQueryPart
+    public function getProductByIdAndSize(string $id, string $size): array|null {
+        return $this->db->fetchOne("SELECT goods.*, categories.code AS category 
                                                 FROM goods JOIN filters_goods ON filters_goods.goods_id = goods.id 
                                                 JOIN filters_values ON filters_goods.filter_value_id = filters_values.id AND  filters_values.value = ?
                                                 JOIN filters ON filters_values.filter_id = filters.id JOIN categories ON goods.category_id = categories.id
-                                                LEFT JOIN favorites ON goods.id = favorites.product_id
                                                 WHERE goods.id = ? AND filters.code = 'size'",
             [$size, $id]);
     }
 
     /**
-     * Получение связанных товаров по артикулу
+     * Получение связанных товаров по id
      *
-     * @param string $article
-     * @param int|null $userId
+     * @param int $id
      * @return array
      */
-    public function getRelatedByArticle(string $article, ?int $userId): array {
-        $userQueryPart = ($userId ? " IF(favorites.product_id = goods.id, true, false) AS favorites, " : "");
-        $userFavoritesQueryPart = ($userId ? " AND favorites.user_id = '$userId' " : "");
-
+    public function getRelatedById(int $id): array {
         return $this->db->fetchAll("SELECT goods.id, goods.title, goods.brand, goods.type, goods.article, goods.price, goods.price_old, 
-                            goods.image, goods.slider_images, categories.code AS category, $userQueryPart 
+                            goods.image, goods.slider_images, categories.code AS category, 
                             GROUP_CONCAT(filters_values.value SEPARATOR '.') AS Size FROM goods_related 
                             JOIN goods ON goods_related.goods_id = goods.id OR goods_related.related_id = goods.id 
                             JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
                             AND filters.code = 'size' AND filters_goods.goods_id = goods.id 
                             AND filters_goods.goods_id = goods.id AND filters_goods.filter_value_id = filters_values.id 
                             JOIN categories ON goods.Category_id = categories.id 
-                            LEFT JOIN favorites ON goods.id = favorites.Goods_id 
-                            $userFavoritesQueryPart
                             WHERE (goods_related.goods_article = ? OR goods_related.related_article = ?) 
                             AND goods.article != ? GROUP BY goods.id",
-            array_fill(0, 3, $article));
+            array_fill(0, 3, $id));
     }
 
     /**
@@ -243,10 +214,10 @@ class GoodsRepository {
      * @param int $id
      * @return array
      */
-    public function getProductById(int $id): array {
+    public function getProductId(int $id): array {
         return $this->db->query()
             ->table('goods')
             ->where('id', $id)
-            ->first();
+            ->value('id');
     }
 }

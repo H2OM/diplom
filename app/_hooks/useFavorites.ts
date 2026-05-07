@@ -1,9 +1,9 @@
 import {useContext} from "react";
 import FavoritesContext from "@providers/FavoritesProvider";
-import {Favorites} from "@_types/providers";
+import {ProviderFavorites} from "@_types/providers";
 
 export function useFavorites(productId?: number) {
-    const context = useContext<Favorites | null>(FavoritesContext);
+    const context = useContext<ProviderFavorites | null>(FavoritesContext);
 
     if (!context) {
         throw new Error('Favorites provider is missing');

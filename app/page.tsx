@@ -1,12 +1,12 @@
 import "@/page.scss";
-import {mediaAPI} from "@api";
+import {mainAPI} from "@api";
 import MainSlider from "@components/mainSlider/client/MainSlider";
 import MiniSlider from "@components/ui/miniSlider/MiniSlider";
 import {SliderMain, SliderProducts} from "@/_types/sliders";
 import Fallback from "@ui/fallback/Fallback";
 
-export default async function page() {
-    const data = await mediaAPI.getMainInfo();
+export default async function Page() {
+    const data = await mainAPI.getInfo();
 
     const {slider, popular, sales}: {
         slider: SliderMain[],

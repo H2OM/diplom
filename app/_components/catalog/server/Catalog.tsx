@@ -1,33 +1,23 @@
-import Cart from "@/comps/ui/cart/Cart";
 import {notFound} from "next/navigation";
 import '../catalog.scss';
-import Filters from "@/comps/ui/filters/filters";
-import GET_DATA from "@/lib/GETDATA/GET_DATA";
+import Filters from "@ui/filters/filters";
+import Cart from "@ui/cart/Cart";
+import {catalogAPI} from "@api";
+import {CatalogFilters} from "@_types/catalog";
+export default async function Catalog({promiseParams, promiseSearchParams}: {
+    promiseParams: Promise<{ type?: string; }>
+    promiseSearchParams: Promise<CatalogFilters>;
+}) {
+    const searchParams: CatalogFilters = await promiseSearchParams;
+    const params = await promiseParams;
 
-export default async function Catalog({params, searchParams}) {
-    const p = await params;
-    const sp = await searchParams;
-
-    let load = new URLSearchParams(Object.fromEntries(
-        Object.entries(sp).filter(([key]) =>
-            !(key === 'category' && p.type)
-        )
-    )).toString();
-
-    let get_params = load;
-
-    if(p.type !== "" && p.type !== undefined) {
-        get_params = '?category=' + p.type + load;
+    if(params.type) {
+        searchParams.category = params.type.toLowerCase();
     }
 
-    let catalog = await GET_DATA({
-        controller: "catalog",
-        action: 'get-catalog' + get_params
-    });
+    const catalog = await catalogAPI.get(searchParams);
 
-    if(!catalog) catalog = undefined;
-
-    let title = ((p.type !== undefined && p.type !== "") ? p.type.toLowerCase() : sp.category);
+    let title = searchParams.category;
 
     switch (title) {
         case undefined:
@@ -49,7 +39,7 @@ export default async function Catalog({params, searchParams}) {
         default:
             notFound();
     }
-
+// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return (
         <section className="Catalog section">
             <div className="grid">

@@ -3,7 +3,7 @@
 import './cart.scss';
 import Image from "next/image";
 import { useState } from "react";
-import {Product} from "@/_types/products";
+import {CatalogProduct} from "../../../_types/catalog";
 import {Icons} from "@components/ui/icons/Icons";
 import {useFavorites} from "@hooks/useFavorites";
 import {useBasket} from "@hooks/useBasket";
@@ -14,7 +14,7 @@ type Modal = {
     sizes: boolean;
 }
 
-export default function Cart ({ product, isSlide = false }: { product: Product; isSlide: boolean; }) {
+export default function Cart ({ product, isSlide = false }: { product: CatalogProduct; isSlide: boolean; }) {
     const { isFavorite, isFavoritesPending, toggleFavorite } = useFavorites(product.id);
     const { add } = useBasket();
     const [modal, setModal] = useState<Modal>({show: false, sizes: false});

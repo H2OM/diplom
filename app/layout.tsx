@@ -79,7 +79,7 @@ const raleway = localFont({
     ]
 })
 
-export default async function Layout ({children}: {children: ReactNode}) {
+export default async function Layout({children}: {children: ReactNode}) {
     return (
         <html className={raleway.className}>
             <body>

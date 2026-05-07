@@ -5,6 +5,7 @@ namespace app\services;
 use app\core\Db;
 use app\core\enums\ResponseMessage;
 use app\core\exceptions\ResponseException;
+use app\core\Session;
 use app\repositories\FiltersRepository;
 use app\repositories\GoodsRepository;
 
@@ -13,7 +14,8 @@ class GoodsService {
     public function __construct(
         private readonly FiltersRepository $filtersRepository,
         private readonly GoodsRepository   $goodsRepository,
-        private readonly AuthService       $authService
+        private readonly FavoritesService  $favoritesService,
+        private readonly Session           $session,
     ) {}
 
     /**
@@ -22,7 +24,7 @@ class GoodsService {
      * @return array[]
      */
     public function getHitAndSales(): array {
-        $result = $this->goodsRepository->getHitAndSales($this->authService->id());
+        $result = $this->goodsRepository->getHitAndSales();
 
         $hit = [];
         $sales = [];
@@ -44,16 +46,23 @@ class GoodsService {
      *
      * @param array $filters
      * @return array
-     * @throws ResponseException
      */
     public function getCatalogByFilters(array $filters): array {
-        $catalog = $this->goodsRepository->getByFilters($filters, $this->authService->id());
+        $catalog = $this->goodsRepository->getByFilters($filters);
 
-        if(count($catalog) === 0) {
-            throw new ResponseException(ResponseMessage::ERROR_DATA, 403);
-        }
+        if(count($catalog) === 0 || !isset($filters['favorite'])) return $catalog;
 
-        return $catalog;
+        $favorites = $this->session->get('favorites');
+
+        if(empty($favorites)) $favorites = $this->favoritesService->get();
+
+        $showOnlyFavorites = filter_var($filters['favorite'], FILTER_VALIDATE_BOOLEAN);
+
+        return array_filter($catalog, function ($product) use ($favorites, $showOnlyFavorites) {
+            $isFavorite = in_array($product['id'], $favorites);
+
+            return $showOnlyFavorites ? $isFavorite : !$isFavorite;
+        });
     }
 
     /**
@@ -110,14 +119,14 @@ class GoodsService {
     }
 
     /**
-     * Получение отдельного товара по артикулу
+     * Получение отдельного товара по id
      *
-     * @param string $article
+     * @param int $id
      * @return array
      * @throws ResponseException
      */
-    public function getProductByArticle(string $article): array {
-        $product = $this->goodsRepository->getProductByArticle($article, $this->authService->id());
+    public function getProductById(int $id): array {
+        $product = $this->goodsRepository->getProductById($id);
 
         if(!$product) {
             throw new ResponseException(ResponseMessage::ERROR_GET_DATA);
@@ -131,12 +140,12 @@ class GoodsService {
     }
 
     /**
-     * Получение связанных товаров по артикулу
+     * Получение связанных товаров по id
      *
-     * @param string $article
+     * @param int $id
      * @return array
      */
-    public function getRelatedByArticle(string $article): array {
-        return $this->goodsRepository->getRelatedByArticle($article, $this->authService->id());
+    public function getRelatedById(int $id): array {
+        return $this->goodsRepository->getRelatedById($id);
     }
 }

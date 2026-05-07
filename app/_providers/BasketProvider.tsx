@@ -2,13 +2,13 @@
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
 import { basketAPI } from "@api";
-import {ProductBasket} from "@_types/products";
-import {Basket} from "@_types/providers";
+import {CatalogProductBasket} from "@_types/catalog";
+import {ProviderBasket} from "@_types/providers";
 
-const BasketContext = createContext<Basket | null>(null);
+const BasketContext = createContext<ProviderBasket | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
-    const [basket, setBasket] = useState<ProductBasket[]>([]);
+    const [basket, setBasket] = useState<CatalogProductBasket[]>([]);
     const [isPending, setIsPending] = useState(false);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export function BasketProvider({ children }: { children: ReactNode }) {
 
     const executeAction = async (
         optimisticUpdate: (() => void) | null,
-        apiCall: () => Promise<{success: boolean; data?: ProductBasket[]}>,
+        apiCall: () => Promise<{success: boolean; data?: CatalogProductBasket[]}>,
     ) => {
         if(isPending) return;
 

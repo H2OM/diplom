@@ -2,7 +2,7 @@
 
 import {callbackAPI} from '@api';
 import {FormEvent, useState} from "react";
-import {Form} from "@_types/callbacks";
+import {CallbackForm} from "@_types/callbacks";
 
 export default function InfoForm () {
     const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -17,7 +17,7 @@ export default function InfoForm () {
 
         setIsFetching(true);
 
-        await callbackAPI.form(data as unknown as Form);
+        await callbackAPI.form(data as unknown as CallbackForm);
 
         setIsFetching(false);
     }

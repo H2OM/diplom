@@ -13,7 +13,6 @@ use app\core\Response;
 class FavoritesController {
     public function __construct(
         private readonly FavoritesService $favoritesService,
-        private readonly AuthService      $authService,
         private readonly Request          $request
     ) {}
 
@@ -23,7 +22,7 @@ class FavoritesController {
      * @return Response
      */
     public function getAction(): Response {
-        $favorites = $this->favoritesService->get(userId: $this->authService->id());
+        $favorites = $this->favoritesService->get();
 
         return Response::jsonSuccess(data: $favorites);
     }
@@ -42,7 +41,7 @@ class FavoritesController {
         }
 
         try {
-            $favorites = $this->favoritesService->add(productId: (int)$productId, userId: $this->authService->id());
+            $favorites = $this->favoritesService->add(productId: (int)$productId);
 
             return Response::jsonSuccess(data: $favorites, message: ResponseMessage::SUCCESS_ADD_FAVORITES);
         } catch (ResponseException $e) {
@@ -63,7 +62,7 @@ class FavoritesController {
         }
 
         try {
-            $favorites = $this->favoritesService->remove(productId: $productId, userId: $this->authService->id());
+            $favorites = $this->favoritesService->remove(productId: $productId);
 
             return Response::jsonSuccess(data: $favorites, message: ResponseMessage::SUCCESS_REMOVE_FAVORITES);
         } catch (ResponseException $e) {

@@ -18,7 +18,7 @@ class CatalogController {
      *
      * @return Response
      */
-    public function getCatalogAction(): Response {
+    public function getAction(): Response {
         $filters = $this->request->get();
 
         try {
@@ -41,15 +41,15 @@ class CatalogController {
      * @return Response
      */
     public function getProductAction(): Response {
-        $article = $this->request->get('article');
+        $id = $this->request->get('id');
 
-        if(!$article) {
+        if(!$id) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
         try {
-            $product = $this->goodsService->getProductByArticle($article);
-            $relatedProducts = $this->goodsService->getRelatedByArticle($article);
+            $product = $this->goodsService->getProductById($id);
+            $relatedProducts = $this->goodsService->getRelatedById($id);
 
             return Response::jsonSuccess(data: [
                 'product' => $product,

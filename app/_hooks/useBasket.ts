@@ -1,9 +1,9 @@
 import {useContext} from "react";
 import BasketContext from "@providers/BasketProvider";
-import {Basket} from "@_types/providers";
+import {ProviderBasket} from "@_types/providers";
 
 export function useBasket() {
-    const context = useContext<Basket | null>(BasketContext);
+    const context = useContext<ProviderBasket | null>(BasketContext);
 
     if (!context) {
         throw new Error('Basket provider is missing');

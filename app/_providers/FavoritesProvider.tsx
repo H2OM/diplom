@@ -2,9 +2,9 @@
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
 import { favoritesAPI } from "@api";
-import {Favorites} from "@_types/providers";
+import {ProviderFavorites} from "@_types/providers";
 
-const FavoritesContext = createContext<Favorites | null>(null);
+const FavoritesContext = createContext<ProviderFavorites | null>(null);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
     const [favorites, setFavorites] = useState<number[]>([]);

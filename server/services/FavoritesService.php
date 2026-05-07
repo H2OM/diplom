@@ -15,6 +15,7 @@ class FavoritesService {
     public function __construct(
         private readonly FavoritesRepository $favoritesRepository,
         private readonly GoodsRepository     $goodsRepository,
+        private readonly AuthService         $authService,
         private readonly Session             $session
     ) {
         $favorites = $this->session->get('favorites');
@@ -31,13 +32,12 @@ class FavoritesService {
     /**
      * Получение
      *
-     * @param int|null $userId
      * @return array
      */
-    public function get(?int $userId): array {
-        if(!$userId) return $this->favorites;
+    public function get(): array {
+        if(!$this->authService->id()) return $this->favorites;
 
-        $this->favorites = $this->favoritesRepository->get($userId);
+        $this->favorites = $this->favoritesRepository->get($this->authService->id());
 
         return $this->save();
     }
@@ -58,20 +58,19 @@ class FavoritesService {
      * Добавление
      *
      * @param int $productId
-     * @param int|null $userId
      * @return array
      * @throws ResponseException
      */
-    public function add(int $productId, ?int $userId): array {
+    public function add(int $productId): array {
         if(in_array($productId, $this->favorites)) {
             throw new ResponseException(ResponseMessage::ERROR_DUPLICATE);
         }
 
-        if(!$this->goodsRepository->getProductById($productId)) {
+        if(!$this->goodsRepository->getProductId($productId)) {
             throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND);
         }
 
-        if($userId && !$this->favoritesRepository->add($userId, $productId)) {
+        if($this->authService->id() && !$this->favoritesRepository->add($this->authService->id(), $productId)) {
             throw new ResponseException(ResponseMessage::ERROR_ADD);
         }
 
@@ -84,12 +83,11 @@ class FavoritesService {
      * Удаление
      *
      * @param string $productId
-     * @param int|null $userId
      * @return array
      * @throws ResponseException
      */
-    public function remove(string $productId, ?int $userId): array {
-        if($userId && !$this->favoritesRepository->remove($userId, $productId)) {
+    public function remove(string $productId): array {
+        if($this->authService->id() && !$this->favoritesRepository->remove($this->authService->id(), $productId)) {
             throw new ResponseException(ResponseMessage::ERROR_UPDATE);
         }
 
