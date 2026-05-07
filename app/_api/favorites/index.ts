@@ -7,9 +7,9 @@ export const get = async () => {
 }
 
 export const add = async (productId: number) => {
-    return await _FETCH.request({url: `${API_URL}/add?product_id=${productId}`});
+    return await _FETCH.request({url: `${API_URL}/add?product_id=${productId}`, toastSuccess: true});
 }
 
 export const remove = async (productId: number) => {
-    return await _FETCH.request({url: `${API_URL}/remove?product_id=${productId}`});
+    return await _FETCH.request({url: `${API_URL}/remove?product_id=${productId}`, toastSuccess: true});
 }

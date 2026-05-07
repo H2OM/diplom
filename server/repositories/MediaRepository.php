@@ -5,8 +5,8 @@ namespace app\repositories;
 use app\core\Db;
 
 /** Репозиторий для управления медиа-информацией */
-readonly class MediaRepository {
-    public function __construct(private Db $db) {}
+class MediaRepository {
+    public function __construct(private readonly Db $db) {}
 
     /**
      * Получение данных из таблицы 'новости'

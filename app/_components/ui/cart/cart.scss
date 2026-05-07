@@ -9,16 +9,15 @@
     position: relative;
     background-color: white;
     z-index: 40;
-    cursor: pointer;
     &-wrap {
         position: relative;
         height: 430px;
-        padding: 15px 15px 0px 15px;
+        padding: 15px 15px 0 15px;
         width: 25%;
         box-shadow: unset;
         // margin-left: 10px;
         &:nth-child(5n + 5), &:first-child {
-            margin-left: 0px;
+            margin-left: 0;
         }
         &_slide {
             width: auto;
@@ -38,6 +37,7 @@
         top: 5px;
         right: 5px;
         height: 24px;
+        cursor: pointer;
     }
     &__img {
         justify-self: center;
@@ -45,6 +45,7 @@
         width: 100%;
         height: 244px;
         padding: 0 10px;
+        cursor: pointer;
     }
     &__desc {
         margin-top: 10px;
@@ -64,7 +65,19 @@
             }
         }
         &__title {
-            margin: 5px 0px;
+            margin: 5px 0;
+            font-size: 16px;
+            transition: .2s all;
+            cursor: pointer;
+            font-weight: 400;
+            text-decoration: unset;
+            color: black;
+            &:hover {
+                color: $dark-purple;
+            }
+        }
+        &__sub-title {
+            margin: 5px 0;
             font-size: 16px;
         }
         &__size {
@@ -124,6 +137,9 @@
                 background-color: unset;
                 border-top: 2px solid $dark-purple;
                 transition: 0.02s all;
+                &._active {
+                    border-top: 4px solid $dark-purple;
+                }
                 &:hover {
                     border-top: 4px solid $dark-purple;
                 }

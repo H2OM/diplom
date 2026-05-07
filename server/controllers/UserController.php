@@ -11,11 +11,11 @@ use app\services\UserService;
 use Exception;
 
 /** Контролер для управления пользователями */
-readonly class UserController {
+class UserController {
     public function __construct(
-        private UserService $userService,
-        private AuthService $authService,
-        private Request     $request
+        private readonly UserService $userService,
+        private readonly AuthService $authService,
+        private readonly Request     $request
     ) {}
 
     /**
@@ -32,15 +32,15 @@ readonly class UserController {
      *
      * @return Response
      */
-    protected function signInAction(): Response {
+    public function signInAction(): Response {
         if($this->authService->check()) {
             return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
         }
 
         try {
             $user = $this->userService->signIn(
-                password: $this->request->post('password'),
-                phone: $this->request->post('phone')
+                password: $this->request->input('password'),
+                phone: $this->request->input('phone')
             );
 
             $this->authService->login(userData: $user);
@@ -63,13 +63,13 @@ readonly class UserController {
      * @return Response
      * @throws Exception
      */
-    protected function signUpAction(): Response {
+    public function signUpAction(): Response {
         if($this->authService->check()) {
             return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
         }
 
         try {
-            $user = $this->userService->signUp($this->request->post());
+            $user = $this->userService->signUp($this->request->input());
 
             $this->authService->login(userData: $user);
 
@@ -90,7 +90,7 @@ readonly class UserController {
      *
      * @return Response
      */
-    protected function logOutAction(): Response {
+    public function logOutAction(): Response {
         if(!$this->authService->check()) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
@@ -105,7 +105,7 @@ readonly class UserController {
      *
      * @return Response
      */
-    protected function getAction(): Response {
+    public function getAction(): Response {
         if(!$this->authService->check()) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
@@ -118,14 +118,14 @@ readonly class UserController {
      *
      * @return Response
      */
-    protected function editAction(): Response {
+    public function editAction(): Response {
         if(!$this->authService->check()) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }
 
         try {
             $updatedUser = $this->userService->edit(
-                userData: $this->request->post(),
+                userData: $this->request->input(),
                 userId: $this->authService->id()
             );
 
@@ -148,7 +148,7 @@ readonly class UserController {
      *
      * @return Response
      */
-    protected function getOrdersAction(): Response {
+    public function getOrdersAction(): Response {
         if(!$this->authService->check()) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
         }

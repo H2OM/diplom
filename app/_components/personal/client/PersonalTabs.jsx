@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import ClientContext from "@/lib/ClientProvider";
 import { fetchRequest } from "@/lib/redux/thunks";
 import { useRouter } from "next/navigation";
-import ClientImage from "@/comps/ui/clientImage/clientImage";
+import ClientImage from "@/comps/ui/clientImage/ClientImage";
 
 export default function PersonalTabs ({children}) {
     const {isAuth, loading} = useContext(ClientContext);

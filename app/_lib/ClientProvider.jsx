@@ -1,11 +1,11 @@
 'use client'
 
 import { createContext, useCallback, useEffect, useState } from "react"
-import { basketSelector, favsSelector, fetchSelector, userSelector } from "./redux/slices";
+import { basketSelector, favsSelector, fetchSelector, userSelector } from "@redux/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { basketFetch, favsFetch } from "./redux/thunks";
+import { basketFetch, favsFetch } from "@redux/thunks";
 import './loading.scss';
-import Spinner from "@/lib/baseComponents/spinner/spiner";
+import Spinner from "@ui/spinner/spiner";
 
 const ClientContext = createContext();
 

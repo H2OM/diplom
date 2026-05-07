@@ -1,8 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
-import { makeStore } from './redux/store'
-import { basketInitiate } from './redux/slices'
+import {makeStore} from "@redux/store";
 
 export const StoreProvider = ({ children }) => {
   const storeRef = useRef()

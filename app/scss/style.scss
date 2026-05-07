@@ -39,6 +39,10 @@ body {
     padding:0px 10px;
 }
 
+._disabled {
+  opacity: .7;
+}
+
 .spinnerWrap {
     position: fixed;
     left: 50%;

@@ -5,8 +5,8 @@ namespace app\repositories;
 use app\core\Db;
 
 /** Репозиторий для управления пользователями */
-readonly class UserRepository {
-    public function __construct(private Db $db) {}
+class UserRepository {
+    public function __construct(private readonly Db $db) {}
 
     /**
      * Получения пользователя по номеру телефона

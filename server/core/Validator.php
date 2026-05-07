@@ -128,7 +128,7 @@ class Validator {
                 break;
 
             case "text":
-                if(iconv_strlen($value) > 300 || iconv_strlen($value) < 5) {
+                if(iconv_strlen($value) > 300) {
                     $this->errors[$field] = 'Некорректная длинна';
                     return false;
                 }

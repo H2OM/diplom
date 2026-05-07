@@ -1,16 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import HeaderBtns from "../client/HeaderBtns";
 import '../header.scss';
+import HeaderButtons from "../client/HeaderButtons";
 
-export default function Header() {
+export function Header() {
 
     return (
         <header className="Header" id="Main">
             <div className="Header__links">
                 <div className="He121vav#4flvs">
-                    <Link className="Header__links__link" href={"/catalog/man"} >Мужчинам</Link>
-                    <Link className="Header__links__link" href={"/catalog/woman"} >Женщинам</Link>
+                    <Link className="Header__links__link" href={"/catalog/man"}>Мужчинам</Link>
+                    <Link className="Header__links__link" href={"/catalog/woman"}>Женщинам</Link>
                     <Link className="Header__links__link" href={"/catalog/kids"}>Детям</Link>
                 </div>
                 <Link className="Header__links__link" href={"/info"}>О нас</Link>
@@ -25,10 +25,8 @@ export default function Header() {
                     quality={100}
                     priority={true}
                 />
-                </Link> 
-            <HeaderBtns/>
-            {/* <div className="ErrorBlock">Ошибка!</div> */}
+            </Link>
+            <HeaderButtons/>
         </header>
-
     )
 }

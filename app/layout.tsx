@@ -2,10 +2,12 @@ import './scss/style.scss';
 import localFont from 'next/font/local';
 import {StoreProvider} from "@lib/StoreProvider";
 import {ClientProvider} from "@lib/ClientProvider";
-import Header from "@components/header/server/Header";
+import {Header} from "@components/header/server/Header";
 import Footer from "@components/footer/server/Footer";
 import {ReactNode} from "react";
 import {FavoritesProvider} from "@providers/FavoritesProvider";
+import {BasketProvider} from "@providers/BasketProvider";
+import {Toaster} from "react-hot-toast";
 
 const raleway = localFont({
     src: [
@@ -83,11 +85,14 @@ export default async function Layout ({children}: {children: ReactNode}) {
             <body>
                 <StoreProvider>
                     <ClientProvider>
-                        <FavoritesProvider>
-                            <Header/>
-                            {children}
-                            <Footer/>
-                        </FavoritesProvider>
+                        <BasketProvider>
+                            <FavoritesProvider>
+                                <Toaster position={"top-center"} reverseOrder={false}/>
+                                <Header/>
+                                {children}
+                                <Footer/>
+                            </FavoritesProvider>
+                        </BasketProvider>
                     </ClientProvider>
                 </StoreProvider>
             </body>

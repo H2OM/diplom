@@ -42,8 +42,8 @@ class Response {
     public static function jsonSuccess(array $data = null, ResponseMessage $message = null): Response {
         $response = ['success' => true];
 
-        if($message) $response['message'] = $message->value;
-        if($data)    $response['data']    = $data;
+        if(is_array($data))     $response['data']    = $data;
+        if($message)            $response['message'] = $message->value;
 
         return self::json(data: $response);
     }

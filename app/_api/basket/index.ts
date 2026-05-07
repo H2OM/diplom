@@ -10,8 +10,8 @@ export const add = async (data: {
     id: number;
     size: string;
     count?: number;
-}) => {
-    return await _FETCH.request({url: `${API_URL}/add`, options: {method: 'POST', body: JSON.stringify(data)}});
+}, toastSuccess: boolean = true) => {
+    return await _FETCH.request({url: `${API_URL}/add`, options: {method: 'POST', body: JSON.stringify(data)}, toastSuccess: toastSuccess});
 }
 
 export const decrement = async (data: {

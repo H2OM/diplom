@@ -1,18 +1,25 @@
 import {useContext} from "react";
 import BasketContext from "@providers/BasketProvider";
+import {Basket} from "@_types/providers";
 
-export function useBasket(productId?: number) {
-    const context = useContext<FavoritesContext | null>(BasketContext);
+export function useBasket() {
+    const context = useContext<Basket | null>(BasketContext);
 
     if (!context) {
-        throw new Error('Favorites provider is missing');
+        throw new Error('Basket provider is missing');
     }
 
-    const { favorites, toggleFavorite } = context;
+    const { basket, isPending, add, setCount, decrement, remove, clear, toggle } = context;
 
     return {
-        favorites,
-        isFavorite: (productId && favorites) ? favorites.includes(productId) : false,
-        toggleFavorite: () => productId && toggleFavorite(productId),
+        basket,
+        inBasket: (id: number, size: string) => basket.find(p => (p.id === id && p.size === size)),
+        isBasketPending: isPending,
+        add,
+        setCount,
+        decrement,
+        remove,
+        clear,
+        toggle,
     };
 }

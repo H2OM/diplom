@@ -5,7 +5,6 @@ use app\core\Router;
 use app\core\App;
 
 require_once "./settings/config.php";
-require_once LIB . "functions.php";
 
 session_start();
 

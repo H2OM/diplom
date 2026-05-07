@@ -10,11 +10,11 @@ use app\services\AuthService;
 use app\services\BasketService;
 
 /** Управление корзиной */
-readonly class BasketController {
+class BasketController {
     public function __construct(
-        private BasketService $basketService,
-        private Request $session,
-        private AuthService $authService
+        private readonly BasketService $basketService,
+        private readonly Request $session,
+        private readonly AuthService $authService
     ) {}
 
     /**
@@ -22,7 +22,7 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function getAction(): Response {
+    public function getAction(): Response {
         return Response::jsonSuccess(data: $this->basketService->get());
     }
 
@@ -31,10 +31,10 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function addAction(): Response {
-        $id    = $this->session->post('id');
-        $size  = $this->session->post('size');
-        $count = (int)$this->session->post('count');
+    public function addAction(): Response {
+        $id    = $this->session->input('id');
+        $size  = $this->session->input('size');
+        $count = (int)$this->session->input('count');
 
         if(!$id || !$size) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
@@ -52,7 +52,7 @@ readonly class BasketController {
                 count: $count
             );
 
-            return Response::jsonSuccess(data: $basket);
+            return Response::jsonSuccess(data: $basket, message: ResponseMessage::SUCCESS_ADD_BASKET);
         } catch (ResponseException $exception) {
             return Response::jsonError(message: $exception->getResponseMessage(), status: $exception->getCode() ?: 400);
         }
@@ -63,9 +63,9 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function decrementAction(): Response {
-        $id   = $this->session->post('id');
-        $size = $this->session->post('size');
+    public function decrementAction(): Response {
+        $id   = $this->session->input('id');
+        $size = $this->session->input('size');
 
         if(!$id || !$size) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
@@ -85,9 +85,9 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function removeAction(): Response {
-        $id   = $this->session->post('id');
-        $size = $this->session->post('size');
+    public function removeAction(): Response {
+        $id   = $this->session->input('id');
+        $size = $this->session->input('size');
 
         try {
             $basket = $this->basketService->remove(id: $id, size: $size);
@@ -103,10 +103,10 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function setCountAction(): Response {
-        $id = $this->session->post('id');
-        $size    = $this->session->post('size');
-        $count   = (int)$this->session->post('count');
+    public function setCountAction(): Response {
+        $id      = $this->session->input('id');
+        $size    = $this->session->input('size');
+        $count   = (int)$this->session->input('count');
 
         if(!$id || !$size || $count <= 0) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
@@ -126,7 +126,7 @@ readonly class BasketController {
      *
      * @return Response
      */
-    protected function clearAction(): Response {
+    public function clearAction(): Response {
         return Response::jsonSuccess(data: $this->basketService->clear());
     }
 }

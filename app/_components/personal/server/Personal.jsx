@@ -1,6 +1,6 @@
 import '../personal.scss';
 import ClientLink from '@/comps/ui/clientLink/clientLink';
-import ClientImage from '@/comps/ui/clientImage/clientImage';
+import ClientImage from '@/comps/ui/clientImage/ClientImage';
 import PersonalTabs from '../client/PersonalTabs';
 import Loadscreen from '@/comps/ui/loadScreen/loadscreen';
 

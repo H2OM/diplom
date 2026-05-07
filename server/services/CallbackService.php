@@ -6,8 +6,8 @@ use app\core\Validator;
 use Exception;
 
 /** Сервис по управлению формами */
-readonly class CallbackService {
-    public function __construct(private Validator $validator) {}
+class CallbackService {
+    public function __construct(private readonly Validator $validator) {}
 
     /**
      * Обработка подписки по email
@@ -17,7 +17,9 @@ readonly class CallbackService {
      * @throws Exception
      */
     public function subscribe(string $email): bool {
-        $data = $this->validator->validate(data: [$email], rules: [
+        $data = $this->validator->validate(data: [
+            'email' => $email
+        ], rules: [
             'email' => ['required', 'email'],
         ]);
 
@@ -42,7 +44,7 @@ readonly class CallbackService {
             'email'      => ['required', 'email'],
             'first_name' => ['required', 'name'],
             'title'      => ['required', 'text'],
-            'message'    => ['required', 'text'],
+            'message'    => ['text'],
         ]);
 
         if(!$validateData) {

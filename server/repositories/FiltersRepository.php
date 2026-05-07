@@ -5,8 +5,8 @@ namespace app\repositories;
 use app\core\Db;
 
 /** Репозиторий для управления фильтрами */
-readonly class FiltersRepository {
-    public function __construct(private Db $db) {}
+class FiltersRepository {
+    public function __construct(private readonly Db $db) {}
 
     /**
      * Получение всех фильтров
@@ -28,7 +28,7 @@ readonly class FiltersRepository {
         }
         // TODO Как передается favorites string или boolean?
         $userFavoritesQueryPart = ((isset($filters['favorites']) && $filters['favorites'] == 'true')
-            ? "JOIN favorites ON favorites.goods_id = goods.id "
+            ? "JOIN favorites ON favorites.product_id = goods.id "
             : ""
         );
 

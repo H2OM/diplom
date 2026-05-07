@@ -14,3 +14,7 @@ export interface Product {
     category_id: number;
     category: string
 }
+
+export interface ProductBasket extends Product {
+    count: number;
+}

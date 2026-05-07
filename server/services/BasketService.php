@@ -24,7 +24,7 @@ class BasketService {
     }
 
     /**
-     * Получение корзины покупок пользователя
+     * Получение
      *
      * @return array
      */
@@ -33,7 +33,7 @@ class BasketService {
     }
 
     /**
-     * Сохранение корзины покупок в сессию
+     * Сохранение в сессию
      *
      * @return array
      */
@@ -45,7 +45,7 @@ class BasketService {
     }
 
     /**
-     * Добавление товара в корзину покупок
+     * Добавление
      *
      * @param string $id
      * @param string $size
@@ -59,7 +59,7 @@ class BasketService {
         $index = $this->findProductIndex(id: $id, size: $size);
 
         if($index !== false) {
-            $this->basket[$index]['value'] += $count;
+            $this->basket[$index]['count'] += $count;
 
             return $this->save();
         }
@@ -71,7 +71,7 @@ class BasketService {
         }
 
         $product['size'] = $size;
-        $product['value'] = $count;
+        $product['count'] = $count;
 
         $this->basket[] = $product;
 
@@ -79,7 +79,7 @@ class BasketService {
     }
 
     /**
-     * Установка количества товара в корзине
+     * Установка количества конкретного товара
      *
      * @param string $id
      * @param string $size
@@ -95,13 +95,13 @@ class BasketService {
             throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
-        $this->basket[$index]['value'] = $count;
+        $this->basket[$index]['count'] = $count;
 
         return $this->save();
     }
 
     /**
-     * Уменьшить кол-во товара в корзине
+     * Уменьшить кол-во конкретного товара
      *
      * @param string $id
      * @param string $size
@@ -115,18 +115,18 @@ class BasketService {
             throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
         }
 
-        if($this->basket[$index]['value'] === 1) {
+        if($this->basket[$index]['count'] === 1) {
             unset($this->basket[$index]);
 
         } else {
-            $this->basket[$index]['value'] -= 1;
+            $this->basket[$index]['count'] -= 1;
         }
 
         return $this->save();
     }
 
     /**
-     * Удалить товар из корзины
+     * Удалить товар
      *
      * @param string $id
      * @param string $size

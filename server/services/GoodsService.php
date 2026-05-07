@@ -9,11 +9,11 @@ use app\repositories\FiltersRepository;
 use app\repositories\GoodsRepository;
 
 /** Сервис для управления товарами */
-readonly class GoodsService {
+class GoodsService {
     public function __construct(
-        private FiltersRepository $filtersRepository,
-        private GoodsRepository $goodsRepository,
-        private AuthService $authService
+        private readonly FiltersRepository $filtersRepository,
+        private readonly GoodsRepository   $goodsRepository,
+        private readonly AuthService       $authService
     ) {}
 
     /**

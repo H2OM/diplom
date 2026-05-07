@@ -1,4 +1,4 @@
-import Info from "@/comps/info/server/Info";
+import Info from "@components/info/server/Info";
 
 export default function Page () {
     return <Info/>

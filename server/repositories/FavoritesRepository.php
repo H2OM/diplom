@@ -6,8 +6,8 @@ namespace app\repositories;
 use app\core\Db;
 //TODO Убрать во всех репозиториях проверку на favorite, проверять на фронте через контекст на избранное
 /** Репозиторий по управлению избранными товарами */
-readonly class FavoritesRepository {
-    public function __construct(private Db $db) {}
+class FavoritesRepository {
+    public function __construct(private readonly Db $db) {}
 
     /**
      * Получение
@@ -17,7 +17,7 @@ readonly class FavoritesRepository {
      */
     public function get(int $userId): array {
         return $this->db->fetchAll("SELECT goods.id FROM goods 
-                    JOIN favorites ON goods.id = favorites.goods_id 
+                    JOIN favorites ON goods.id = favorites.product_id 
                     JOIN users ON favorites.user_id = users.id WHERE users.id = ?", [$userId]);
     }
 

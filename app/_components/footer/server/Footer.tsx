@@ -9,7 +9,6 @@ export default function Footer() {
         <footer className="Footer">
             <div className="grid">
                 <div className="Footer__block Footer__block_1">
-                    {/* <a href={serv+"agreement.html"} target="blank" className="Footer__link">Политика конфиденциальности</a>  */}
                     <Link href={"info#Callback"} className="Footer__link">Обратная связь</Link>
                     <Link href={"info#Contacts"} className="Footer__link">Контакты</Link>
                     <Link href={"/#Main"}>

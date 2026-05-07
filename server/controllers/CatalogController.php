@@ -10,15 +10,15 @@ use app\services\GoodsService;
 
 
 /** Управление каталогом */
-readonly class CatalogController {
-    public function __construct(private Request $request, private GoodsService $goodsService) {}
+class CatalogController {
+    public function __construct(private readonly Request $request, private readonly GoodsService $goodsService) {}
 
     /**
      * Получение каталога товара
      *
      * @return Response
      */
-    protected function getCatalogAction(): Response {
+    public function getCatalogAction(): Response {
         $filters = $this->request->get();
 
         try {
@@ -40,7 +40,7 @@ readonly class CatalogController {
      *
      * @return Response
      */
-    protected function getProductAction(): Response {
+    public function getProductAction(): Response {
         $article = $this->request->get('article');
 
         if(!$article) {

@@ -10,11 +10,11 @@ use app\core\Request;
 use app\core\Response;
 
 /** Контроллер для управления избранным */
-readonly class FavoritesController {
+class FavoritesController {
     public function __construct(
-        private FavoritesService $favoritesService,
-        private AuthService $authService,
-        private Request     $request
+        private readonly FavoritesService $favoritesService,
+        private readonly AuthService      $authService,
+        private readonly Request          $request
     ) {}
 
     /**
@@ -22,11 +22,7 @@ readonly class FavoritesController {
      *
      * @return Response
      */
-    protected function getAction(): Response {
-        if(!$this->authService->check()) {
-            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
-        }
-
+    public function getAction(): Response {
         $favorites = $this->favoritesService->get(userId: $this->authService->id());
 
         return Response::jsonSuccess(data: $favorites);
@@ -38,11 +34,7 @@ readonly class FavoritesController {
      *
      * @return Response
      */
-    protected function addAction(): Response {
-        if(!$this->authService->check()) {
-            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
-        }
-
+    public function addAction(): Response {
         $productId = $this->request->get('product_id');
 
         if(empty($productId)) {
@@ -50,9 +42,9 @@ readonly class FavoritesController {
         }
 
         try {
-            $this->favoritesService->add(userId: $this->authService->id(), productId: $productId);
+            $favorites = $this->favoritesService->add(productId: (int)$productId, userId: $this->authService->id());
 
-            return Response::jsonSuccess(message: ResponseMessage::SUCCESS_ADD);
+            return Response::jsonSuccess(data: $favorites, message: ResponseMessage::SUCCESS_ADD_FAVORITES);
         } catch (ResponseException $e) {
             return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
         }
@@ -63,11 +55,7 @@ readonly class FavoritesController {
      *
      * @return Response
      */
-    protected function removeAction(): Response {
-        if(!$this->authService->check()) {
-            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
-        }
-
+    public function removeAction(): Response {
         $productId = $this->request->get('product_id');
 
         if(empty($productId)) {
@@ -75,9 +63,9 @@ readonly class FavoritesController {
         }
 
         try {
-            $this->favoritesService->remove(userId: $this->authService->id(), productId: $productId);
+            $favorites = $this->favoritesService->remove(productId: $productId, userId: $this->authService->id());
 
-            return Response::jsonSuccess(message: ResponseMessage::SUCCESS_REMOVE);
+            return Response::jsonSuccess(data: $favorites, message: ResponseMessage::SUCCESS_REMOVE_FAVORITES);
         } catch (ResponseException $e) {
             return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
         }

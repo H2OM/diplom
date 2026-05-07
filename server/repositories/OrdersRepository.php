@@ -4,8 +4,8 @@ namespace app\repositories;
 
 use app\core\Db;
 
-readonly class OrdersRepository {
-    public function __construct(private Db $db) {}
+class OrdersRepository {
+    public function __construct(private readonly Db $db) {}
 
     /**
      * Получение всех заказов пользователя по его id

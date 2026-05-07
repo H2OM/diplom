@@ -9,18 +9,18 @@ use app\services\CallbackService;
 use Exception;
 
 /** Контролер для управления обратной связи */
-readonly class CallbackController {
+class CallbackController {
     public function __construct(
-        private Request $request,
-        private CallbackService $callbackService) {}
+        private readonly Request         $request,
+        private readonly CallbackService $callbackService) {}
 
     /**
      * Обработка формы подписки на новости
      *
      * @return Response
      */
-    protected function subscribeAction(): Response {
-        $email = $this->request->post('email');
+    public function subscribeAction(): Response {
+        $email = $this->request->input('email');
 
         if(!$email) {
             return Response::jsonError(message: ResponseMessage::ERROR_DATA, status: 403);
@@ -43,9 +43,9 @@ readonly class CallbackController {
      *
      * @return Response
      */
-    protected function formAction(): Response {
+    public function formAction(): Response {
         try {
-            $this->callbackService->form(data: $this->request->post());
+            $this->callbackService->form(data: $this->request->input());
 
             return Response::jsonSuccess(message: ResponseMessage::SUCCESS_FORM);
         } catch (Exception $e) {

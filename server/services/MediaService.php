@@ -5,8 +5,8 @@ namespace app\services;
 use app\repositories\MediaRepository;
 
 /** Сервис для управления медиа-информацией */
-readonly class MediaService {
-    public function __construct(private MediaRepository $mediaRepository) {}
+class MediaService {
+    public function __construct(private readonly MediaRepository $mediaRepository) {}
 
     /**
      * Получение данных из таблицы 'новости'

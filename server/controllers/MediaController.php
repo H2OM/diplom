@@ -6,8 +6,8 @@ use app\services\GoodsService;
 use app\services\MediaService;
 
 /** Контролер для управления главной информацией */
-readonly class MediaController {
-    public function __construct(private MediaService $mediaService, private GoodsService $goodsService) {}
+class MediaController {
+    public function __construct(private readonly MediaService $mediaService, private readonly GoodsService $goodsService) {}
 
     /**
      * Получение основной информации

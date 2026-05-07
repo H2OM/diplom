@@ -1,9 +1,11 @@
-import ClientImage from '@/comps/ui/clientImage/clientImage';
 import '../info.scss';
 import Image from "next/image";
 import InfoForm from '../client/InfoForm';
+import ClientImage from "@ui/clientImage/ClientImage";
+import {Icons} from "@ui/icons/Icons";
+import {contacts} from "@/_constants/contacts";
 
-export default function Info () {
+export default function Info() {
     return (
         <section className="About section" id="About">
             <div className="About__us">
@@ -54,45 +56,13 @@ export default function Info () {
                     <h2 className="title">Как с нами связаться?</h2>
                     <div className="About__describe About__describe_typethree">
                         <p>
-                            Можете написать нам в <a href="#" className="About__describe__link">Telegram 
-                            <ClientImage
-                                src={"svg/telegram.svg"}
-                                alt={"inst"}
-                                className="About__describe__link__svg"
-                                width={14}
-                                height={14}
-                                quality={100}
-                            />
-                            </a> или <a href="#" className="About__describe__link">WhatsApp 
-                            <ClientImage
-                                src={"svg/whatsapp.svg"}
-                                alt="inst"
-                                className="About__describe__link__svg"
-                                width={14}
-                                height={14}
-                                quality={100}
-                            />
+                            Можете написать нам в <a href={contacts.socials.telegram} className="About__describe__link">Telegram
+                            <Icons type={'telegram'} className={'About__describe__link__svg'}/>
+                            </a> или <a href={contacts.socials.vk} className="About__describe__link">Vk
+                            <Icons type={'vk'} className={'About__describe__link__svg'}/>
                             </a>.
                             <br />
-                            Так же мы есть в социальных сетях <span className="About__describe__link">Instagram 
-                                <ClientImage
-                                    src={"svg/instagram.svg"}
-                                    alt="inst"
-                                    className="About__describe__link__svg"
-                                    width={14}
-                                    height={14}
-                                    quality={100}
-                                /></span> и <a href="#" className="About__describe__link">Vk 
-                                <ClientImage
-                                    src={"svg/vk.svg"}
-                                    alt="vk"
-                                    className="About__describe__link__svg"
-                                    width={14}
-                                    height={14}
-                                    quality={100}
-                                /></a>.
-                            <br />
-                            Наша почта - <span className="About__describe__link">shoes@mail.ru</span>.
+                            Наша почта - <span className="About__describe__link">{contacts.email}</span>.
                         </p>
                     </div>
                 </div>

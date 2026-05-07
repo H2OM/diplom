@@ -2,11 +2,13 @@
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
 import { favoritesAPI } from "@api";
+import {Favorites} from "@_types/providers";
 
-const FavoritesContext = createContext<FavoritesContext | null>(null);
+const FavoritesContext = createContext<Favorites | null>(null);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-    const [favorites, setFavorites] = useState<number[] | null>(null);
+    const [favorites, setFavorites] = useState<number[]>([]);
+    const [isPending, setIsPending] = useState(false);
 
     useEffect(() => {
         favoritesAPI.get().then(response => {
@@ -15,12 +17,14 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const toggleFavorite = async (id: number) => {
-        if(!favorites) return;
+        if(isPending) return;
+
+        setIsPending(true);
 
         // Оптимистичное обновление (сразу меняем в UI)
         const isAdded = favorites.includes(id);
 
-        setFavorites(prev => isAdded ? prev!.filter(f => f !== id) : [...prev!, id]);
+        setFavorites(prev => isAdded ? prev.filter(f => f !== id) : [...prev, id]);
 
         let response;
 
@@ -32,12 +36,16 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         }
 
         if (!response.success) {
-            setFavorites(prev => isAdded ? [...prev!, id] : prev!.filter(f => f !== id));
+            setFavorites(prev => isAdded ? [...prev, id] : prev.filter(f => f !== id));
+        } else {
+            setFavorites(response.data);
         }
+
+        setIsPending(false);
     };
 
     return (
-        <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
+        <FavoritesContext.Provider value={{ favorites, isPending, toggleFavorite }}>
             {children}
         </FavoritesContext.Provider>
     );
