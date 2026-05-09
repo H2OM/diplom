@@ -68,41 +68,98 @@ class GoodsService {
     /**
      * Получение всех фильтров
      *
-     * @param array $filters
+     * @param array $params
      * @return array
      * @throws ResponseException
      */
-    public function getFilters(array $filters): array {
-        $filters = $this->filtersRepository->getFilters($filters);
+    public function getFilters(array $params): array {
+        $filters = $this->filtersRepository->getFilters($params);
 
         if(count($filters) === 0) {
             throw new ResponseException(ResponseMessage::ERROR_DATA, 403);
         }
+
+        return $filters;
+    }
+
+    /**
+     * Получение всех фильтров сгруппированных по коду
+     *
+     * @param array $params
+     * @return array
+     * @throws ResponseException
+     */
+    public function getFiltersGroupByCode(array $params): array {
+        $filters = $this->getFilters($params);
+
+        $groupedFilters = [];
 
         foreach($filters as $filter) {
             if($filter['name'] === "" && $filter['value_code'] === "") {
                 continue;
             }
 
-            if(!isset($filters[$filter['type']])) {
-                $filters[$filter['type']] = [];
+            $code = $filter['code'];
+
+            if(!isset($groupedFilters[$code])) {
+                $groupedFilters[$code] = [
+                    'code' => $code,
+                    'name' => $filter['filter'],
+                    'type' => $filter['type'],
+                    'values' => []
+                ];
+            }
+
+            $groupedFilters[$code]['values'][] = [
+                'id' => $filter['id'],
+                'name' => $filter['name'],
+                'code' => $filter['value_code'],
+            ];
+        }
+
+        return array_values($groupedFilters);
+    }
+    
+    /**
+     * Получение всех фильтров сгруппированных по типу
+     *
+     * @param array $params
+     * @return array
+     * @throws ResponseException
+     */
+    public function getFiltersGroupByType(array $params): array {
+        $filters = $this->getFilters($params);
+
+        $groupedFilters = [];
+
+        foreach($filters as $filter) {
+            if($filter['name'] === "" && $filter['value_code'] === "") {
+                continue;
+            }
+
+            $type = $filter['type'];
+
+            if(!isset($groupedFilters[$type])) {
+                $groupedFilters[$type] = [];
             }
 
             $index = "";
 
-            foreach($filters[$filter['type']] as $k => $type) {
-                if(isset($type['code']) && $type['code'] == $filter['code']) {
-                    $index = $k;
+            foreach($groupedFilters[$type] as $key => $value) {
+                if(isset($type['code']) && $value['code'] == $filter['code']) {
+                    $index = $key;
 
                     break;
                 }
             }
 
             if($index !== "") {
-                $filters[$filter['type']][$index]["values"][] = ["name" => $filter["name"], "value_code" => $filter['value_code']];
-
+                $groupedFilters[$type][$index]["values"][] = [
+                    "name" => $filter["name"],
+                    "value_code" => $filter['value_code']
+                ];
             } else {
-                $filters[$filter['type']][] = [
+                $groupedFilters[$type][] = [
                     "filter" => $filter['filter'],
                     "code" => $filter['code'],
                     "values" => [
@@ -115,7 +172,7 @@ class GoodsService {
             }
         }
 
-        return $filters;
+        return $groupedFilters;
     }
 
     /**

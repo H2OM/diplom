@@ -18,15 +18,3 @@ export interface CatalogProduct {
 export interface CatalogProductBasket extends CatalogProduct {
     count: number;
 }
-
-export interface CatalogFilters {
-    category?: string;
-    price?: string;
-    sale?: 'Yes' | 'More10' | 'More30' | 'More50';
-    favorite?: boolean;
-    brand?: string;
-    size?: string;
-    color?: string;
-    type?: string;
-    sort?: string;
-}

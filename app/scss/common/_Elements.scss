@@ -1,6 +1,6 @@
 @use "Vars";
 
-.btn  {
+.btn {
     color: white;
     font-size: 16px;
     background-color: Vars.$dark-purple;
@@ -50,6 +50,7 @@
         }
 
     }
+    &:disabled,
     &_disabled {
         &:hover {
             background-color: Vars.$dark-purple;

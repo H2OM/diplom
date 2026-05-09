@@ -1,6 +1,6 @@
 'use client';
 import Cart from "@/comps/ui/cart/Cart";
-import Filters from "@/comps/ui/filters/filters";
+import Filters from "../../../_components/ui/filters/Filters";
 import Spinner from "@/comps/ui/spinner/spiner";
 import ClientContext from "@/lib/ClientProvider.jsx";
 import { useCallback, useContext, useEffect, useState } from "react";

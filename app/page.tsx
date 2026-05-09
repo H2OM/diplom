@@ -8,11 +8,13 @@ import Fallback from "@ui/fallback/Fallback";
 export default async function Page() {
     const data = await mainAPI.getInfo();
 
+    console.log(data);
+
     const {slider, popular, sales}: {
-        slider: SliderMain[],
-        popular: SliderProducts[],
-        sales: SliderProducts[]
-    } = data.data ?? [];
+        slider?: SliderMain[],
+        popular?: SliderProducts[],
+        sales?: SliderProducts[]
+    } = data.data ?? {};
 
     return (
         <section className="FirstPage section">

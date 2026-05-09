@@ -52,7 +52,7 @@
                     &:hover {
                         border-left: 10px solid $ghosted-black;
                     }
-                    &_selected {
+                    &._selected {
                         border-left: 10px solid $dark-purple;
                         color: $dark-purple;
                         &:hover {
@@ -69,7 +69,7 @@
                     align-items: flex-end;
                     border-bottom: 1px solid $light-black;
                     transition: 0.2s all;
-                    &_active {
+                    &._active {
                         border-bottom: 1px solid $dark-purple;
                     }
                     &__target {

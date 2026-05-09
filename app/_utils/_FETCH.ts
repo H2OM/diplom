@@ -124,7 +124,7 @@ const progressTrackingRequest = async ({
             success: data => success ?? data.message ?? 'Успешно!',
             error: e => error ?? e.message ?? 'Ошибка загрузки данных!'
         },
-    ).catch(error => ({success: false, error: error.message}));
+    ).catch(error => ({success: false, message: error.message}));
 }
 
 export default {request, progressTrackingRequest, cleanRequest, fileRequest};

@@ -23,12 +23,11 @@ class CatalogController {
 
         try {
             $catalog = $this->goodsService->getCatalogByFilters($filters);
-            $filters = $this->goodsService->getFilters($filters);
+            $filters = $this->goodsService->getFiltersGroupByCode($filters);
 
             return Response::jsonSuccess(data: [
                 'catalog' => $catalog,
-                'filters' => $filters,
-                'count' => count($catalog)
+                'filters' => $filters
             ]);
         } catch (ResponseException $e) {
             return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
@@ -41,9 +40,9 @@ class CatalogController {
      * @return Response
      */
     public function getProductAction(): Response {
-        $id = $this->request->get('id');
+        $id = (int)$this->request->get('id');
 
-        if(!$id) {
+        if(!$id || !is_numeric($id)) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
