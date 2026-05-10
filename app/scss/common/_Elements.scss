@@ -16,12 +16,17 @@
     text-decoration: none;
     transition: 0.2s all;
     &:hover {
-        background-color: rgba(151,28,195,.7);
+        opacity: .7;
         color: white;
     }
     &:active {
         background-color: Vars.$dark-purple;
         transition: 0s all;
+    }
+    &._outline {
+        background-color: transparent;
+        border: 1px solid Vars.$dark-purple;
+        color: Vars.$dark-purple;
     }
     &_small {
         border-radius: 3px;

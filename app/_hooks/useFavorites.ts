@@ -9,12 +9,15 @@ export function useFavorites(productId?: number) {
         throw new Error('Favorites provider is missing');
     }
 
-    const { favorites, isPending, toggleFavorite } = context;
-
     return {
-        favorites,
-        isFavorite: (productId && favorites) ? favorites.includes(productId) : false,
-        isFavoritesPending: isPending,
-        toggleFavorite: () => productId && toggleFavorite(productId),
+        ...context,
+        isFavorite: (id?: number) => {
+            const pId = id || productId;
+
+            if(!pId) return false;
+
+            return context.favorites.includes(pId);
+        },
+        toggle: (id?: number) => context.toggle(id ?? productId)
     };
 }

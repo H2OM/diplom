@@ -16,8 +16,8 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         });
     }, []);
 
-    const toggleFavorite = async (id: number) => {
-        if(isPending) return;
+    const toggle = async (id?: number) => {
+        if(isPending || !id) return;
 
         setIsPending(true);
 
@@ -45,7 +45,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <FavoritesContext.Provider value={{ favorites, isPending, toggleFavorite }}>
+        <FavoritesContext.Provider value={{ favorites, isPending, toggle }}>
             {children}
         </FavoritesContext.Provider>
     );

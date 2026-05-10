@@ -3,7 +3,7 @@ import '../catalog.scss';
 import Filters from "../../ui/filters/Filters";
 import Cart from "@ui/cart/Cart";
 import {catalogAPI} from "@api";
-import {CatalogProduct} from "@_types/catalog";
+import {Product} from "@_types/product";
 import Fallback from "@ui/fallback/Fallback";
 import {Filter} from "@_types/filters";
 
@@ -44,13 +44,9 @@ export default async function Catalog({promiseParams, promiseSearchParams}: {
     }
 
     const { catalog, filters }: {
-        catalog?: CatalogProduct[];
+        catalog?: Product[];
         filters?: Filter[];
     } = data.data ?? {};
-
-    console.log(searchParams);
-    console.log(data);
-    console.log(title);
 
     return (
         <section className="Catalog section">

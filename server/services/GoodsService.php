@@ -30,7 +30,7 @@ class GoodsService {
         $sales = [];
 
         foreach($result as $k => $v) {
-            if($v['hit']) {
+            if($v['hit'] === '1') {
                 $hit[] = $v;
             }
             if($v['sale']) {
@@ -191,6 +191,27 @@ class GoodsService {
 
         if(count($product) === 0) {
             throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND, 404);
+        }
+
+        if(!empty($product['colors'])) {
+            $colors = array_unique(explode(',', $product['colors']));
+
+            sort($colors);
+
+            foreach ($colors as &$color) {
+                $params = explode(';', $color);
+
+                $color = [
+                    'id' => (int)$params[0],
+                    'article' => $params[1],
+                    'category' => $params[2],
+                    'image' => $params[3],
+                ];
+            }
+
+            $product['colors'] = $colors;
+        } else {
+            $product['colors'] = [];
         }
 
         return $product;

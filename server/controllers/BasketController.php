@@ -13,8 +13,7 @@ use app\services\BasketService;
 class BasketController {
     public function __construct(
         private readonly BasketService $basketService,
-        private readonly Request $session,
-        private readonly AuthService $authService
+        private readonly Request $session
     ) {}
 
     /**
@@ -48,7 +47,6 @@ class BasketController {
             $basket = $this->basketService->add(
                 id: $id,
                 size: $size,
-                userId: $this->authService->id(),
                 count: $count
             );
 
@@ -74,7 +72,7 @@ class BasketController {
         try {
             $basket = $this->basketService->decrement(id: $id, size: $size);
 
-            return Response::jsonSuccess(data: $basket);
+            return Response::jsonSuccess(data: $basket, message: ResponseMessage::SUCCESS_REMOVE_BASKET);
         } catch (ResponseException $exception) {
             return Response::jsonError(message: $exception->getResponseMessage(), status: $exception->getCode() ?: 400);
         }
@@ -92,7 +90,7 @@ class BasketController {
         try {
             $basket = $this->basketService->remove(id: $id, size: $size);
 
-            return Response::jsonSuccess(data: $basket);
+            return Response::jsonSuccess(data: $basket, message: ResponseMessage::SUCCESS_REMOVE_BASKET);
         } catch (ResponseException $exception) {
             return Response::jsonError(message: $exception->getResponseMessage(), status: $exception->getCode() ?: 400);
         }

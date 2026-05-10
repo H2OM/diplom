@@ -11,31 +11,59 @@ export const add = async (data: {
     size: string;
     count?: number;
 }, toastSuccess: boolean = true) => {
-    return await _FETCH.request({url: `${API_URL}/add`, options: {method: 'POST', body: JSON.stringify(data)}, toastSuccess: toastSuccess});
+    return await _FETCH.request({
+        url: `${API_URL}/add`,
+        options: {
+            method: 'POST',
+            body: JSON.stringify(data)
+        },
+        toastSuccess
+    });
 }
 
 export const decrement = async (data: {
     id: number;
     size: string;
-}) => {
-    return await _FETCH.request({url: `${API_URL}/decrement`, options: {method: 'POST', body: JSON.stringify(data)}});
+}, toastSuccess: boolean = true) => {
+    return await _FETCH.request({
+        url: `${API_URL}/decrement`,
+        options: {
+            method: 'POST',
+            body: JSON.stringify(data)
+        },
+        toastSuccess
+    });
 }
 
 export const remove = async (data: {
     id: number;
     size: string;
-}) => {
-    return await _FETCH.request({url: `${API_URL}/remove`, options: {method: 'POST', body: JSON.stringify(data)}});
+}, toastSuccess: boolean = true) => {
+    return await _FETCH.request({
+        url: `${API_URL}/remove`,
+        options: {
+            method: 'POST',
+            body: JSON.stringify(data)
+        },
+        toastSuccess
+    });
 }
 
 export const setCount = async (data: {
     id: number;
     size: string;
     count: number;
-}) => {
-    return await _FETCH.request({url: `${API_URL}/set-count`, options: {method: 'POST', body: JSON.stringify(data)}});
+}, toastSuccess: boolean = true) => {
+    return await _FETCH.request({
+        url: `${API_URL}/set-count`,
+        options: {
+            method: 'POST',
+            body: JSON.stringify(data)
+        },
+        toastSuccess
+    });
 }
 
-export const clear = async () => {
-    return await _FETCH.request({url: `${API_URL}/clear`});
+export const clear = async (toastSuccess: boolean = true) => {
+    return await _FETCH.request({url: `${API_URL}/clear`, toastSuccess});
 }

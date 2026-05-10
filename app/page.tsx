@@ -1,19 +1,18 @@
 import "@/page.scss";
 import {mainAPI} from "@api";
-import MainSlider from "@components/mainSlider/client/MainSlider";
+import MainSlider from "@components/main/client/MainSlider";
 import MiniSlider from "@components/ui/miniSlider/MiniSlider";
-import {SliderMain, SliderProducts} from "@/_types/sliders";
+import {SliderMain} from "@/_types/sliders";
 import Fallback from "@ui/fallback/Fallback";
+import {Product} from "@_types/product";
 
 export default async function Page() {
     const data = await mainAPI.getInfo();
 
-    console.log(data);
-
     const {slider, popular, sales}: {
         slider?: SliderMain[],
-        popular?: SliderProducts[],
-        sales?: SliderProducts[]
+        popular?: Product[],
+        sales?: Product[]
     } = data.data ?? {};
 
     return (

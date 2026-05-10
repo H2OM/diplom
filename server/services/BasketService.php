@@ -47,14 +47,13 @@ class BasketService {
     /**
      * Добавление
      *
-     * @param string $id
+     * @param int $id
      * @param string $size
-     * @param int|null $userId
      * @param int $count
      * @return array
      * @throws ResponseException
      */
-    public function add(string $id, string $size, ?int $userId, int $count = 1): array {
+    public function add(int $id, string $size, int $count = 1): array {
         $count = max(1, $count);
         $index = $this->findProductIndex(id: $id, size: $size);
 
@@ -64,7 +63,7 @@ class BasketService {
             return $this->save();
         }
 
-        $product = $this->goodsRepository->getProductByIdAndSize($id, $size, $userId);
+        $product = $this->goodsRepository->getProductByIdAndSize($id, $size);
 
         if(!$product || count($product) === 0) {
             throw new ResponseException(responseMessage: ResponseMessage::ERROR_PRODUCT_NOT_FOUND, code: 404);
@@ -81,13 +80,13 @@ class BasketService {
     /**
      * Установка количества конкретного товара
      *
-     * @param string $id
+     * @param int $id
      * @param string $size
      * @param int $count
      * @return array
      * @throws ResponseException
      */
-    public function setCount(string $id, string $size, int $count): array {
+    public function setCount(int $id, string $size, int $count): array {
         $count = max(1, $count);
         $index = $this->findProductIndex(id: $id, size: $size);
 
@@ -103,12 +102,12 @@ class BasketService {
     /**
      * Уменьшить кол-во конкретного товара
      *
-     * @param string $id
+     * @param int $id
      * @param string $size
      * @return array
      * @throws ResponseException
      */
-    public function decrement(string $id, string $size): array {
+    public function decrement(int $id, string $size): array {
         $index = $this->findProductIndex(id: $id, size: $size);
 
         if($index === false) {
@@ -128,12 +127,12 @@ class BasketService {
     /**
      * Удалить товар
      *
-     * @param string $id
+     * @param int $id $id
      * @param string $size
      * @return array
      * @throws ResponseException
      */
-    public function remove(string $id, string $size): array {
+    public function remove(int $id, string $size): array {
         $index = $this->findProductIndex(id: $id, size: $size);
 
         if($index === false) {
@@ -156,13 +155,12 @@ class BasketService {
         return $this->save();
     }
 
-    private function findProductIndex(string $id, string $size): int|false {
+    private function findProductIndex(int $id, string $size): int|false {
         foreach ($this->basket as $index => $product) {
             if ($product['id'] === $id && $product['size'] === $size) {
                 return $index;
             }
         }
-
         return false;
     }
 }

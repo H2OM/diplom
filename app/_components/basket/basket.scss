@@ -23,15 +23,8 @@
                 }
             }
             &__confirm {
-                width: 100%;
                 font-weight: 400;
-            }
-            &__clear {
-                color: black;
-                font-weight: 400;
-                width: 100%;
-                margin-top: 10px;
-                background-color: $gray;
+                margin-bottom: 10px;
             }
         }
         &__content {
@@ -92,7 +85,8 @@
                     &__btn {
                         width: auto;
                         height: 100%;
-                        background-color: $gray;
+                        background-color: $dark-purple;
+                        color: white;
                         border: none;
                         padding: 4px 20px;
                         font-weight: 300;
@@ -100,8 +94,8 @@
                         font-size: 16px;
                         cursor: pointer;
                         transition: 0.1s all;
+                        min-width: unset;
                         &__svg {
-                            margin-left: 5px;
                             height: 12px;
                             width: auto;
                         }
@@ -140,13 +134,17 @@
                         height: 30px;
                         width: 30px;
                         align-self: center;
-                        border-radius: 100%;
+                        border-radius: 4px;
                         border: unset;
-                        background-color: $gray;
+                        background-color: unset;
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         cursor: pointer;
+                        border: 1px solid $dark-purple;
+                        color: $dark-purple!important;
+                        min-width: unset;
+                        padding: unset;
                         &__svg {
                             height: 20px;
                             width: auto;

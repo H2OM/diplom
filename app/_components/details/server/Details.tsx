@@ -5,92 +5,74 @@ import Interaction from '../client/Interaction';
 import TabsNavigation from '../client/TabsNavigation';
 import DetailsSlider from '../client/DetailsSlider';
 import MiniSlider from "@ui/miniSlider/MiniSlider";
+import {Product, ProductDetails} from "@_types/product";
+import {Fragment} from "react";
 
-export default async function Details({data}) {
-
+type DetailsProps = {
+    data: {
+        product: ProductDetails;
+        related: Product[];
+    }
+}
+// TODO НУЖЕН ТЕСТ
+export default async function Details({data}: DetailsProps) {
     const {product, related} = data;
-
-    let {
-        id,
-        Title,
-        Type,
-        Brand,
-        Size,
-        Image: img,
-        SliderImages,
-        Price,
-        article,
-        Color,
-        Price_old: OldPrice,
-        Category,
-        Fav = null,
-        Colors,
-        Description
-    } = product;
-
-    Colors = Colors !== null ? Colors.split(",") : [];
 
     return (
         <section className="Details section">
             <div className="grid">
-                <h1 className="title title_black">{Brand} {Title} <span className="title__type">{Type}</span></h1>
+                <h1 className="title title_black">{product.brand} {product.title} <span
+                    className="title__type">{product.type}</span>
+                </h1>
                 <div className="Details__split">
                     <div className="Details__split__content">
                         <div>
-                            <div className="Details__split__content__price">{Price} ₽</div>
-                            <div
-                                className="Details__split__content__subtitle Details__split__content__subtitle_art">Артикул
-                                - {article}</div>
-                            <div
-                                className="Details__split__content__subtitle Details__split__content__subtitle_color">Цвет
-                                - {Color}</div>
+                            <div className="Details__split__content__price">{product.price} ₽</div>
+                            <div className="Details__split__content__subtitle _art">
+                                Артикул - {product.article}
+                            </div>
+                            <div className="Details__split__content__subtitle _color">
+                                Цвет - {product.color}
+                            </div>
                         </div>
-                        {Colors.length > 1 ?
+                        {product.colors.length !== 0 &&
                             <>
                                 <div className="Details__split__content__title">Другие цвета:</div>
                                 <div className="Details__split__content__colors">
                                     {
-                                        Colors.map(value => {
-                                            value = value.split("#");
+                                        product.colors.map(color => {
+                                            const isCurrent = color.id === product.id;
 
-                                            return value[0] == article
-                                                ?
+                                            const content = (
                                                 <Image
-                                                    className="Details__split__content__colors__type Details__split__content__colors__type_active"
-                                                    src={`/img/${value[2].trim()}`}
+                                                    className={`Details__split__content__colors__type ${isCurrent ? "_active" : ""}`}
+                                                    src={`/img/${color.image.trim()}`}
                                                     height={100}
                                                     width={110}
                                                     quality={100}
                                                     priority
                                                     alt="Цвет"
-                                                    key={value[0]}
+                                                    key={color.id}
                                                 />
-                                                : <Link key={value[0]} href={`/catalog/${value[1]}/${value[0]}`}>
-                                                    <Image
-                                                        className="Details__split__content__colors__type"
-                                                        src={`/img/${value[2].trim()}`}
-                                                        height={100}
-                                                        width={110}
-                                                        quality={100}
-                                                        priority
-                                                        alt="Цвет"
-                                                        key={value[0]}
-                                                    />
-                                                </Link>
+                                            );
+
+                                            return color.id === product.id
+                                                ? <Fragment key={color.id}>{content}</Fragment>
+                                                : <Link key={color.id} href={`/product/${color.id}`}>
+                                                    {content}
+                                                </Link>;
                                         })
                                     }
                                 </div>
                             </>
-                            : null
                         }
-                        <Interaction Size={Size} article={article} product_id={id}/>
+                        <Interaction sizes={product.size} productId={product.id}/>
                     </div>
-                    <DetailsSlider slider={(SliderImages != "" ? SliderImages.split(",") : null)} img={img}/>
-
+                    <DetailsSlider slides={product.slider_images.split(',')} mainImage={product.image}/>
                 </div>
                 <div className="Details__tabs">
                     <TabsNavigation>
-                        <div className="Details__tabs__nav__tab Details__tabs__nav__tab_active" data-link={"Описание"}>
+                        <div className="Details__tabs__nav__tab _active" data-link={"Описание"}>
                             Описание
                         </div>
                         <div className="Details__tabs__nav__tab" data-link={"Товар"}>
@@ -102,9 +84,9 @@ export default async function Details({data}) {
                         </div>
                     </TabsNavigation>
                     <div className="Details__tabs__content">
-                        <div className="Details__tabs__content__block Details__tabs__content__block_active"
+                        <div className="Details__tabs__content__block _active"
                              data-link={"Описание"}>
-                            {Description}
+                            {product.description}
                         </div>
                         <div className="Details__tabs__content__block" data-link={"Товар"}>
                             //Характеристики
@@ -114,8 +96,7 @@ export default async function Details({data}) {
                         </div>
                     </div>
                 </div>
-                {Array.isArray(related) && related.length > 0 ?
-                    <MiniSlider title={"Похожие товары"} products={related}/> : null}
+                {related.length > 0 && <MiniSlider title={"Похожие товары"} products={related}/>}
             </div>
         </section>
     )

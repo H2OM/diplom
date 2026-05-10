@@ -2,13 +2,13 @@
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
 import { basketAPI } from "@api";
-import {CatalogProductBasket} from "@_types/catalog";
+import {ProductBasket} from "@_types/product";
 import {ProviderBasket} from "@_types/providers";
 
 const BasketContext = createContext<ProviderBasket | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
-    const [basket, setBasket] = useState<CatalogProductBasket[]>([]);
+    const [basket, setBasket] = useState<ProductBasket[]>([]);
     const [isPending, setIsPending] = useState(false);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export function BasketProvider({ children }: { children: ReactNode }) {
 
     const executeAction = async (
         optimisticUpdate: (() => void) | null,
-        apiCall: () => Promise<{success: boolean; data?: CatalogProductBasket[]}>,
+        apiCall: () => Promise<{success: boolean; data?: ProductBasket[]}>,
     ) => {
         if(isPending) return;
 
@@ -80,7 +80,7 @@ export function BasketProvider({ children }: { children: ReactNode }) {
     const remove = (productId: number, productSize: string) => {
         void executeAction(
             () => setBasket(prev =>
-                prev.filter(p => (p.id !== productId && p.size !== productSize))
+                prev.filter(p => p.id !== productId || p.size !== productSize)
             ),
             () => basketAPI.remove({id: productId, size: productSize})
         );

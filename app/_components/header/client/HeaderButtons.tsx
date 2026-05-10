@@ -15,7 +15,7 @@ export default function HeaderButtons () {
     return (
         <div className="Header__btns">
             <Link href={"/basket"} className="Header__btns__btn btn">
-                <Icons type={'basketWhite'}/>
+                <Icons type={'basket'}/>
                 <div className="Header__btns__btn__count">{basket.length}</div>
             </Link>
             <Link href={"/favorites"} className="Header__btns__btn btn">
@@ -25,7 +25,7 @@ export default function HeaderButtons () {
             {isAuth == 'loading'
                 ?   <button className="Header__btns__btn btn btn_disabled">loading...</button>
                 :   <Link className="Header__btns__btn btn" href={isAuth == true ? "/personal" : "/autorization/login"}>
-                        <Icons type={'userWhite'}/>
+                        <Icons type={'user'}/>
                     </Link>
             }
         </div>

@@ -9,17 +9,9 @@ export function useBasket() {
         throw new Error('Basket provider is missing');
     }
 
-    const { basket, isPending, add, setCount, decrement, remove, clear, toggle } = context;
-
     return {
-        basket,
-        inBasket: (id: number, size: string) => basket.find(p => (p.id === id && p.size === size)),
-        isBasketPending: isPending,
-        add,
-        setCount,
-        decrement,
-        remove,
-        clear,
-        toggle,
+        ...context,
+        getItem: (id: number, size: string) =>
+            context.basket.find(p => p.id === id && p.size === size)
     };
 }

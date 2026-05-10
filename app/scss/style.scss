@@ -44,6 +44,11 @@ body {
   opacity: .7;
 }
 
+._w-100 {
+    width: 100%;
+    min-width: unset;
+}
+
 .spinnerWrap {
     position: fixed;
     left: 50%;

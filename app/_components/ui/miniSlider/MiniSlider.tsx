@@ -2,13 +2,13 @@
 
 import './minislider.scss';
 import Image from "next/image";
-import { useState } from "react";
+import {useState} from "react";
 import Cart from "@components/ui/cart/Cart";
-import {SliderProducts} from "@_types/sliders";
+import {Product} from "@_types/product";
 
-export default function MiniSlider ({title, products}: {
+export default function MiniSlider({title, products}: {
     title: string;
-    products: SliderProducts[]
+    products: Product[];
 }) {
     const [slide, moveSlide] = useState<number>(0);
 
@@ -19,10 +19,10 @@ export default function MiniSlider ({title, products}: {
                 <div className="topbar__nav">
                     <div className="topbar__nav-wrap"
                          style={(slide === 0 ? {transition: "0s all", visibility: "hidden"} : {})}
-                         onClick={()=> {
-                             if(slide === 0) return;
+                         onClick={() => {
+                             if (slide === 0) return;
 
-                             moveSlide(sim=> sim + 25);
+                             moveSlide(sim => sim + 25);
                          }}>
                         <Image
                             src={"/png/arrow.png"}
@@ -36,11 +36,14 @@ export default function MiniSlider ({title, products}: {
                         />
                     </div>
                     <div className="topbar__nav-wrap"
-                         style={(slide <= (-25 * (products.length - 4))) ? {transition: "0s all", visibility: "hidden"} : {}}
-                         onClick={()=> {
-                             if(slide <= (-25 * (products.length - 4))) return;
+                         style={(slide <= (-25 * (products.length - 4))) ? {
+                             transition: "0s all",
+                             visibility: "hidden"
+                         } : {}}
+                         onClick={() => {
+                             if (slide <= (-25 * (products.length - 4))) return;
 
-                             moveSlide((sim)=> sim - 25);
+                             moveSlide((sim) => sim - 25);
                          }}>
                         <Image
                             src={"/png/arrow.png"}
@@ -57,7 +60,7 @@ export default function MiniSlider ({title, products}: {
             </div>
             <div className="miniSlider__content"
                  style={{gridTemplateColumns: `repeat(${products.length},25%)`, transform: `translateX(${slide}%)`}}>
-                {products.map(product=> {
+                {products.map(product => {
                     return (
                         <Cart key={product.id} product={product} isSlide={true}/>
                     )
