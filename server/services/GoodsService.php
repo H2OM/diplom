@@ -95,7 +95,7 @@ class GoodsService {
         $groupedFilters = [];
 
         foreach($filters as $filter) {
-            if($filter['name'] === "" && $filter['value_code'] === "") {
+            if(!$filter['name'] && !$filter['value_code']) {
                 continue;
             }
 
