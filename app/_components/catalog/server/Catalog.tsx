@@ -20,8 +20,6 @@ export default async function Catalog({promiseParams, promiseSearchParams}: {
 
     const data = await catalogAPI.get(searchParams);
 
-    console.log(data);
-
     let title = searchParams.category;
 
     switch (title) {
