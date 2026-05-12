@@ -52,6 +52,10 @@
                     }
                     &._gray {
                         background-color: $light-gray;
+                        color: black;
+                        svg {
+                            fill: black;
+                        }
                     }
                     .btn__svg {
                         fill: white;
@@ -63,6 +67,13 @@
                     z-index: 6;
                     &::before {
                         display: none !important;
+                    }
+                    &:active {
+                        background-color: unset;
+                        color: black;
+                        svg {
+                            fill: black;
+                        }
                     }
                 }
                 .btn__svg {
@@ -79,14 +90,13 @@
                     width: 95%;
                     overflow: hidden;
                     border-radius: 0 0 5px 5px;
-                    padding: 0;
+                    padding: 0 6px;
                     height: 0;
                     box-shadow: 0 0 10px 0 rgba(0,0,0,.20);
-                    &._close {
-                        animation: exitModalClose .2s forwards;
-                    }
+                    transition: .1s height linear, .1s padding linear;
                     &._active {
-                        animation: exitModal .2s forwards;
+                        height: 57px;
+                        padding: 6px;
                     }
                     &__title {
                         font-size: 14px;
@@ -129,13 +139,9 @@
             &__split {
                 display: flex;
                 margin-top: 25px;
+                gap: 60px;
                 &__block {
                     width: 50%;
-                    padding-right: 30px;
-                    &:last-child {
-                        padding-right: 0px;
-                        padding-left: 30px;
-                    }
                     &__title {
                         color: $light-black;
                         font-size: 20px;
@@ -163,8 +169,10 @@
                         margin-bottom: 25px;
                         font-weight: 400;
                         font-size: 16px;
-                        &_switch {
+                        &._switch {
                             grid-template-columns: 1fr auto auto;
+                            border-bottom: 1px solid #d3d3d3;
+                            padding-bottom: 3px;
                         }
                         &__switch {
                             color: #000;
@@ -299,34 +307,5 @@
             }
             
         }
-    }
-}
-
-@keyframes exitModal {
-    from {
-        height: 0;
-        padding: 0;
-    }
-    10% {
-        height: 8px;
-        padding: 6px 6px 0;
-    }
-    to {
-        height: 57px;
-        padding: 6px;
-    }
-}
-@keyframes exitModalClose {
-    from {
-        height: 57px;
-        padding: 6px;
-    }
-    90% {
-        height: 8px;
-        padding: 6px 6px 0;
-    }
-    to {
-        height: 0;
-        padding: 0 0 0;
     }
 }

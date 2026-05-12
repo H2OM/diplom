@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 04 2026 г., 18:08
+-- Время создания: Май 12 2026 г., 18:27
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -59,15 +59,9 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`user_id`, `product_id`) VALUES
-(15, 1),
-(15, 2),
-(12, 4),
-(11, 5),
-(12, 5),
-(15, 8),
-(12, 13),
-(12, 16),
-(12, 19);
+(16, 5),
+(16, 8),
+(16, 13);
 
 -- --------------------------------------------------------
 
@@ -667,14 +661,6 @@ CREATE TABLE `orders` (
   `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Дамп данных таблицы `orders`
---
-
-INSERT INTO `orders` (`id`, `number`, `status`, `user_id`, `date`, `change_date`, `delivery_date`, `comment`) VALUES
-(1, 'A10000-A00001', '0', 5, '2023-11-29 18:05:16', '2023-11-29 18:05:16', '2023-11-29 19:40:19', NULL),
-(2, 'A10001-A00002', '0', 5, '2023-11-29 18:06:16', '2023-11-29 18:06:16', '2023-11-29 19:40:19', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -686,15 +672,6 @@ CREATE TABLE `orders_goods` (
   `goods_id` int UNSIGNED NOT NULL,
   `size` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `orders_goods`
---
-
-INSERT INTO `orders_goods` (`order_id`, `goods_id`, `size`) VALUES
-(1, 1, '42'),
-(2, 1, '43,5'),
-(2, 2, '43');
 
 -- --------------------------------------------------------
 
@@ -709,7 +686,7 @@ CREATE TABLE `users` (
   `age` int UNSIGNED NOT NULL,
   `gender` enum('male','female') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `phone` char(18) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` char(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -718,12 +695,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `second_name`, `age`, `gender`, `email`, `phone`, `password`) VALUES
-(5, 'Дмитрий', 'Заболотнов', 19, 'male', 'dima.zabolotnov.02@mail.ru', '+7 (918) 219-55-84', '$2y$10$j3VsuFxHcIeTuCy/9yPfS.2BVzi/4AXy1KB4/nr14q/JUt6NlWiti'),
-(11, 'Дмитрий', 'Заболотнов', 12, 'male', 'dima.za2232@mail.ru', '+7 (918) 294-25-22', '$2y$10$t56uGoskE/jLBmrpzMlm3.ZkZ1yukDyHwk8Rar3YaTT7jrMx6GmS2'),
-(12, 'Дмитрий', 'Заболотнов', 43, 'male', 'dima.za423@mail.ru', '+7 (918) 111-11-12', '$2y$10$TwK3UYpWGj2UvUwjS0OMMuWchiJIFh.AOH.Zxr52S9deifhtbTj16'),
-(13, 'Дмитрий', 'Заболотнов', 43, 'male', 'dima.za425@mail.ru', '+7 (918) 222-22-22', '$2y$10$4xPK6YnY.oRFQZU6Kbe/6.ljQXGH17unMsp1vjACibDCwhRsoTQwK'),
-(14, 'Дмитрий', 'Коваленко', 22, 'female', 'danvbcsf@mail.ru', '+7 (124) 151-51-54', '$2y$10$czay3zomMM5UuR2aNjcQye2Uol3ai3IzPv6k4bMxbazPIbm5b9jtm'),
-(15, 'Дмитрий', 'Коваленко', 22, 'male', 'dima.za2512@mail.ru', '+7 (151) 515-15-11', '$2y$10$zx/B7DdeJlYiRLl4JNRUNuNggsYtInO0y91qSnt3d3Jky6QGjrlw6');
+(16, 'Андрей', 'Антонов', 99, 'male', 'test3@mail.ru', '79999999999', '$2y$10$ujNQL.RwX7SuByY/fBE09OPQ7Q1ZCA2H86XP.euU9kr13KbU/AS3q');
 
 --
 -- Индексы сохранённых таблиц
@@ -876,7 +848,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

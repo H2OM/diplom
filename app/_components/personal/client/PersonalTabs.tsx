@@ -19,13 +19,13 @@ export default function PersonalTabs({children}: { children: ReactNode }) {
     return (
         <div className="Personal__split__side">
             {children}
-            <div className="Personal__split__side__block">
-                <button className={"btn btn_small Personal__split__side__btn _exit" + (exitModal ? " _gray" : "")}
+            <div className={"Personal__split__side__block"}>
+                <button className={"btn btn_small Personal__split__side__btn _exit" + (exitModal ? " _gray _active" : "")}
                         onClick={() => setExitModal(true)}>
                     <Icons type={'exit'} className={'btn__svg'}/>
                     Выход
                 </button>
-                <div className={"Personal__split__side__block__modal" + (exitModal ? " _active" : " _close")}>
+                <div className={"Personal__split__side__block__modal" + (exitModal ? " _active" : "")}>
                     <p className="Personal__split__side__block__modal__title">Подтвердите выход</p>
                     <div className="Personal__split__side__block__modal__wrap">
                         <form style={{width: "48%"}} onSubmit={(e) => {

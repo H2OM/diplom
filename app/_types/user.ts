@@ -17,3 +17,5 @@ export interface UserSignUpData extends Omit<User, 'id'> {
     password: string;
     password_confirmed: string;
 }
+
+export interface UserEditData extends Omit<User, 'id'> {}

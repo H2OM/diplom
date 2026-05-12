@@ -5,6 +5,7 @@ import useUser from "@hooks/useUser";
 import {FormEvent, useState} from "react";
 import {UserSignUpData} from "@_types/user";
 import MaskInput from "@ui/maskInput/MaskInput";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
     const {isPending, signUp} = useUser();
@@ -16,7 +17,11 @@ export default function SignUp() {
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData) as unknown as UserSignUpData;
 
-        if(data.password_confirmed !== password) return;
+        if(data.password_confirmed !== password) {
+            toast.error("Пароли не совпадают");
+
+            return;
+        }
 
         void signUp(data);
     }

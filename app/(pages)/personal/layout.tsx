@@ -1,8 +1,8 @@
 import "@components/personal/personal.scss";
 import {ReactNode} from "react";
-import PersonalTabs from "../../_components/personal/client/PersonalTabs";
 import {Icons} from "@ui/icons/Icons";
 import ClientLink from "@ui/clientLink/ClientLink";
+import PersonalTabs from "@components/personal/client/PersonalTabs";
 
 export default function Layout({children}: {children: ReactNode}) {
     return (

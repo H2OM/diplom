@@ -50,8 +50,29 @@ body {
     min-width: unset;
 }
 
-input[type='checkbox'] {
-    cursor: pointer;
+
+label {
+    &:has(input[type='checkbox']),
+    &:has(input[type='radio']) {
+        cursor: pointer;
+    }
+}
+
+input {
+    font-family: inherit;
+    &[type='checkbox'], &[type='radio'] {
+        cursor: pointer;
+        accent-color: Vars.$dark-purple;
+    }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    &:focus {
+        outline: none;
+        border-bottom: 1px solid #afafaf;
+    }
 }
 
 .spinnerWrap {

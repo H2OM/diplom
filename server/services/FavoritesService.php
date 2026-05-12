@@ -72,7 +72,7 @@ class FavoritesService {
             throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND);
         }
 
-        if($this->authService->id() && $this->favoritesRepository->add($this->authService->id(), $productId) > 0) {
+        if($this->authService->id() && $this->favoritesRepository->add($this->authService->id(), $productId) === 0) {
             throw new ResponseException(ResponseMessage::ERROR_ADD);
         }
 

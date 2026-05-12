@@ -234,12 +234,14 @@ class QueryBuilder {
      */
     public function update(array $updateData): self {
         $this->prepareQuery = "UPDATE {$this->table} SET ";
-        $this->bindings = [];
+        $bindings = [];
 
         foreach ($updateData as $field => $value) {
             $this->prepareQuery .= "$field = ?,";
-            $this->bindings[] = $value;
+            $bindings[] = $value;
         }
+
+        $this->bindings = [...$bindings, ...$this->bindings];
 
         $this->prepareQuery = rtrim($this->prepareQuery, ',');
 

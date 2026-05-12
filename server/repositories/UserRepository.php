@@ -39,13 +39,13 @@ class UserRepository {
      *
      * @param int $userId
      * @param array $userData
-     * @return string|false
+     * @return bool
      */
-    public function edit(int $userId, array $userData): string|false {
+    public function edit(int $userId, array $userData): bool {
         return $this->db->query()
             ->table('users')
             ->where('id', '=', $userId)
             ->update($userData)
-            ->insertId();
+            ->execute();
     }
 }

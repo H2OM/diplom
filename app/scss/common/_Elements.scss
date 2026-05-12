@@ -17,10 +17,13 @@
     transition: 0.2s all;
     &:hover {
         opacity: .7;
-        color: white;
     }
     &:active {
         background-color: Vars.$dark-purple;
+        color: white;
+        svg {
+            fill: white;
+        }
         transition: 0s all;
     }
     &._outline {

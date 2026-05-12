@@ -10,6 +10,8 @@ export default function PersonalProfile() {
 
     if (!user) return <Spinner/>;
 
+    const parsedPhone = `+7 (${user.phone.slice(1, 4)}) ${user.phone.slice(4, 7)}-${user.phone.slice(7, 9)}-${user.phone.slice(9, 11)}`;
+
     return (
         <>
             {isPending && <LoadScreen><Spinner/></LoadScreen>}
@@ -36,7 +38,7 @@ export default function PersonalProfile() {
                         Почта: <span data-info>{user.email}</span>
                     </div>
                     <div className="Personal__split__content__split__block__field">
-                        Номер телефона: <span data-info>{user.phone}</span>
+                        Номер телефона: <span data-info>{parsedPhone}</span>
                     </div>
                 </div>
             </div>

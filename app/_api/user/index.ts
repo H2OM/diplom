@@ -1,5 +1,5 @@
 import _FETCH from "@/_utils/_FETCH";
-import {User, UserSignInData, UserSignUpData} from "@_types/user";
+import {UserEditData, UserSignInData, UserSignUpData} from "@_types/user";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/user`;
 
@@ -11,7 +11,7 @@ export const get = async () => {
     return await _FETCH.request({url: `${API_URL}/get`});
 }
 
-export const edit = async (body: Partial<User>) => {
+export const edit = async (body: UserEditData) => {
     return await _FETCH.request({
         url: `${API_URL}/edit`,
         options: {

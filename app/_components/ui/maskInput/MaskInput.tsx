@@ -2,15 +2,28 @@
 
 import {useState, KeyboardEvent} from "react";
 
-export default function MaskInput({name, className = "", required = false, baseValue = "+7 (___) ___-__-__"}: {
+export default function MaskInput({
+    name,
+    className = "",
+    required = false,
+    baseValue = "+7 (___) ___-__-__",
+    readonly = false
+}: {
     name: string;
     className?: string;
     required?: boolean;
     baseValue?: string;
+    readonly?: boolean;
 }) {
     const [phoneMask, setPhoneMask] = useState({
-        mask: baseValue,
+        mask: parseToMask(baseValue),
     });
+
+    function parseToMask(value: string) {
+        const s = String(value);
+
+        return `+7 (${s.slice(1, 4)}) ${s.slice(4, 7)}-${s.slice(7, 9)}-${s.slice(9, 11)}`;
+    }
 
     const handleUpdatePosition = (
         target: HTMLInputElement,
@@ -53,6 +66,7 @@ export default function MaskInput({name, className = "", required = false, baseV
     return (
         <input className={className} name={name} type="text" required={required} value={phoneMask.mask}
                autoComplete="tel"
+               readOnly={readonly}
                onChange={() => {
                }}
                onClick={(e) => {

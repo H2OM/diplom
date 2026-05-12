@@ -2,7 +2,7 @@
 
 import {createContext, ReactNode, useEffect, useState} from "react"
 import {ProviderUser} from "@_types/providers";
-import {User, UserSignInData, UserSignUpData} from "@_types/user";
+import {User, UserEditData, UserSignInData, UserSignUpData} from "@_types/user";
 import {userAPI} from "@api";
 import {useFavorites} from "@hooks/useFavorites";
 
@@ -26,7 +26,6 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
 
         if (response.success && response.data) {
             setUser(response.data);
-            void getFavorites();
         }
     }
 
@@ -68,7 +67,7 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
         }
     }
 
-    const edit = async (data: Partial<User>) => {
+    const edit = async (data: UserEditData) => {
         setIsPending(true);
 
         const response = await userAPI.edit(data);
@@ -78,6 +77,8 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
         if (response.success) {
             setUser(response.data);
         }
+
+        return Boolean(response.success);
     }
 
     return (

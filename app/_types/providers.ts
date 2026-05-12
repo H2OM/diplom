@@ -1,5 +1,5 @@
 import {Product, ProductBasket} from "./product";
-import {User, UserSignInData, UserSignUpData} from "@_types/user";
+import {User, UserEditData, UserSignInData, UserSignUpData} from "@_types/user";
 
 export interface ProviderFavorites {
     favorites: Product[];
@@ -25,6 +25,6 @@ export interface ProviderUser {
     get: () => Promise<void>;
     signIn: (data: UserSignInData) => Promise<void>;
     signUp: (data: UserSignUpData) => Promise<void>;
-    edit: (data: Partial<User>) => Promise<void>;
+    edit: (data: UserEditData) => Promise<boolean>;
     logOut: () => Promise<void>;
 }

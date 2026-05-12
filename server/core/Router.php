@@ -2,6 +2,7 @@
     namespace app\core;
 
     use Exception;
+    use PDOException;
 
     /** Роутер. Маршрутизация. Обработка ответа. */
     class Router {
@@ -37,6 +38,11 @@
                 } else {
                     Router::dispatchURI(App::request()->server('REQUEST_URI'));
                 }
+            } catch (PDOException $e) {
+                if(isset($_SESSION['debug'])) $message = $e->getMessage();
+                    else $message = 'Внутренняя ошибка сервера!';
+                Response::json(['error' => true, 'message' => $message], 500)->send();
+
             } catch (Exception $e) {
                 Response::json(['error' => true, 'message' => $e->getMessage()], 400)->send();
             }
@@ -55,7 +61,8 @@
             $action = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $action)))) . 'Action';
 
             $class = "app\\controllers\\$controllerName";
-
+            //TODO
+$_SESSION['debug'] = 1;
             if (!class_exists($class))
                 throw new \Exception("Class not found", 400);
 
