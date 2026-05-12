@@ -18,7 +18,7 @@ export default async function Page() {
         <section className="FirstPage section">
             <div className="Slider">
                 <div className="grid">
-                    {/*{slider && <MainSlider slides={slider}/>}*/}
+                    {slider && <MainSlider slides={slider}/>}
                     {!data.success && <Fallback message={data.message}/>}
                 </div>
             </div>
