@@ -9,13 +9,21 @@ const BasketContext = createContext<ProviderBasket | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
     const [basket, setBasket] = useState<ProductBasket[]>([]);
-    const [isPending, setIsPending] = useState(false);
+    const [isPending, setIsPending] = useState(true);
 
     useEffect(() => {
-        basketAPI.get().then(response => {
-            if (response.success) setBasket(response.data);
-        });
+       void get();
     }, []);
+
+    const get = async () => {
+        setIsPending(true);
+
+        const response = await basketAPI.get();
+
+        setIsPending(false);
+
+        if (response.success) setBasket(response.data);
+    };
 
     const executeAction = async (
         optimisticUpdate: (() => void) | null,

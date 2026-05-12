@@ -11,7 +11,7 @@ export default function FooterForm() {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
-        const email = formData.get('email')?.toString();;
+        const email = formData.get('email')?.toString();
 
         if(!email) return;
 

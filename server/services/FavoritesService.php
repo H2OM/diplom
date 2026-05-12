@@ -62,19 +62,21 @@ class FavoritesService {
      * @throws ResponseException
      */
     public function add(int $productId): array {
-        if(in_array($productId, $this->favorites)) {
+        if($this->findProductIndex($productId)) {
             throw new ResponseException(ResponseMessage::ERROR_DUPLICATE);
         }
 
-        if(!$this->goodsRepository->getProductId($productId)) {
+        $product = $this->goodsRepository->getProductById($productId);
+
+        if(!$product) {
             throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND);
         }
 
-        if($this->authService->id() && !$this->favoritesRepository->add($this->authService->id(), $productId)) {
+        if($this->authService->id() && $this->favoritesRepository->add($this->authService->id(), $productId) > 0) {
             throw new ResponseException(ResponseMessage::ERROR_ADD);
         }
 
-        $this->favorites[] = $productId;
+        $this->favorites[] = $product;
 
         return $this->save();
     }
@@ -82,17 +84,49 @@ class FavoritesService {
     /**
      * Удаление
      *
-     * @param string $productId
+     * @param int $productId
      * @return array
      * @throws ResponseException
      */
-    public function remove(string $productId): array {
-        if($this->authService->id() && !$this->favoritesRepository->remove($this->authService->id(), $productId)) {
+    public function remove(int $productId): array {
+        if($this->authService->id() && $this->favoritesRepository->remove($this->authService->id(), $productId) === 0) {
             throw new ResponseException(ResponseMessage::ERROR_UPDATE);
         }
 
-        unset($this->favorites[array_search($productId, $this->favorites)]);
+        $index = $this->findProductIndex($productId);
+
+        if($index === false) {
+            throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND);
+        }
+
+        unset($this->favorites[$index]);
 
         return $this->save();
+    }
+
+    /**
+     * Отчистка
+     *
+     * @return array
+     * @throws ResponseException
+     */
+    public function clear(): array {
+        if($this->authService->id() && !$this->favoritesRepository->clear($this->authService->id())) {
+            throw new ResponseException(ResponseMessage::ERROR_UPDATE);
+        }
+
+        $this->favorites = [];
+
+        return $this->save();
+    }
+
+    private function findProductIndex(int $id): int|false {
+        foreach ($this->favorites as $index => $product) {
+            if (!empty($product['id']) && $product['id'] === $id) {
+                return $index;
+            }
+        }
+
+        return false;
     }
 }

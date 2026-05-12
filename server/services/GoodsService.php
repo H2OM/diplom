@@ -183,7 +183,7 @@ class GoodsService {
      * @throws ResponseException
      */
     public function getProductById(int $id): array {
-        $product = $this->goodsRepository->getProductById($id);
+        $product = $this->goodsRepository->getProductDetailsById($id);
 
         if(!$product) {
             throw new ResponseException(ResponseMessage::ERROR_GET_DATA);

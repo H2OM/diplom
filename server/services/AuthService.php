@@ -37,6 +37,8 @@ class AuthService {
      * @return void
      */
     public function login(array $userData): void {
+        unset($userData['password']);
+
         $this->session->set('user', $userData);
     }
 

@@ -15,8 +15,7 @@
             max-height: 320px;
             background-color: white;
             box-shadow: 0 0 10px 0 rgba(0,0,0,.15);
-            padding: 10px;
-            padding-bottom: 15px;
+            padding: 10px 10px 15px;
             &__btn {
                 font-size: 16px;
                 width: 100%;
@@ -27,33 +26,6 @@
                 color: black;
                 height: 35px;
                 transition: 0.1s all;
-                &_active {
-                    color: white;
-                    background-color: $dark-purple;
-                    &:hover {
-                        background-color: $dark-purple;
-                    }
-                    &:active {
-                        background-color: $dark-purple;
-                    }
-                    &_gray {
-                        background-color: $light-gray;
-                    }
-                    &::before {
-                        display: none !important;
-                    }
-                    .btn__svg {
-                        filter: invert(1);
-                    }
-                }
-                &_exit {
-                    margin-bottom: 0px;
-                    position: relative;
-                    z-index: 6;
-                    &::before {
-                        display: none !important;
-                    }
-                }
                 &::before {
                     content: "";
                     display: block;
@@ -66,6 +38,36 @@
                     background-image: url('../../../public/svg/arrowCorner.svg');
                     background-size: cover;
                 }
+                &._active {
+                    color: white;
+                    background-color: $dark-purple;
+                    &:hover {
+                        background-color: $dark-purple;
+                    }
+                    &:active {
+                        background-color: $dark-purple;
+                    }
+                    &::before {
+                        display: none !important;
+                    }
+                    &._gray {
+                        background-color: $light-gray;
+                    }
+                    .btn__svg {
+                        fill: white;
+                    }
+                }
+                &._exit {
+                    margin-bottom: 0;
+                    position: relative;
+                    z-index: 6;
+                    &::before {
+                        display: none !important;
+                    }
+                }
+                .btn__svg {
+                    fill: black;
+                }
             }
             &__block {
                 position: relative;
@@ -77,11 +79,14 @@
                     width: 95%;
                     overflow: hidden;
                     border-radius: 0 0 5px 5px;
-                    padding: 6px;
-                    box-shadow:0 0 10px 0 rgba(0,0,0,.20);
-                    animation: exitModal .2s;
-                    &_close {
+                    padding: 0;
+                    height: 0;
+                    box-shadow: 0 0 10px 0 rgba(0,0,0,.20);
+                    &._close {
                         animation: exitModalClose .2s forwards;
+                    }
+                    &._active {
+                        animation: exitModal .2s forwards;
                     }
                     &__title {
                         font-size: 14px;
@@ -103,7 +108,7 @@
                             color: white;
                             cursor: pointer;
                             transition: 0.1s all;
-                            &_gray {
+                            &._gray {
                                 color: #000;
                                 width: 48%;
                                 background-color: unset;
@@ -197,8 +202,7 @@
                 }
             }
             .personal-btn {
-                margin: 0 auto;
-                margin-top: 30px;
+                margin: 30px auto 0;
                 min-width: 190px;
                 width: 40%;
             }
@@ -220,7 +224,7 @@
                             font-size: 18px;
                             font-weight: 400;
                         }
-                        &_bottom {
+                        &._bottom {
                             border-radius: 0 0 10px 10px;
                         }
                     }
@@ -235,10 +239,10 @@
                                 &__price {
                                     font-size: 18px;
                                     font-weight: 600;
-                                    &_new {
+                                    &._new {
                                         color: $dark-purple;
                                     }
-                                    &_old {
+                                    &._old {
                                         padding-left: 5px;
                                         font-size: 16px;
                                         font-weight: 500;
@@ -300,18 +304,12 @@
 
 @keyframes exitModal {
     from {
-        height: 0px;
-        padding-top: 0px;
-        padding-left: 0px;
-        padding-right: 0px;
-        padding-bottom: 0px;
+        height: 0;
+        padding: 0;
     }
     10% {
         height: 8px;
-        padding-left: 6px;
-        padding-right: 6px;
-        padding-top: 6px;
-        padding-bottom: 0px;
+        padding: 6px 6px 0;
     }
     to {
         height: 57px;
@@ -325,16 +323,10 @@
     }
     90% {
         height: 8px;
-        padding-top: 6px;
-        padding-left: 6px;
-        padding-right: 6px;
-        padding-bottom: 0px;
+        padding: 6px 6px 0;
     }
     to {
-        height: 0px;
-        padding-top: 0px;
-        padding-left: 0px;
-        padding-right: 0px;
-        padding-bottom: 0px;
+        height: 0;
+        padding: 0 0 0;
     }
 }

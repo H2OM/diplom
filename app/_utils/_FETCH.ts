@@ -81,9 +81,11 @@ const request = async ({
         .catch(error => {
             const MESSAGE = typeof toastError === 'string'
                 ? toastError
-                : (error instanceof Error && error.message !== 'Failed to fetch'
-                    ? `Ошибка в получении данных! (${error.message})`
-                    : "Ошибка соединения с сервером!");
+                : (error instanceof Error && error.message === 'Failed to fetch'
+                    ? "Ошибка соединения с сервером!"
+                        : (error.message !== ''
+                            ? error.message
+                            : "Ошибка в получении данных!"));
 
             toastError && isClient && toast.error(MESSAGE);
 

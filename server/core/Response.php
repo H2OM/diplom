@@ -39,10 +39,10 @@ class Response {
      * @param ResponseMessage|null $message
      * @return Response
      */
-    public static function jsonSuccess(array $data = null, ResponseMessage $message = null): Response {
+    public static function jsonSuccess(mixed $data = null, ResponseMessage $message = null): Response {
         $response = ['success' => true];
 
-        if(is_array($data))     $response['data']    = $data;
+        if($data !== null)      $response['data']    = $data;
         if($message)            $response['message'] = $message->value;
 
         return self::json(data: $response);
@@ -86,13 +86,13 @@ class Response {
      * Формирование JSON ответа
      *
      * @param mixed $data
-     * @param int $status
+     * @param mixed $status
      * @return self
      */
-    public static function json(mixed $data, int $status = 200): self {
+    public static function json(mixed $data, mixed $status = 200): self {
         return new self(
             json_encode($data),
-            $status,
+            ((int)$status) ?: 500,
             ['Content-Type' => 'application/json']
         );
     }

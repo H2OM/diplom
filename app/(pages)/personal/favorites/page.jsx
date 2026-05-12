@@ -2,7 +2,7 @@
 import Cart from "@/comps/ui/cart/Cart";
 import Filters from "../../../_components/ui/filters/Filters";
 import Spinner from "@/comps/ui/spinner/spiner";
-import ClientContext from "@/lib/ClientProvider.jsx";
+import ClientContext from "../../../_providers/UserProvider.tsx";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 export default function Favorites ({searchParams}) {

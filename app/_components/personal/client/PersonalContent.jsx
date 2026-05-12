@@ -1,6 +1,6 @@
 'use client';
 import { useContext } from "react";
-import ClientContext from "@/lib/ClientProvider";
+import ClientContext from "../../../_providers/UserProvider";
 import Loadscreen from "@/comps/ui/loadScreen/loadscreen";
 
 export default function PersonalContent ({children}) {

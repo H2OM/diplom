@@ -16,7 +16,7 @@ export function useFavorites(productId?: number) {
 
             if(!pId) return false;
 
-            return context.favorites.includes(pId);
+            return Boolean(context.favorites.find(product => product.id === pId));
         },
         toggle: (id?: number) => context.toggle(id ?? productId)
     };

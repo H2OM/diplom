@@ -39,10 +39,10 @@ class UserService {
         );
 
         if (!$validateData) {
-            throw new Exception(message: $this->validator->formatErrors(), code: 403);
+            throw new ResponseException(ResponseMessage::ERROR_AUTH);
         }
 
-        $user = $this->userRepository->getByPhone($phone);
+        $user = $this->userRepository->getByPhone($this->normalizePhone($phone));
 
         if(empty($user) || !password_verify($validateData['password'], $user['password'])) {
             throw new ResponseException(ResponseMessage::ERROR_AUTH);
@@ -78,6 +78,12 @@ class UserService {
 
         $prepareUserData = $this->prepareData($validateData);
 
+        $isUserIsset = $this->userRepository->getByPhone($prepareUserData['phone']);
+
+        if($isUserIsset) {
+            throw new ResponseException(ResponseMessage::ERROR_USER_PHONE_ISSET);
+        }
+
         $insertId = $this->userRepository->insert($prepareUserData);
 
         if(!$insertId) {
@@ -85,7 +91,7 @@ class UserService {
         }
 
         return [
-            'id' => $insertId,
+            'id' => (int)$insertId,
             ...$prepareUserData
         ];
     }
@@ -165,15 +171,20 @@ class UserService {
      * @return array
      */
     private function prepareData(array $data): array {
-        return [
-            'first_name'  => ucfirst($data['first_name']),
-            'second_name' => ucfirst($data['second_name']),
-            'phone'       => $this->normalizePhone($data['phone']),
-            'password'    => password_hash($data['password'], PASSWORD_DEFAULT),
-            'age'         => (int)$data['age'],
-            'gender'      => $data['gender'],
-            'email'       => strtolower($data['email']),
-        ];
+        $prepareData = [];
+
+        foreach($data as $field => $value) {
+            $prepareData[$field] = match ($field) {
+                'first_name', 'second_name' => ucfirst($value),
+                'phone'       => $this->normalizePhone($value),
+                'password'    => password_hash($value, PASSWORD_DEFAULT),
+                'age'         => (int)$value,
+                'email'       => strtolower($value),
+                default       => $value,
+            };
+        }
+
+        return $prepareData;
     }
 
     /**

@@ -1,7 +1,9 @@
-import {ProductBasket} from "./product";
+import {Product, ProductBasket} from "./product";
+import {User, UserSignInData, UserSignUpData} from "@_types/user";
 
 export interface ProviderFavorites {
-    favorites: number[];
+    favorites: Product[];
+    get: () => Promise<void>;
     toggle: (id?: number) => Promise<void>;
     isPending: boolean;
 }
@@ -15,4 +17,14 @@ export interface ProviderBasket {
     clear: () => void;
     toggle: (productId: number, productSize: string) => void;
     isPending: boolean;
+}
+
+export interface ProviderUser {
+    user: User | null;
+    isPending: boolean;
+    get: () => Promise<void>;
+    signIn: (data: UserSignInData) => Promise<void>;
+    signUp: (data: UserSignUpData) => Promise<void>;
+    edit: (data: Partial<User>) => Promise<void>;
+    logOut: () => Promise<void>;
 }

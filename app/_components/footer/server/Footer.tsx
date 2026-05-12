@@ -19,6 +19,7 @@ export default function Footer() {
                             height={0}
                             width={0}
                             sizes="100vw"
+                            priority={true}
                             quality={100}
                         />   
                     </Link> 

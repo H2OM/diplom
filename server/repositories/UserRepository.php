@@ -12,13 +12,13 @@ class UserRepository {
      * Получения пользователя по номеру телефона
      *
      * @param string $phone
-     * @return array
+     * @return array|null
      */
-    public function getByPhone(string $phone): array {
+    public function getByPhone(string $phone): ?array {
         return $this->db->query()
             ->table('users')
             ->where('phone', $phone)
-            ->get();
+            ->first();
     }
 
     /**
@@ -30,7 +30,8 @@ class UserRepository {
     public function insert(array $userData): string|false {
         return $this->db->query()
             ->table('users')
-            ->insert($userData);
+            ->insert($userData)
+            ->insertId();
     }
 
     /**
@@ -44,6 +45,7 @@ class UserRepository {
         return $this->db->query()
             ->table('users')
             ->where('id', '=', $userId)
-            ->update($userData);
+            ->update($userData)
+            ->insertId();
     }
 }

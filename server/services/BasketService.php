@@ -161,6 +161,7 @@ class BasketService {
                 return $index;
             }
         }
+
         return false;
     }
 }

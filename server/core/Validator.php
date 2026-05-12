@@ -203,12 +203,11 @@ class Validator {
      * Определение гендера
      *
      * @param string $gender
-     * @return bool|string
+     * @return bool
      */
-    public function gender(string $gender): bool|string {
+    public function gender(string $gender): bool {
         return match ($gender) {
-            "Женский", "female" => "female",
-            "Мужской", "male" => "male",
+            "female", "male" => true,
             default => false,
         };
     }

@@ -1,6 +1,6 @@
 'use client';
 import Spinner from "@/comps/ui/spinner/spiner";
-import ClientContext from "@/lib/ClientProvider";
+import ClientContext from "../../../_providers/UserProvider";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 

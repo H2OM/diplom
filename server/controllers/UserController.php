@@ -24,7 +24,7 @@ class UserController {
      * @return Response
      */
     public function isAuthAction(): Response {
-        return Response::jsonSuccess(data: ['authorized' => $this->authService->check()]);
+        return Response::jsonSuccess(data: $this->authService->check());
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController {
      */
     public function signInAction(): Response {
         if($this->authService->check()) {
-            return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
+            return Response::jsonSuccess(data: $this->authService->user(), message: ResponseMessage::USER_ALREADY);
         }
 
         try {
@@ -42,6 +42,8 @@ class UserController {
                 password: $this->request->input('password'),
                 phone: $this->request->input('phone')
             );
+
+//            TODO При авторизации добавлять избранное из сессию в базу
 
             $this->authService->login(userData: $user);
 
@@ -65,11 +67,13 @@ class UserController {
      */
     public function signUpAction(): Response {
         if($this->authService->check()) {
-            return Response::jsonSuccess(message: ResponseMessage::USER_ALREADY);
+            return Response::jsonSuccess(data: $this->authService->user(), message: ResponseMessage::USER_ALREADY);
         }
 
         try {
             $user = $this->userService->signUp($this->request->input());
+
+//            TODO При авторизации добавлять избранное из сессию в базу
 
             $this->authService->login(userData: $user);
 
@@ -107,7 +111,7 @@ class UserController {
      */
     public function getAction(): Response {
         if(!$this->authService->check()) {
-            return Response::jsonError(message: ResponseMessage::ERROR_NOT_AUTH, status: 401);
+            return Response::jsonSuccess(message: ResponseMessage::ERROR_NOT_AUTH);
         }
 
         return Response::jsonSuccess(data: $this->authService->user());
@@ -131,7 +135,7 @@ class UserController {
 
             $this->authService->login(userData: $updatedUser + $this->authService->user());
 
-            return Response::jsonSuccess(data: $this->authService->user());
+            return Response::jsonSuccess(data: $this->authService->user(), message: ResponseMessage::SUCCESS_EDIT);
         } catch (ResponseException $e) {
             return Response::jsonError(message: $e->getResponseMessage(), status: $e->getCode() ?: 400);
 

@@ -14,6 +14,7 @@ enum ResponseMessage: string {
     case ERROR_ADD = 'Не удалось добавить данные';
     case ERROR_DUPLICATE = 'Не удалось добавить данные. Позиция уже существует!';
     case ERROR_NOT_AUTH = 'Не авторизирован';
+    case ERROR_USER_PHONE_ISSET = 'Пользователь с таким номером зарегистрирован!';
     case SUCCESS_SUBSCRIBE = 'Вы успешно подписаны на обновления!';
     case SUCCESS_FORM = 'Ваша заявка в обработке';
     case SUCCESS_AUTH = 'Успешная авторизация';
@@ -24,5 +25,7 @@ enum ResponseMessage: string {
     case SUCCESS_REMOVE = 'Успешное удаление';
     case SUCCESS_REMOVE_BASKET = 'Товар удален из корзины';
     case SUCCESS_REMOVE_FAVORITES = 'Товар удален из избранного';
+    case SUCCESS_CLEAR_FAVORITES = 'Избранное отчищено!';
+    case SUCCESS_EDIT = 'Данные отредактированы';
     case USER_ALREADY = 'Пользователь уже авторизован';
 }

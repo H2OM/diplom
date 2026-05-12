@@ -1,6 +1,6 @@
 @use "../../scss/common/Vars" as *;
 
-.Autorization {
+.Authorization {
     padding-top: 45px;
     padding-bottom: 60px;
     &__spinnerWrap {
@@ -60,10 +60,10 @@
             &:active {
                 color: initial;
             }
-            &_active {
+            &._active {
                 animation: btnColor 0.1s linear forwards;
             }
-            &_block {
+            &._block {
                 transition: .2s all;
                 filter: blur(2px);
             }
@@ -78,7 +78,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            &_type2 {
+            &._type2 {
                 display: block;
                 max-width: 800px;
                 &__footer {
@@ -145,7 +145,7 @@
                     display: none;
                     position: relative;
                     &:checked {
-                        & + .Autorization__content__form__label_radio {
+                        & + .Authorization__content__form__label_radio {
                             &::before {
                                 transition: 0.1s all;
                                 position: absolute;

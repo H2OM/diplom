@@ -6,6 +6,7 @@ use Closure;
 
 /** Конструктор запросов */
 class QueryBuilder {
+    protected string $prepareQuery = '';
     protected string $table = '';
     protected array $select = ['*'];
     protected array $wheres = [];
@@ -192,69 +193,103 @@ class QueryBuilder {
      * @return array
      */
     public function toSql(): array {
-        $sql = "SELECT " . implode(', ', $this->select) . " FROM {$this->table}";
+        $this->prepareQuery = "SELECT " . implode(', ', $this->select) . " FROM {$this->table}";
 
         if (!empty($this->wheres)) {
-            $sql .= " WHERE " . $this->compileWheres($this->wheres);
+            $this->prepareQuery .= " WHERE " . $this->compileWheres($this->wheres);
         }
 
         if ($this->orderBy) {
-            $sql .= " " . $this->orderBy;
+            $this->prepareQuery .= " " . $this->orderBy;
         }
 
         if ($this->limit) {
-            $sql .= " " . $this->limit;
+            $this->prepareQuery .= " " . $this->limit;
         }
 
-        return [$sql, $this->bindings];
+        return [$this->prepareQuery, $this->bindings];
     }
 
     /**
-     * Выполнение SQL запроса. Вставка значений
+     * Подготовка SQL запроса. Вставка значений
      *
      * @param array $insertData
-     * @return string|false
+     * @return QueryBuilder
      */
-    public function insert(array $insertData): string|false {
+    public function insert(array $insertData): self {
         $columns = implode(', ', array_keys($insertData));
         $placeholders = implode(', ', array_fill(0, count($insertData), '?'));
+        $this->prepareQuery = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
 
-        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
+        $this->bindings = array_values($insertData);
 
-        return $this->db->fetchInsertId($sql, $this->bindings);
+        return $this;
     }
 
     /**
-     * Выполнение SQL запроса. Обновление таблицы
+     * Подготовка SQL запроса. Обновление таблицы
      *
      * @param array $updateData
-     * @return string|false
+     * @return QueryBuilder
      */
-    public function update(array $updateData): string|false {
-        $sql = "UPDATE {$this->table} SET ";
-        $bindings = [];
+    public function update(array $updateData): self {
+        $this->prepareQuery = "UPDATE {$this->table} SET ";
+        $this->bindings = [];
 
         foreach ($updateData as $field => $value) {
-            $sql .= "$field = ?,";
-            $bindings[] = $value;
+            $this->prepareQuery .= "$field = ?,";
+            $this->bindings[] = $value;
         }
 
-        $sql = rtrim($sql, ',');
+        $this->prepareQuery = rtrim($this->prepareQuery, ',');
 
-        $sql .= " WHERE " . $this->compileWheres($this->wheres);
+        $this->prepareQuery .= " WHERE " . $this->compileWheres($this->wheres);
 
-        return $this->db->fetchInsertId($sql, $bindings);
+        return $this;
     }
 
     /**
-     * Выполнение SQL запроса. Удаление данных из таблицы
+     * Подготовка SQL запроса. Удаление
+     *
+     * @return QueryBuilder
+     */
+    public function delete(): self {
+        $this->prepareQuery = "DELETE FROM {$this->table} WHERE " . $this->compileWheres($this->wheres);
+
+        return $this;
+    }
+
+    /**
+     * Выполнение SQL запроса. Возвращение статуса выполнения
      *
      * @return bool
      */
-    public function delete(): bool {
-        $sql = "DELETE FROM {$this->table} WHERE " . $this->compileWheres($this->wheres);
+    public function execute(): bool {
+        if(empty($this->prepareQuery)) $this->toSql();
 
-        return (boolean)$this->db->fetchOne($sql, $this->bindings);
+        return $this->db->execute($this->prepareQuery, $this->bindings);
+    }
+
+    /**
+     * Выполнение SQL запроса. Возвращение id
+     *
+     * @return string|false
+     */
+    public function insertId(): string|false {
+        if(empty($this->prepareQuery)) $this->toSql();
+
+        return $this->db->fetchInsertId($this->prepareQuery, $this->bindings);
+    }
+
+    /**
+     * Выполнение SQL запроса. Возвращение затронутых строк
+     *
+     * @return int
+     */
+    public function affectedRows(): int {
+        if(empty($this->prepareQuery)) $this->toSql();
+
+        return $this->db->fetchAffectedRows($this->prepareQuery, $this->bindings);
     }
 
     /**
@@ -263,22 +298,22 @@ class QueryBuilder {
      * @return array
      */
     public function get(): array {
-        [$sql, $bindings] = $this->toSql();
+        if(empty($this->prepareQuery)) $this->toSql();
 
-        return $this->db->fetchAll($sql, $bindings);
+        return $this->db->fetchAll($this->prepareQuery, $this->bindings);
     }
 
     /**
      * Выполнение SQL запроса. Получение всех строк
      *
-     * @return array
+     * @return array|null
      */
-    public function first(): array {
+    public function first(): ?array {
         $this->limit(1);
 
-        [$sql, $bindings] = $this->toSql();
+        if(empty($this->prepareQuery)) $this->toSql();
 
-        return $this->db->fetchOne($sql, $bindings);
+        return $this->db->fetchOne($this->prepareQuery, $this->bindings);
     }
 
     /**
@@ -290,8 +325,8 @@ class QueryBuilder {
     public function value(string $column): mixed {
         $this->select([$column])->limit(1);
 
-        [$sql, $bindings] = $this->toSql();
+        if(empty($this->prepareQuery)) $this->toSql();
 
-        return $this->db->fetchColumn($sql, $bindings);
+        return $this->db->fetchColumn($this->prepareQuery, $this->bindings);
     }
 }

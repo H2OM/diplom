@@ -1,5 +1,39 @@
 @use "../../../scss/common/Vars" as *;
 
+.spinner-mini {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &._color {
+        &:after {
+            border: 1px solid $dark-purple;
+        }
+        &:before {
+            border: 1px solid $dark-purple;
+        }
+    }
+    &:after {
+        content: "";
+        display: block;
+        border-radius: 100%;
+        border: 2px solid white;
+        border-right-color: transparent;
+        width: 15px;
+        height: 15px;
+        animation: spinner-mini-rotate 1s infinite linear;
+    }
+}
+@keyframes spinner-mini-rotate {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+}
+
 .spinner {
     position: absolute;
     display: flex;

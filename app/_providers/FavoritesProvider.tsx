@@ -3,28 +3,39 @@
 import {createContext, useState, useEffect, ReactNode} from 'react';
 import { favoritesAPI } from "@api";
 import {ProviderFavorites} from "@_types/providers";
+import {Product} from "@_types/product";
 
 const FavoritesContext = createContext<ProviderFavorites | null>(null);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-    const [favorites, setFavorites] = useState<number[]>([]);
-    const [isPending, setIsPending] = useState(false);
+    const [favorites, setFavorites] = useState<Product[]>([]);
+    const [isPending, setIsPending] = useState(true);
 
     useEffect(() => {
-        favoritesAPI.get().then(response => {
-            if (response.success) setFavorites(response.data);
-        });
+        void get();
     }, []);
+
+    const get = async () => {
+        setIsPending(true);
+
+        const response = await favoritesAPI.get();
+
+        setIsPending(false);
+
+        if (response.success) setFavorites(response.data);
+    }
 
     const toggle = async (id?: number) => {
         if(isPending || !id) return;
 
         setIsPending(true);
 
-        // Оптимистичное обновление (сразу меняем в UI)
-        const isAdded = favorites.includes(id);
+        const fallback = [...favorites];
 
-        setFavorites(prev => isAdded ? prev.filter(f => f !== id) : [...prev, id]);
+        // Оптимистичное обновление только при удалении (сразу меняем в UI)
+        const isAdded = favorites.find(product => product.id === id);
+
+        setFavorites(prev => isAdded ? prev.filter(product => product.id !== id) : prev);
 
         let response;
 
@@ -36,7 +47,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         }
 
         if (!response.success) {
-            setFavorites(prev => isAdded ? [...prev, id] : prev.filter(f => f !== id));
+            setFavorites(fallback);
         } else {
             setFavorites(response.data);
         }
@@ -45,7 +56,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <FavoritesContext.Provider value={{ favorites, isPending, toggle }}>
+        <FavoritesContext.Provider value={{ get, favorites, isPending, toggle }}>
             {children}
         </FavoritesContext.Provider>
     );

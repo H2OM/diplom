@@ -44,16 +44,6 @@
         width: auto;
         margin-right: 5px;
         margin-bottom: 3px;
-        path {
-            fill: white;
-        }
-        &_white {
-            filter: invert(1);
-            // .color {
-            //     fill: white;
-            // }
-        }
-
     }
     &:disabled,
     &_disabled {
@@ -114,7 +104,6 @@
     &__btns {
         font-size: 16px;
         font-weight: 400;
-        background-color: unset;
         border: none;
         display: flex;
         justify-content: center;

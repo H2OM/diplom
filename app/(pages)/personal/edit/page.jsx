@@ -1,7 +1,7 @@
 'use client';
-import MaskInput from "@/comps/ui/maskInput/maskInput";
+import MaskInput from "../../../_components/ui/maskInput/MaskInput";
 import Spinner from "@/comps/ui/spinner/spiner";
-import ClientContext from "@/lib/ClientProvider";
+import ClientContext from "../../../_providers/UserProvider";
 import { userSelector } from "@/lib/redux/slices";
 import { fetchRequest, userFetch } from "@/lib/redux/thunks";
 import { useRouter } from "next/navigation";
@@ -47,7 +47,7 @@ export default function Edit () {
                         </div>
                         <div className="Personal__split__content__split__block">
                             <label className="Personal__split__content__split__block__label">Фамилия: <input type="text" name="second_name" defaultValue={userData.second_name} className="Personal__split__content__split__block__label__input"/></label>
-                            <label className="Personal__split__content__split__block__label">Телефон: <MaskInput className={"Personal__split__content__split__block__label__input"} name="phone" always={true} baseValue={userData.phone} required={true}/></label>
+                            <label className="Personal__split__content__split__block__label">Телефон: <MaskInput className={"Personal__split__content__split__block__label__input"} name="phone" baseValue={userData.phone} required={true}/></label>
                             <div className="Personal__split__content__split__block__label Personal__split__content__split__block__label_switch">
                                 Пол:
                                 <label className="Personal__split__content__split__block__label__switch"><input type="radio" name="gender" value="female" defaultChecked={userData.gender === "female"} className="Personal__split__content__split__block__label__switch__radio"/> Женский</label>
