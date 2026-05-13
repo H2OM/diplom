@@ -32,7 +32,12 @@ export default async function Details({params}: { params: Promise<{ id: string; 
                 <div className="Details__split">
                     <div className="Details__split__content">
                         <div>
-                            <div className="Details__split__content__price">{product.price} ₽</div>
+                            <div className="Details__split__content__price">
+                                {product.price.toLocaleString('ru-RU', {
+                                    style: 'currency',
+                                    currency: 'RUB',
+                                })}
+                            </div>
                             <div className="Details__split__content__subtitle _art">
                                 Артикул - {product.article}
                             </div>

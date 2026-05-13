@@ -16,7 +16,12 @@ export default function BasketCart({product}: { product: ProductBasket }) {
     return (
         <div className="Basket__split__content__cart">
             <div className="Basket__split__content__cart__desc">
-                <h2 className="Basket__split__content__cart__desc__price">{product.price} ₽</h2>
+                <h2 className="Basket__split__content__cart__desc__price">
+                    {product.price.toLocaleString('ru-RU', {
+                        style: 'currency',
+                        currency: 'RUB',
+                    })}
+                </h2>
                 <div className="Basket__split__content__cart__desc__title">
                     {product.brand} {titleLength > 25
                     ? product.title.slice(0, 25 - titleLength) + "... "

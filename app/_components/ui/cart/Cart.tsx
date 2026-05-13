@@ -64,10 +64,18 @@ export default function Cart({product, isSlider = false}: { product: Product; is
                 </Link>
                 <div className="cart__desc">
                     <div className="cart__desc__price cart__desc__price_new">
-                        {product.price} ₽
-                        {product.price_old &&
-                            <span className="cart__desc__price cart__desc__price_old">{product.price_old} ₽</span>
-                            || null
+                        {product.price.toLocaleString('ru-RU', {
+                            style: 'currency',
+                            currency: 'RUB',
+                        })}&nbsp;
+                        {product.price_old ?
+                            <span className="cart__desc__price cart__desc__price_old">
+                                {product.price_old.toLocaleString('ru-RU', {
+                                    style: 'currency',
+                                    currency: 'RUB',
+                                })}
+                            </span>
+                            : null
                         }
                     </div>
                     <Link href={`/product/${product.id}`} className="cart__desc__title">{product.type} {title}</Link>

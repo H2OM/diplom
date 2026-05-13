@@ -74,7 +74,10 @@ export default function PersonalOrders() {
                                 <div className="Personal__split__content__block__order__content__cart" key={product.id}>
                                     <div className="Personal__split__content__block__order__content__cart__desc">
                                         <h2 className="Personal__split__content__block__order__content__cart__desc__price">
-                                            {product.price} ₽
+                                            {product.price.toLocaleString('ru-RU', {
+                                                style: 'currency',
+                                                currency: 'RUB',
+                                            })}
                                         </h2>
                                         <Link
                                             className="Personal__split__content__block__order__content__cart__desc__link"
