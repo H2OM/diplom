@@ -1,7 +1,7 @@
 'use client';
 
 import './filters.scss';
-import { useSearchParams } from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import DialogSwitch from "./DialogSwitch";
 import DialogRange from "./DialogRange";
@@ -20,7 +20,7 @@ export default function Filters({filters, category = false}: { filters: Filter[]
         content: []
     });
 
-    useEffect(()=> {
+    useEffect(() => {
         document.addEventListener('click', handleDocumentClose);
         window.addEventListener('resize', handleModalClose);
 
@@ -33,7 +33,7 @@ export default function Filters({filters, category = false}: { filters: Filter[]
     const handleDocumentClose = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
 
-        if(!target.classList.contains('filters__tab') && !target.closest('.filters__tab__dialog')) {
+        if (!target.classList.contains('filters__tab') && !target.closest('.filters__tab__dialog')) {
             handleModalClose();
         }
     }
@@ -57,7 +57,7 @@ export default function Filters({filters, category = false}: { filters: Filter[]
     return (
         <div className="filters">
             {filters.map(filter => {
-                if(filter.code === "category" && !category) return null;
+                if (filter.code === "category" && !category) return null;
 
                 return (
                     <div className={"filters__tab"
@@ -73,11 +73,14 @@ export default function Filters({filters, category = false}: { filters: Filter[]
                          }}>
                         {filter.name}
                     </div>
-                )
+                );
             })}
-            {modalOptions.modalType === "switch" && <DialogSwitch modalOptions={modalOptions} closeAction={handleModalClose}/>}
-            {modalOptions.modalType === "range" && <DialogRange modalOptions={modalOptions} closeAction={handleModalClose}/>}
-            {modalOptions.modalType === "multi" && <DialogMulti modalOptions={modalOptions} closeAction={handleModalClose}/>}
+            {modalOptions.modalType === "switch" &&
+                <DialogSwitch modalOptions={modalOptions} closeAction={handleModalClose}/>}
+            {modalOptions.modalType === "range" &&
+                <DialogRange modalOptions={modalOptions} closeAction={handleModalClose}/>}
+            {modalOptions.modalType === "multi" &&
+                <DialogMulti modalOptions={modalOptions} closeAction={handleModalClose}/>}
         </div>
-    )
+    );
 }

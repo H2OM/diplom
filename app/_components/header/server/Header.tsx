@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import '../header.scss';
-import HeaderButtons from "../client/HeaderButtons";
+import HeaderButtons from "@components/header/client/HeaderButtons";
 
 export function Header() {
-
     return (
         <header className="Header" id="Main">
             <div className="Header__links">
@@ -28,5 +27,5 @@ export function Header() {
             </Link>
             <HeaderButtons/>
         </header>
-    )
+    );
 }

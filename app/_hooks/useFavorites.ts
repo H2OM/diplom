@@ -14,7 +14,7 @@ export function useFavorites(productId?: number) {
         isFavorite: (id?: number) => {
             const pId = id || productId;
 
-            if(!pId) return false;
+            if (!pId) return false;
 
             return Boolean(context.favorites.find(product => product.id === pId));
         },

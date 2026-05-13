@@ -1,7 +1,10 @@
-'use client';
+import dynamic from "next/dynamic";
 
-import PersonalProfile from "@components/personal/client/PersonalProfile";
+const PersonalProfile = dynamic(
+    () => import("@components/personal/client/PersonalProfile"),
+    {ssr: false}
+);
 
 export default function Page() {
-    return <PersonalProfile/>
+    return <PersonalProfile/>;
 }

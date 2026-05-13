@@ -15,7 +15,7 @@ type Modal = {
 }
 // TODO добавить colors в CART
 
-export default function Cart({product, isSlide = false}: { product: Product; isSlide?: boolean; }) {
+export default function Cart({product, isSlider = false}: { product: Product; isSlider?: boolean; }) {
     const {isFavorite, isPending, toggle} = useFavorites(product.id);
     const {add} = useBasket();
     const [modal, setModal] = useState<Modal>({show: false, sizes: false});
@@ -25,7 +25,7 @@ export default function Cart({product, isSlide = false}: { product: Product; isS
     const title: string = (product.title.length > 19 ? product.title.slice(0, 19) + "... " : product.title);
 
     return (
-        <div className={"cart-wrap" + (isSlide ? " cart-wrap_slide" : "")}>
+        <div className={"cart-wrap" + (isSlider ? " cart-wrap_slide" : "")}>
             <div className="cart"
                  onMouseEnter={({currentTarget}) => {
                      let target = currentTarget;
@@ -116,5 +116,5 @@ export default function Cart({product, isSlide = false}: { product: Product; isS
                 </div>
             </div>
         </div>
-    )
+    );
 }

@@ -20,7 +20,7 @@ export default function PersonalProfileEdit() {
 
         const response = await edit(data as unknown as UserEditData);
 
-        if(response) {
+        if (response) {
             router.push("/personal");
         }
     }
@@ -50,10 +50,10 @@ export default function PersonalProfileEdit() {
                         </label>
                         <label className="Personal__split__content__split__block__label">
                             Возраст: <input className="Personal__split__content__split__block__label__input"
-                                                  required
-                                                  type="number"
-                                                  name="age"
-                                                  defaultValue={user.age}/>
+                                            required
+                                            type="number"
+                                            name="age"
+                                            defaultValue={user.age}/>
                         </label>
                         <div className="Personal__split__content__split__block__label _switch">
                             Пол:
@@ -79,15 +79,16 @@ export default function PersonalProfileEdit() {
                         <h3 className="Personal__split__content__split__block__title">Контактная информация</h3>
                         <label className="Personal__split__content__split__block__label">
                             Почта: <input className="Personal__split__content__split__block__label__input"
-                                           required
-                                           type="email" name="email"
-                                           defaultValue={user.email}/>
+                                          required
+                                          type="email" name="email"
+                                          defaultValue={user.email}/>
                         </label>
                         <label className="Personal__split__content__split__block__label">
-                            Номер телефона: <MaskInput className={"Personal__split__content__split__block__label__input"}
-                                                required={true}
-                                                name="phone"
-                                                baseValue={user.phone} />
+                            Номер телефона: <MaskInput
+                            className={"Personal__split__content__split__block__label__input"}
+                            required={true}
+                            name="phone"
+                            baseValue={user.phone}/>
                         </label>
                     </div>
                     {/*TODO смена пароля*/}
@@ -95,5 +96,5 @@ export default function PersonalProfileEdit() {
                 <button className="btn _w-100" type="submit" disabled={isPending}>Сохранить</button>
             </form>
         </>
-    )
+    );
 }

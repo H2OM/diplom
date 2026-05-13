@@ -1,6 +1,6 @@
 import '../info.scss';
 import Image from "next/image";
-import InfoForm from '../client/InfoForm';
+import InfoForm from '@components/info/client/InfoForm';
 import ClientImage from "@ui/clientImage/ClientImage";
 import {Icons} from "@ui/icons/Icons";
 import {contacts} from "@/_constants/contacts";
@@ -27,7 +27,9 @@ export default function Info() {
                     </div>
                     <div className="About__us__section About__us__section_right">
                         <div className="About__describe">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda tenetur ut qui ipsum, obcaecati quos illo distinctio laudantium laboriosam, blanditiis animi nam fuga, doloremque voluptatibus amet adipisci molestias unde! Aut?
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda tenetur ut qui ipsum,
+                            obcaecati quos illo distinctio laudantium laboriosam, blanditiis animi nam fuga, doloremque
+                            voluptatibus amet adipisci molestias unde! Aut?
                         </div>
                         <Image
                             src="/img/sneaker.jpg"
@@ -45,9 +47,12 @@ export default function Info() {
                 <div className="grid">
                     <h2 className="title">Как заказать товар в нашем магазине?</h2>
                     <div className="About__describe About__describe_typetwo">
-                        Перейдите в интересующий вас раздел, выберете товар который вам понравится, нажмите добавить в корзину.
+                        Перейдите в интересующий вас раздел, выберете товар который вам понравится, нажмите добавить в
+                        корзину.
                         Как закончите с выбором - переходите в корзину и нажмите кнопку оформить заказ.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod dolorum, iusto consequatur animi ipsam magnam ex culpa voluptatem! Dicta, maiores! Provident mollitia nobis veritatis itaque impedit minima doloribus, modi quia.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod dolorum, iusto consequatur animi
+                        ipsam magnam ex culpa voluptatem! Dicta, maiores! Provident mollitia nobis veritatis itaque
+                        impedit minima doloribus, modi quia.
                     </div>
                 </div>
             </div>
@@ -58,10 +63,10 @@ export default function Info() {
                         <p>
                             Можете написать нам в <a href={contacts.socials.telegram} className="About__describe__link">Telegram
                             <Icons type={'telegram'} className={'About__describe__link__svg'}/>
-                            </a> или <a href={contacts.socials.vk} className="About__describe__link">Vk
+                        </a> или <a href={contacts.socials.vk} className="About__describe__link">Vk
                             <Icons type={'vk'} className={'About__describe__link__svg'}/>
-                            </a>.
-                            <br />
+                        </a>.
+                            <br/>
                             Наша почта - <span className="About__describe__link">{contacts.email}</span>.
                         </p>
                     </div>
@@ -73,16 +78,18 @@ export default function Info() {
                     width={350}
                     height={350}
                     quality={100}
-                    
+
                 />
             </div>
             <div className="About__callback" id="Callback">
                 <div className="grid">
                     <h1 className="title">Форма обратной связи</h1>
-                    <div className="About__describe About__describe_typethree">Остались вопросы или нужна помощь специалиста? Заполните форму и наш менеджер свяжется с вами.</div>
+                    <div className="About__describe About__describe_typethree">Остались вопросы или нужна помощь
+                        специалиста? Заполните форму и наш менеджер свяжется с вами.
+                    </div>
                     <InfoForm/>
                 </div>
             </div>
         </section>
-    )
+    );
 }

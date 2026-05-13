@@ -4,6 +4,7 @@ export interface CallbackForm {
     title: string;
     message: string;
 }
+
 export interface CallbackSubscribe {
     email: string;
 }

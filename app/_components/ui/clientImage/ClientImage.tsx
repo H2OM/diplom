@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export default function ClientImage ({
+export default function ClientImage({
     src,
     alt,
     className,
@@ -11,7 +11,7 @@ export default function ClientImage ({
     quality,
     sizes,
     priority = false
-} : {
+}: {
     src: string;
     alt: string;
     className: string;
@@ -33,5 +33,5 @@ export default function ClientImage ({
             priority={priority}
             onError={({currentTarget}) => currentTarget.remove()}
         />
-    )
+    );
 }

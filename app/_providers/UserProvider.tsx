@@ -13,9 +13,7 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
     const [isPending, setIsPending] = useState(true);
     const {get: getFavorites} = useFavorites();
 
-    useEffect(() => {
-        void get();
-    }, []);
+    useEffect(() => void get(), []);
 
     const get = async () => {
         setIsPending(true);
@@ -94,7 +92,7 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
             }}>
             {children}
         </UserContext.Provider>
-    )
+    );
 }
 
 export default UserContext;

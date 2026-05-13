@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {FilterModalOptions} from "@_types/filters";
 import setQueryParams from "@/_hooks/setQueryParams";
 
@@ -13,12 +13,12 @@ const Range = ({value, initialValue, setValue}: {
         <input className="filters__tab__dialog__range__option__target"
                type="number"
                value={value}
-               onChange={({currentTarget})=> setValue(currentTarget.value)}
+               onChange={({currentTarget}) => setValue(currentTarget.value)}
         />
     </label>
 )
 
-export default function DialogRange ({modalOptions, closeAction}: {
+export default function DialogRange({modalOptions, closeAction}: {
     modalOptions: FilterModalOptions;
     closeAction: () => void;
 }) {
@@ -31,15 +31,15 @@ export default function DialogRange ({modalOptions, closeAction}: {
         second: ""
     });
 
-    useEffect(()=> {
+    useEffect(() => {
         setValues({
             first: selected[0] ?? contentValues[0],
-            second: selected[1]  ?? contentValues[1]
+            second: selected[1] ?? contentValues[1]
         });
     }, []);
 
     const handleConfirm = () => {
-        if((!values.first || values.first === contentValues[0]) && (!values.second || values.second === contentValues[1])) {
+        if ((!values.first || values.first === contentValues[0]) && (!values.second || values.second === contentValues[1])) {
             unset(name);
 
         } else {
@@ -49,16 +49,16 @@ export default function DialogRange ({modalOptions, closeAction}: {
         confirm();
         closeAction();
     }
-    
+
     return (
         <div className="filters__tab__dialog" style={{top: cords.y, left: cords.x}}>
             <div className="filters__tab__dialog__range">
                 <Range value={values.first}
-                    initialValue={contentValues[0]}
-                    setValue={(value: string) => setValues({
-                        ...values,
-                        first: value
-                    })}
+                       initialValue={contentValues[0]}
+                       setValue={(value: string) => setValues({
+                           ...values,
+                           first: value
+                       })}
                 />
                 <span className="filters__tab__dialog__range__middle">—</span>
                 <Range value={values.second}
@@ -75,5 +75,5 @@ export default function DialogRange ({modalOptions, closeAction}: {
                 </button>
             </div>
         </div>
-    )
+    );
 }

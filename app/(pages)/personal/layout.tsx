@@ -1,44 +1,11 @@
-import "@components/personal/personal.scss";
 import {ReactNode} from "react";
-import {Icons} from "@ui/icons/Icons";
-import ClientLink from "@ui/clientLink/ClientLink";
-import PersonalTabs from "@components/personal/client/PersonalTabs";
+import Personal from "@components/personal/server/Personal";
+import "@components/personal/personal.scss";
 
-export default function Layout({children}: {children: ReactNode}) {
+export default function Layout({children}: { children: ReactNode }) {
     return (
-        <section className="Personal section">
-            <div className="grid">
-                <h1 className="title title_black">Личный кабинет</h1>
-                <div className="Personal__split">
-                    <PersonalTabs>
-                        <ClientLink activeRoutes={["/personal", "/personal/edit"]}
-                                    href={"/personal"}
-                                    className={"btn btn_small Personal__split__side__btn"}
-                                    activeClassName={"_active"}
-                        >
-                            <Icons type={'user'} className={'btn__svg'}/>
-                            Профиль
-                        </ClientLink>
-                        <ClientLink href={"/personal/orders"}
-                                    className={"btn btn_small Personal__split__side__btn"}
-                                    activeClassName={"_active"}
-                        >
-                            <Icons type={'order'} className={'btn__svg'}/>
-                            Заказы
-                        </ClientLink>
-                        <ClientLink href={"/personal/favorites"}
-                                    className={"btn btn_small Personal__split__side__btn"}
-                                    activeClassName={"_active"}
-                        >
-                            <Icons type={'unfiledHeart'} className={'btn__svg'}/>
-                            Избранное
-                        </ClientLink>
-                    </PersonalTabs>
-                    <div className="Personal__split__content">
-                        {children}
-                    </div>
-                </div>
-            </div>
-        </section>
-    )
+        <Personal>
+            {children}
+        </Personal>
+    );
 }

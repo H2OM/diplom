@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, KeyboardEvent} from "react";
+import parsePhone from "@utils/parsePhone";
 
 export default function MaskInput({
     name,
@@ -16,14 +17,8 @@ export default function MaskInput({
     readonly?: boolean;
 }) {
     const [phoneMask, setPhoneMask] = useState({
-        mask: parseToMask(baseValue),
+        mask: parsePhone(baseValue),
     });
-
-    function parseToMask(value: string) {
-        const s = String(value);
-
-        return `+7 (${s.slice(1, 4)}) ${s.slice(4, 7)}-${s.slice(7, 9)}-${s.slice(9, 11)}`;
-    }
 
     const handleUpdatePosition = (
         target: HTMLInputElement,
@@ -75,5 +70,5 @@ export default function MaskInput({
                onKeyDown={handleKeyDown}
                onSubmit={() => setPhoneMask({mask: "+7 (___) ___-__-__"})}
         />
-    )
+    );
 }

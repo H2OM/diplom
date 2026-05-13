@@ -8,7 +8,7 @@ export interface Filter {
 }
 
 export interface FilterValues {
-    id: number|null;
+    id: number | null;
     code: string;
     name: string;
 }

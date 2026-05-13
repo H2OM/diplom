@@ -154,14 +154,14 @@ class UserService {
                 }
             }
 
-            if(!isset($result[$orderId]['goods'])) {
-                $result[$orderId]['goods'] = [];
+            if(!isset($result[$orderId]['products'])) {
+                $result[$orderId]['products'] = [];
             }
 
-            $result[$orderId]['goods'][] = $product;
+            $result[$orderId]['products'][] = $product;
         }
 
-        return $result;
+        return array_values($result);
     }
 
     /**

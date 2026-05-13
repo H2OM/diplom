@@ -48,6 +48,6 @@ export const logOut = async () => {
     return await _FETCH.request({url: `${API_URL}/log-out`});
 }
 
-export const orders = async () => {
+export const getOrders = async () => {
     return await _FETCH.request({url: `${API_URL}/get-orders`});
 }

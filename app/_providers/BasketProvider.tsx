@@ -1,19 +1,17 @@
 'use client';
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
-import { basketAPI } from "@api";
+import {basketAPI} from "@api";
 import {ProductBasket} from "@_types/product";
 import {ProviderBasket} from "@_types/providers";
 
 const BasketContext = createContext<ProviderBasket | null>(null);
 
-export function BasketProvider({ children }: { children: ReactNode }) {
+export function BasketProvider({children}: { children: ReactNode }) {
     const [basket, setBasket] = useState<ProductBasket[]>([]);
     const [isPending, setIsPending] = useState(true);
 
-    useEffect(() => {
-       void get();
-    }, []);
+    useEffect(() => void get(), []);
 
     const get = async () => {
         setIsPending(true);
@@ -27,9 +25,9 @@ export function BasketProvider({ children }: { children: ReactNode }) {
 
     const executeAction = async (
         optimisticUpdate: (() => void) | null,
-        apiCall: () => Promise<{success: boolean; data?: ProductBasket[]}>,
+        apiCall: () => Promise<{ success: boolean; data?: ProductBasket[] }>,
     ) => {
-        if(isPending) return;
+        if (isPending) return;
 
         setIsPending(true);
 
@@ -39,10 +37,10 @@ export function BasketProvider({ children }: { children: ReactNode }) {
 
         const response = await apiCall();
 
-        if(!response.success) {
+        if (!response.success) {
             setBasket(fallback);
 
-        } else if(response.data) {
+        } else if (response.data) {
             setBasket(response.data);
         }
 
@@ -65,9 +63,9 @@ export function BasketProvider({ children }: { children: ReactNode }) {
         void executeAction(
             () => setBasket(prev => prev
                 .map(p => (p.id === productId && p.size === productSize)
-                    ? {...p, size: productSize, count: count }
+                    ? {...p, size: productSize, count: count}
                     : p
-            )),
+                )),
             () => basketAPI.setCount({id: productId, size: productSize, count})
         );
     }
@@ -76,7 +74,7 @@ export function BasketProvider({ children }: { children: ReactNode }) {
         void executeAction(
             () => setBasket(prev => prev
                 .map(p => (p.id === productId && p.size === productSize)
-                    ? { ...p, value: p.count - 1 }
+                    ? {...p, value: p.count - 1}
                     : p
                 )
                 .filter(p => p.count > 0)
@@ -102,9 +100,9 @@ export function BasketProvider({ children }: { children: ReactNode }) {
     }
 
     const toggle = (productId: number, productSize: string) => {
-        if(isPending) return;
+        if (isPending) return;
 
-        if(basket.find(p => (p.id === productId && p.size === productSize))) {
+        if (basket.find(p => (p.id === productId && p.size === productSize))) {
             void remove(productId, productSize);
         } else {
             void add(productId, productSize);

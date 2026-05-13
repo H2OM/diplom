@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {FilterModalOptions} from "@_types/filters";
 import setQueryParams from "@hooks/setQueryParams";
 
-export default function DialogMulti ({modalOptions, closeAction}: {
+export default function DialogMulti({modalOptions, closeAction}: {
     modalOptions: FilterModalOptions;
     closeAction: () => void;
 }) {
@@ -30,7 +30,7 @@ export default function DialogMulti ({modalOptions, closeAction}: {
     }
 
     const handleConfirm = () => {
-        if(selected.length === 0) return;
+        if (selected.length === 0) return;
 
         set(name, selected.join(','));
         confirm();
@@ -40,7 +40,7 @@ export default function DialogMulti ({modalOptions, closeAction}: {
     return (
         <div className="filters__tab__dialog" style={{top: cords.y, left: cords.x}}>
             <ul className="filters__tab__dialog__list">
-                {content.map(value=> {
+                {content.map(value => {
                     return (
                         <li key={value.id + value.code}>
                             <label className={"filters__tab__dialog__list__option"
@@ -49,7 +49,7 @@ export default function DialogMulti ({modalOptions, closeAction}: {
                                 <input type="checkbox" hidden
                                        name={name}
                                        value={value.code ?? ''}
-                                       onClick={()=> triggerSelect(value.code)}/>
+                                       onClick={() => triggerSelect(value.code)}/>
                                 {value.name}
                             </label>
                         </li>
@@ -65,8 +65,7 @@ export default function DialogMulti ({modalOptions, closeAction}: {
                 </div>
                 <button className="filters__tab__dialog__footer__submit btn_small btn"
                         disabled={selected.length === 0}
-                        onClick={handleConfirm}
-                >
+                        onClick={handleConfirm}>
                     Подтвердить
                 </button>
             </div>

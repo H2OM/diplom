@@ -1,3 +1,5 @@
+import {Product} from "@_types/product";
+
 export interface User {
     id: number;
     first_name: string;
@@ -18,4 +20,17 @@ export interface UserSignUpData extends Omit<User, 'id'> {
     password_confirmed: string;
 }
 
-export interface UserEditData extends Omit<User, 'id'> {}
+export interface UserEditData extends Omit<User, 'id'> {
+}
+
+export interface UserOrder {
+    id: number;
+    number: string;
+    status: number;
+    user_id: number;
+    date: string;
+    change_date: string;
+    delivery_date: string;
+    comment: string;
+    products: Product[];
+}

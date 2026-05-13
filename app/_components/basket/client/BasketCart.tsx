@@ -19,16 +19,17 @@ export default function BasketCart({product}: { product: ProductBasket }) {
                 <h2 className="Basket__split__content__cart__desc__price">{product.price} ₽</h2>
                 <div className="Basket__split__content__cart__desc__title">
                     {product.brand} {titleLength > 25
-                        ? product.title.slice(0, 25 - titleLength) + "... "
-                        : product.title + " "
-                    }<span className="Basket__split__content__cart__desc__title__type">{product.type}</span>
+                    ? product.title.slice(0, 25 - titleLength) + "... "
+                    : product.title + " "
+                }<span className="Basket__split__content__cart__desc__title__type">{product.type}</span>
                 </div>
                 <div className="Basket__split__content__cart__desc__subtitle">Артикул - {product.article}</div>
                 <div className="Basket__split__content__cart__desc__subtitle">Размер - {product.size}</div>
             </div>
             <div className="Basket__split__content__cart__options">
-                <button className={"btn Basket__split__content__cart__options__btn" + (isFavorite() ? '' : '  _outline')}
-                        onClick={() => toggle()}>
+                <button
+                    className={"btn Basket__split__content__cart__options__btn" + (isFavorite() ? '' : '  _outline')}
+                    onClick={() => toggle()}>
                     <Icons type={isFavorite() ? 'filedHeart' : 'unfiledHeart'}
                            className={"Basket__split__content__cart__options__btn__svg"}
                     />
@@ -61,5 +62,5 @@ export default function BasketCart({product}: { product: ProductBasket }) {
                 />
             </Link>
         </div>
-    )
+    );
 }

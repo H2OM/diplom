@@ -1,22 +1,27 @@
-import Link from 'next/link';
 import '../details.scss';
+import Link from 'next/link';
 import Image from "next/image";
-import Interaction from '../client/Interaction';
-import TabsNavigation from '../client/TabsNavigation';
-import DetailsSlider from '../client/DetailsSlider';
+import Interaction from '@components/details/client/Interaction';
+import TabsNavigation from '@components/details/client/TabsNavigation';
+import DetailsSlider from '@components/details/client/DetailsSlider';
 import MiniSlider from "@ui/miniSlider/MiniSlider";
 import {Product, ProductDetails} from "@_types/product";
 import {Fragment} from "react";
+import {notFound} from "next/navigation";
+import {catalogAPI} from "@api";
 
-type DetailsProps = {
-    data: {
+export default async function Details({params}: { params: Promise<{ id: string; }> }) {
+    const {id} = await params;
+    const response = await catalogAPI.getProductById(id);
+
+    if (!response.success) {
+        return notFound();
+    }
+
+    const {product, related}: {
         product: ProductDetails;
         related: Product[];
-    }
-}
-// TODO НУЖЕН ТЕСТ
-export default async function Details({data}: DetailsProps) {
-    const {product, related} = data;
+    } = response.data;
 
     return (
         <section className="Details section">

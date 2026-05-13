@@ -1,11 +1,11 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
+import {useState} from "react";
 import {SliderMain} from "@/_types/sliders";
 
-export default function MainSlider ({slides} : {slides: SliderMain[]}) {
-    const [infoSlide, moveInfoSlide]= useState<number>(0);
+export default function MainSlider({slides}: { slides: SliderMain[] }) {
+    const [infoSlide, moveInfoSlide] = useState<number>(0);
 
     return (
         <div className="Slider__sections">
@@ -15,11 +15,11 @@ export default function MainSlider ({slides} : {slides: SliderMain[]}) {
                     {slides[infoSlide].text}
                 </p>
                 <div className="Slider__sections__desc__nav">
-                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=> {
-                        if(infoSlide == 0) {
+                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={() => {
+                        if (infoSlide == 0) {
                             moveInfoSlide(slides.length - 1);
                         } else {
-                            moveInfoSlide(slide=> slide - 1);
+                            moveInfoSlide(slide => slide - 1);
                         }
                     }}>
                         <Image
@@ -32,23 +32,25 @@ export default function MainSlider ({slides} : {slides: SliderMain[]}) {
                             quality={100}
                             priority={true}
                         />
-                    </div>  
+                    </div>
                     <div className="Slider__sections__desc__nav__bars">
-                        {slides.map((slide,i)=> {
+                        {slides.map((slide, i) => {
                             return (
                                 <div key={slide.id}
-                                     className={"Slider__sections__desc__nav__bars__bar" + (i === infoSlide ? " Slider__sections__desc__nav__bars__bar_active": "")}
-                                     onClick={()=> {
-                                        moveInfoSlide(i);
-                                    }}></div>
+                                     className={"Slider__sections__desc__nav__bars__bar"
+                                         + (i === infoSlide ? " Slider__sections__desc__nav__bars__bar_active" : "")
+                                     }
+                                     onClick={() => {
+                                         moveInfoSlide(i);
+                                     }}></div>
                             )
                         })}
                     </div>
-                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={()=> {
-                        if(infoSlide === slides.length - 1) {
+                    <div className="Slider__sections__desc__nav__arrows-wrap" onClick={() => {
+                        if (infoSlide === slides.length - 1) {
                             moveInfoSlide(0);
                         } else {
-                            moveInfoSlide(slide=> slide + 1);
+                            moveInfoSlide(slide => slide + 1);
                         }
                     }}>
                         <Image
@@ -76,6 +78,6 @@ export default function MainSlider ({slides} : {slides: SliderMain[]}) {
                 />
             </div>
         </div>
-    )
+    );
 }
 

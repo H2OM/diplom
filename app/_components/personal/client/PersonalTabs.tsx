@@ -20,8 +20,9 @@ export default function PersonalTabs({children}: { children: ReactNode }) {
         <div className="Personal__split__side">
             {children}
             <div className={"Personal__split__side__block"}>
-                <button className={"btn btn_small Personal__split__side__btn _exit" + (exitModal ? " _gray _active" : "")}
-                        onClick={() => setExitModal(true)}>
+                <button
+                    className={"btn btn_small Personal__split__side__btn _exit" + (exitModal ? " _gray _active" : "")}
+                    onClick={() => setExitModal(true)}>
                     <Icons type={'exit'} className={'btn__svg'}/>
                     Выход
                 </button>
@@ -45,5 +46,5 @@ export default function PersonalTabs({children}: { children: ReactNode }) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

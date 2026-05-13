@@ -29,5 +29,5 @@ export default function HeaderButtons() {
                 </Link>
             }
         </div>
-    )
+    );
 }

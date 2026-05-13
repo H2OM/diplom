@@ -1,14 +1,23 @@
 'use client';
 
-import '../authorization.scss';
 import useUser from "@hooks/useUser";
-import {ReactNode} from "react";
+import {ReactNode, useEffect} from "react";
 import Link from "next/link";
 import LoadScreen from "@ui/loadScreen/LoadScreen";
 import Spinner from "@ui/spinner/Spinner";
+import {usePathname, useRouter} from "next/navigation";
 
-export default function Authorization({children, isSignIn}: { children: ReactNode; isSignIn: boolean }) {
+export default function Authorization({children}: { children: ReactNode }) {
     const {user, isPending} = useUser();
+    const pathname = usePathname();
+    const router = useRouter();
+    const isSignIn = pathname.includes("sign-in");
+
+    useEffect(() => {
+        if (!isPending && user) {
+            router.push("/personal");
+        }
+    }, [user, isPending]);
 
     return (
         <section className="Authorization section">

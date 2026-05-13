@@ -1,20 +1,24 @@
 import {notFound} from "next/navigation";
 import '../catalog.scss';
-import Filters from "../../ui/filters/Filters";
+import Filters from "@ui/filters/Filters";
 import Cart from "@ui/cart/Cart";
 import {catalogAPI} from "@api";
 import {Product} from "@_types/product";
 import Fallback from "@ui/fallback/Fallback";
 import {Filter} from "@_types/filters";
+import normalizeParams from "@utils/normalizeParams";
+import {SearchParams} from "@_types/common";
 
 export default async function Catalog({promiseParams, promiseSearchParams}: {
     promiseParams: Promise<{ type?: string; }>
-    promiseSearchParams: Promise<Record<string, string>>;
+    promiseSearchParams: Promise<SearchParams>;
 }) {
-    const searchParams: Record<string, string> = await promiseSearchParams;
+    const rawSearchParams: SearchParams = await promiseSearchParams;
     const params = await promiseParams;
 
-    if(params.type) {
+    const searchParams = normalizeParams(rawSearchParams);
+
+    if (params.type) {
         searchParams.category = params.type.toLowerCase();
     }
 
@@ -43,7 +47,7 @@ export default async function Catalog({promiseParams, promiseSearchParams}: {
             notFound();
     }
 
-    const { catalog, filters }: {
+    const {catalog, filters}: {
         catalog?: Product[];
         filters?: Filter[];
     } = data.data ?? {};
@@ -65,7 +69,7 @@ export default async function Catalog({promiseParams, promiseSearchParams}: {
                                 <div className="Catalog__content">
                                     {catalog.map(product => {
                                         return (
-                                            <Cart product={product} key={product.id} />
+                                            <Cart product={product} key={product.id}/>
                                         )
                                     })}
                                 </div>
@@ -102,5 +106,5 @@ export default async function Catalog({promiseParams, promiseSearchParams}: {
                 {(!data.success || !catalog) && <Fallback message={data.message}/>}
             </div>
         </section>
-    )
+    );
 }

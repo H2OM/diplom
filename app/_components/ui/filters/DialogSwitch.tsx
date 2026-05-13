@@ -1,10 +1,10 @@
 'use client';
 
-import { useSearchParams } from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {FilterModalOptions} from "@_types/filters";
 import setQueryParams from "@hooks/setQueryParams";
 
-export default function DialogSwitch ({modalOptions, closeAction}: {
+export default function DialogSwitch({modalOptions, closeAction}: {
     modalOptions: FilterModalOptions;
     closeAction: () => void;
 }) {
@@ -14,7 +14,7 @@ export default function DialogSwitch ({modalOptions, closeAction}: {
     const selected = searchParams.get(name);
 
     const handleOptionSelect = (code: string) => {
-        if(code === selected) {
+        if (code === selected) {
             unset(name);
 
         } else {
@@ -28,7 +28,7 @@ export default function DialogSwitch ({modalOptions, closeAction}: {
     return (
         <div className="filters__tab__dialog" style={{top: cords.y, left: cords.x}}>
             <ul className={"filters__tab__dialog__list"}>
-                {content.map(value=> {
+                {content.map(value => {
                     return (
                         <li key={value.code}>
                             <label className={"filters__tab__dialog__list__option"
@@ -45,5 +45,5 @@ export default function DialogSwitch ({modalOptions, closeAction}: {
                 })}
             </ul>
         </div>
-    )
+    );
 }

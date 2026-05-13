@@ -4,13 +4,14 @@ import useUser from "@hooks/useUser";
 import Spinner from "@ui/spinner/Spinner";
 import Link from "next/link";
 import LoadScreen from "@ui/loadScreen/LoadScreen";
+import parsePhone from "@utils/parsePhone";
 
 export default function PersonalProfile() {
     const {user, isPending} = useUser();
 
     if (!user) return <Spinner/>;
 
-    const parsedPhone = `+7 (${user.phone.slice(1, 4)}) ${user.phone.slice(4, 7)}-${user.phone.slice(7, 9)}-${user.phone.slice(9, 11)}`;
+    const parsedPhone = parsePhone(user.phone);
 
     return (
         <>
@@ -44,5 +45,5 @@ export default function PersonalProfile() {
             </div>
             <Link href={"/personal/edit"} className="btn">Изменить информацию</Link>
         </>
-    )
+    );
 }

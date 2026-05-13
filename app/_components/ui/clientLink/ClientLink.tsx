@@ -31,6 +31,5 @@ export default function ClientLink({href, children = null, activeRoutes = [], cl
         <Link className={className + (isActive ? ` ${activeClassName}` : "")} href={href}>
             {children}
         </Link>
-    )
-
+    );
 }

@@ -1,19 +1,17 @@
 'use client';
 
 import {createContext, useState, useEffect, ReactNode} from 'react';
-import { favoritesAPI } from "@api";
+import {favoritesAPI} from "@api";
 import {ProviderFavorites} from "@_types/providers";
 import {Product} from "@_types/product";
 
 const FavoritesContext = createContext<ProviderFavorites | null>(null);
 
-export function FavoritesProvider({ children }: { children: ReactNode }) {
+export function FavoritesProvider({children}: { children: ReactNode }) {
     const [favorites, setFavorites] = useState<Product[]>([]);
     const [isPending, setIsPending] = useState(true);
 
-    useEffect(() => {
-        void get();
-    }, []);
+    useEffect(() => void get(), []);
 
     const get = async () => {
         setIsPending(true);
@@ -26,7 +24,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
 
     const toggle = async (id?: number) => {
-        if(isPending || !id) return;
+        if (isPending || !id) return;
 
         setIsPending(true);
 
@@ -56,7 +54,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <FavoritesContext.Provider value={{ get, favorites, isPending, toggle }}>
+        <FavoritesContext.Provider value={{get, favorites, isPending, toggle}}>
             {children}
         </FavoritesContext.Provider>
     );

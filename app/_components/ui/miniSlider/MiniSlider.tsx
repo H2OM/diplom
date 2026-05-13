@@ -6,10 +6,7 @@ import {useState} from "react";
 import Cart from "@components/ui/cart/Cart";
 import {Product} from "@_types/product";
 
-export default function MiniSlider({title, products}: {
-    title: string;
-    products: Product[];
-}) {
+export default function MiniSlider({title, products}: { title: string; products: Product[]; }) {
     const [slide, moveSlide] = useState<number>(0);
 
     return (
@@ -62,10 +59,10 @@ export default function MiniSlider({title, products}: {
                  style={{gridTemplateColumns: `repeat(${products.length},25%)`, transform: `translateX(${slide}%)`}}>
                 {products.map(product => {
                     return (
-                        <Cart key={product.id} product={product} isSlide={true}/>
+                        <Cart key={product.id} product={product} isSlider={true}/>
                     )
                 })}
             </div>
         </div>
-    )
+    );
 }

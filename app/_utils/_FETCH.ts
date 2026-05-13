@@ -24,7 +24,7 @@ const fileRequest = async ({url, options = {method: "GET"}, toasts = false}: {
     const RESPONSE = await fetch(url, options);
     const blob = await RESPONSE.blob();
 
-    if(!(blob instanceof Blob)) {
+    if (!(blob instanceof Blob)) {
         isClient && toast.error("Ошибка запроса");
 
         return false;
@@ -49,9 +49,11 @@ const fileRequest = async ({url, options = {method: "GET"}, toasts = false}: {
 
 const request = async ({
     url,
-    options = {method: "GET", cache: "no-cache", headers: {
-        "Content-Type": "application/json"
-    }},
+    options = {
+       method: "GET", cache: "no-cache", headers: {
+           "Content-Type": "application/json"
+       }
+    },
     toastSuccess = false,
     toastError = true
 }: {
@@ -70,7 +72,7 @@ const request = async ({
         .then(data => {
             DEBUG && console.log(data);
 
-            if(!data || !data.success) {
+            if (!data || !data.success) {
                 throw new Error(data.message ?? `Ошибка в получении данных с сервера.`);
             }
 
@@ -83,9 +85,9 @@ const request = async ({
                 ? toastError
                 : (error instanceof Error && error.message === 'Failed to fetch'
                     ? "Ошибка соединения с сервером!"
-                        : (error.message !== ''
-                            ? error.message
-                            : "Ошибка в получении данных!"));
+                    : (error.message !== ''
+                        ? error.message
+                        : "Ошибка в получении данных!"));
 
             toastError && isClient && toast.error(MESSAGE);
 
@@ -106,7 +108,7 @@ const progressTrackingRequest = async ({
     success?: string;
     error?: string;
 }) => {
-    if(!isClient) return request({url, options, toastError: false});
+    if (!isClient) return request({url, options, toastError: false});
 
     options.headers = {
         ...options.headers,
@@ -117,7 +119,7 @@ const progressTrackingRequest = async ({
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
-                if(!data || !data.success) throw new Error(data.message);
+                if (!data || !data.success) throw new Error(data.message);
 
                 return data;
             }),

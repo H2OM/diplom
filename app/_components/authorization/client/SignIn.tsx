@@ -1,6 +1,5 @@
 'use client';
 
-import '../authorization.scss';
 import useUser from "@hooks/useUser";
 import {FormEvent} from "react";
 import {UserSignInData} from "@_types/user";
