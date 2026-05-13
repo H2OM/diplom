@@ -4,6 +4,7 @@ import MiniSlider from "@components/ui/miniSlider/MiniSlider";
 import {SliderMain} from "@/_types/sliders";
 import Fallback from "@ui/fallback/Fallback";
 import {Product} from "@_types/product";
+import MainSlider from "@components/main/client/MainSlider";
 
 export default async function Page() {
     const data = await mainAPI.getInfo();
