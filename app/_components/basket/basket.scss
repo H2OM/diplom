@@ -9,9 +9,10 @@
         &__side {
             width: 25%;
             background-color: white;
-            box-shadow: 0 0 10px 0 rgba(0,0,0,.15);
+            height: fit-content;
+            box-shadow: 0 0 10px 0 rgba(0,0,0,.1);
             padding: 10px;
-            height: 275px;
+            border-radius: 8px;
             &__block {
                 margin-bottom: 15px;
                 &__title {
@@ -24,7 +25,7 @@
             }
             &__confirm {
                 font-weight: 400;
-                margin-bottom: 10px;
+                margin-bottom: 6px;
             }
         }
         &__content {
@@ -40,7 +41,7 @@
                 padding: 15px 10px;
                 border-bottom: 1px solid $gray;
                 &:first-child {
-                    padding-top: 0px;
+                    padding-top: 0;
                 }
                 &__desc {
                     &__price {

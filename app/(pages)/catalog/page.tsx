@@ -1,7 +1,7 @@
 import Catalog from "@components/catalog/server/Catalog";
 import {SearchParams} from "@_types/common";
 
-export default async function Page({params, searchParams}: {
+export default function Page({params, searchParams}: {
     params: Promise<{}>;
     searchParams: Promise<SearchParams>;
 }) {

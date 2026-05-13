@@ -1,9 +1,4 @@
-import dynamic from "next/dynamic";
-
-const PersonalProfile = dynamic(
-    () => import("@components/personal/client/PersonalProfile"),
-    {ssr: false}
-);
+import PersonalProfile from "@components/personal/client/PersonalProfile";
 
 export default function Page() {
     return <PersonalProfile/>;

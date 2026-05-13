@@ -1,11 +1,6 @@
-import dynamic from "next/dynamic";
+import BasketOrder from "@components/basket/client/BasketOrder";
 import '@components/basket/basket.scss';
 
-const BasketOrder = dynamic(
-    () => import("@components/basket/client/BasketOrder"),
-    {ssr: false}
-);
-
-export default function Order() {
+export default function Page() {
     return <BasketOrder/>;
 }

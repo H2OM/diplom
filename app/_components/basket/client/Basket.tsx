@@ -4,9 +4,11 @@ import {useBasket} from "@hooks/useBasket";
 import {useMemo} from "react";
 import Link from "next/link";
 import BasketCart from "@components/basket/client/BasketCart";
+import LoadScreen from "@ui/loadScreen/LoadScreen";
+import Spinner from "@ui/spinner/Spinner";
 
 export default function Basket() {
-    const {basket, clear} = useBasket();
+    const {basket, isPending, clear} = useBasket();
 
     const total = useMemo(() => {
         return basket.reduce((acc, product) => ({
@@ -17,6 +19,7 @@ export default function Basket() {
 
     return (
         <section className="Basket section">
+            {isPending && <LoadScreen><Spinner/></LoadScreen>}
             <div className="grid">
                 <h1 className="title title_black">Корзина покупок</h1>
                 {basket.length > 0 &&

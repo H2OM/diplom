@@ -9,20 +9,20 @@ import Spinner from "@ui/spinner/Spinner";
 
 export default function HeaderButtons() {
     const {user, isPending: isUserPending} = useUser();
-    const {basket, isPending: isBasketPending} = useBasket();
-    const {favorites, isPending: isFavoritesPending} = useFavorites();
+    const {basket} = useBasket();
+    const {favorites} = useFavorites();
 
     return (
         <div className="Header__btns">
             <Link href={"/basket"} className="Header__btns__btn btn">
                 <Icons type={'basket'}/>
-                {!isBasketPending && <div className="Header__btns__btn__count">{basket.length}</div>}
+                <div className="Header__btns__btn__count">{basket.length}</div>
             </Link>
             <Link href={"/favorites"} className="Header__btns__btn btn">
                 <Icons type={'filedHeart'}/>
-                {!isFavoritesPending && <div className="Header__btns__btn__count">{favorites.length}</div>}
+                <div className="Header__btns__btn__count">{favorites.length}</div>
             </Link>
-            {isUserPending
+            {(isUserPending && !user)
                 ? <button className="Header__btns__btn btn _disabled"><Spinner mini={true}/></button>
                 : <Link className="Header__btns__btn btn" href={user ? "/personal" : "/authorization/sign-in"}>
                     <Icons type={'user'}/>

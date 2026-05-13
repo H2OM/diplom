@@ -1,10 +1,5 @@
-import dynamic from "next/dynamic";
+import PersonalFavorites from "@components/personal/client/PersonalFavorites";
 
-const PersonalFavorites = dynamic(
-    () => import("@components/personal/client/PersonalFavorites"),
-    {ssr: false}
-);
-
-export default function Favorites() {
+export default function Page() {
     return <PersonalFavorites/>;
 }

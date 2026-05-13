@@ -1,8 +1,8 @@
 import '../details.scss';
 import Link from 'next/link';
 import Image from "next/image";
-import Interaction from '@components/details/client/Interaction';
-import TabsNavigation from '@components/details/client/TabsNavigation';
+import DetailsInteraction from '../client/DetailsInteraction';
+import DetailsTabsNavigation from '../client/DetailsTabsNavigation';
 import DetailsSlider from '@components/details/client/DetailsSlider';
 import MiniSlider from "@ui/miniSlider/MiniSlider";
 import {Product, ProductDetails} from "@_types/product";
@@ -71,12 +71,12 @@ export default async function Details({params}: { params: Promise<{ id: string; 
                                 </div>
                             </>
                         }
-                        <Interaction sizes={product.size} productId={product.id}/>
+                        <DetailsInteraction sizes={product.size} productId={product.id}/>
                     </div>
                     <DetailsSlider slides={product.slider_images.split(',')} mainImage={product.image}/>
                 </div>
                 <div className="Details__tabs">
-                    <TabsNavigation>
+                    <DetailsTabsNavigation>
                         <div className="Details__tabs__nav__tab _active" data-link={"Описание"}>
                             Описание
                         </div>
@@ -87,7 +87,7 @@ export default async function Details({params}: { params: Promise<{ id: string; 
                             Отзывы
                             {/* <span className="Details__tabs__nav__tab__value"> {Array.isArray(feedback) ? feedback.length : ""}</span> */}
                         </div>
-                    </TabsNavigation>
+                    </DetailsTabsNavigation>
                     <div className="Details__tabs__content">
                         <div className="Details__tabs__content__block _active"
                              data-link={"Описание"}>

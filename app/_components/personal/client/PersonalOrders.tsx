@@ -22,6 +22,18 @@ export default function PersonalOrders() {
 
     useEffect(() => void getOrders(), []);
 
+    const total: Record<number, number> = useMemo(() => {
+        if (orders === null) return {};
+
+        const result: Record<number, number> = {};
+
+        orders.forEach(order => {
+            result[order.id] = order.products.length;
+        })
+
+        return result;
+    }, [orders]);
+
     async function getOrders() {
         setLoading(true);
 
@@ -39,21 +51,10 @@ export default function PersonalOrders() {
 
     if (!user) return <Spinner/>;
 
-    const total: Record<number, number> = useMemo(() => {
-        if (orders === null) return {};
-
-        const result: Record<number, number> = {};
-
-        orders.forEach(order => {
-            result[order.id] = order.products.length;
-        })
-
-        return result;
-    }, [orders]);
-
     return (
         <>
             {(isPending || loading) && <LoadScreen><Spinner/></LoadScreen>}
+            <h2 className="title title_black title_small">Заказы</h2>
             {orders && orders.length > 0 && orders.map(order => (
                 <div className="Personal__split__content__block" key={order.id}>
                     <div className="Personal__split__content__block__order">
@@ -128,7 +129,7 @@ export default function PersonalOrders() {
                     У вас еще нет заказов
                 </div>
             }
-            {orders === null &&
+            {!loading && orders === null &&
                 <div className="title title_black title_small"
                      style={{fontWeight: "200", textAlign: "start", marginTop: "20px"}}>
                     Не удалось получить заказы

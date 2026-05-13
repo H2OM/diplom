@@ -1,10 +1,5 @@
-import dynamic from "next/dynamic";
+import PersonalOrders from "@components/personal/client/PersonalOrders";
 
-const PersonalOrders = dynamic(
-    () => import("@components/personal/client/PersonalOrders"),
-    {ssr: false}
-);
-
-export default function Orders() {
+export default function Page() {
     return <PersonalOrders/>;
 }

@@ -1,10 +1,5 @@
-import dynamic from "next/dynamic";
+import Favorites from "@components/favorites/client/Favorites";
 import '@components/favorites/favorites.scss';
-
-const Favorites = dynamic(
-    () => import("@components/favorites/client/Favorites"),
-    {ssr: false}
-);
 
 export default function Page() {
     return <Favorites/>;

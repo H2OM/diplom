@@ -5,19 +5,19 @@ import parsePhone from "@utils/parsePhone";
 
 export default function MaskInput({
     name,
+    baseValue,
     className = "",
     required = false,
-    baseValue = "+7 (___) ___-__-__",
     readonly = false
 }: {
     name: string;
+    baseValue?: string;
     className?: string;
     required?: boolean;
-    baseValue?: string;
     readonly?: boolean;
 }) {
-    const [phoneMask, setPhoneMask] = useState({
-        mask: parsePhone(baseValue),
+    const [phoneMask, setPhoneMask] = useState<Record<string, string>>({
+        mask: baseValue ? parsePhone(baseValue) : "+7 (___) ___-__-__",
     });
 
     const handleUpdatePosition = (

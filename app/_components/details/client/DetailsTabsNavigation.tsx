@@ -2,7 +2,7 @@
 
 import React, {ReactNode} from "react";
 
-export default function TabsNavigation({children}: { children: ReactNode }) {
+export default function DetailsTabsNavigation({children}: { children: ReactNode }) {
     const handleTabChange = (e: React.MouseEvent) => {
         const target = e.target as HTMLElement;
 

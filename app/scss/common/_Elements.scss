@@ -15,10 +15,11 @@
     cursor: pointer;
     text-decoration: none;
     transition: 0.2s all;
+    font-family: raleway, raleway Fallback, serif;
     &:hover {
         opacity: .7;
     }
-    &:active {
+    &:not(._white):active {
         background-color: Vars.$dark-purple;
         color: white;
         svg {
@@ -31,11 +32,19 @@
         border: 1px solid Vars.$dark-purple;
         color: Vars.$dark-purple;
     }
-    &_small {
+    &._small {
         border-radius: 3px;
         font-size: 14px;
         font-weight: 400;
         height: 30px;
+    }
+    &._gray {
+        color: #000;
+        background-color: unset;
+        &:hover {
+            opacity: 1;
+            background: Vars.$light-gray;
+        }
     }
     &_big {
         width: 50%;

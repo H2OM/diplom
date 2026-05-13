@@ -12,21 +12,21 @@ export default function Personal({children}: { children: ReactNode }) {
                     <PersonalTabs>
                         <ClientLink activeRoutes={["/personal", "/personal/edit"]}
                                     href={"/personal"}
-                                    className={"btn btn_small Personal__split__side__btn"}
+                                    className={"btn _white Personal__split__side__btn"}
                                     activeClassName={"_active"}
                         >
                             <Icons type={'user'} className={'btn__svg'}/>
                             Профиль
                         </ClientLink>
                         <ClientLink href={"/personal/orders"}
-                                    className={"btn btn_small Personal__split__side__btn"}
+                                    className={"btn _white Personal__split__side__btn"}
                                     activeClassName={"_active"}
                         >
                             <Icons type={'order'} className={'btn__svg'}/>
                             Заказы
                         </ClientLink>
                         <ClientLink href={"/personal/favorites"}
-                                    className={"btn btn_small Personal__split__side__btn"}
+                                    className={"btn _white Personal__split__side__btn"}
                                     activeClassName={"_active"}
                         >
                             <Icons type={'unfiledHeart'} className={'btn__svg'}/>

@@ -6,7 +6,7 @@ import {useBasket} from "@hooks/useBasket";
 import {Icons} from "@ui/icons/Icons";
 import {ProductBasket} from "@_types/product";
 
-export default function Interaction({sizes, productId}: { sizes: string, productId: number }) {
+export default function DetailsInteraction({sizes, productId}: { sizes: string, productId: number }) {
     const {toggle, isFavorite, isPending: isFavoritesPending} = useFavorites(productId);
     const {add, remove, isPending: isBasketPending, getItem, basket} = useBasket();
     const [selectedSize, setSelectedSize] = useState<string>('');
@@ -58,20 +58,22 @@ export default function Interaction({sizes, productId}: { sizes: string, product
                 &nbsp;- В корзине
             </div>
             {/*TODO доделать функционал - 'добавлено в корзину' и 'выбрать сколько добавить'*/}
-            <div className="Details__split__content__container">
-                <button className="btn" disabled={isBasketPending} onClick={handleAddToBasket}>
-                    {inBasket ? `Добавить еще (${inBasket.count})` : 'В корзину'}
-                </button>
-                <button className={"btn" + (isFavorite() ? ' _selected' : '')} disabled={isFavoritesPending}
-                        onClick={() => toggle()}>
-                    <Icons type={isFavorite() ? 'filedHeart' : 'unfiledHeart'}/>
-                </button>
+            <div style={{display: "flex", flexDirection: "column", gap: '6px', minHeight: '136px'}}>
+                <div className="Details__split__content__container">
+                    <button className="btn" disabled={isBasketPending} onClick={handleAddToBasket}>
+                        {inBasket ? `Добавить еще (${inBasket.count})` : 'В корзину'}
+                    </button>
+                    <button className={"btn" + (isFavorite() ? ' _selected' : '')} disabled={isFavoritesPending}
+                            onClick={() => toggle()}>
+                        <Icons type={isFavorite() ? 'filedHeart' : 'unfiledHeart'}/>
+                    </button>
+                </div>
+                {inBasket &&
+                    <button className="btn _outline _w-100" onClick={() => remove(productId, selectedSize)}>
+                        Удалить из корзины
+                    </button>
+                }
             </div>
-            {inBasket &&
-                <button className="btn _outline _w-100" onClick={() => remove(productId, selectedSize)}>
-                    Удалить из корзины
-                </button>
-            }
         </div>
     )
 }
