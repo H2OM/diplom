@@ -8,7 +8,6 @@ export const get = async () => {
 
 export const add = async (data: {
     id: number;
-    size: string;
     count?: number;
 }, toastSuccess: boolean = true) => {
     return await _FETCH.request({
@@ -23,7 +22,6 @@ export const add = async (data: {
 
 export const decrement = async (data: {
     id: number;
-    size: string;
 }, toastSuccess: boolean = true) => {
     return await _FETCH.request({
         url: `${API_URL}/decrement`,
@@ -37,7 +35,6 @@ export const decrement = async (data: {
 
 export const remove = async (data: {
     id: number;
-    size: string;
 }, toastSuccess: boolean = true) => {
     return await _FETCH.request({
         url: `${API_URL}/remove`,
@@ -51,7 +48,6 @@ export const remove = async (data: {
 
 export const setCount = async (data: {
     id: number;
-    size: string;
     count: number;
 }, toastSuccess: boolean = true) => {
     return await _FETCH.request({

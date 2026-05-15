@@ -49,46 +49,45 @@ export function BasketProvider({children}: { children: ReactNode }) {
 
     const add = (
         productId: number,
-        productSize: string,
-        toastSuccess: boolean = true,
         count?: number,
+        toastSuccess: boolean = true,
     ) => {
         void executeAction(
             null,
-            () => basketAPI.add({id: productId, size: productSize, count}, toastSuccess)
+            () => basketAPI.add({id: productId, count}, toastSuccess)
         );
     }
 
-    const setCount = (productId: number, productSize: string, count: number) => {
+    const setCount = (productId: number, count: number) => {
         void executeAction(
             () => setBasket(prev => prev
-                .map(p => (p.id === productId && p.size === productSize)
-                    ? {...p, size: productSize, count: count}
+                .map(p => (p.id === productId)
+                    ? {...p, count: count}
                     : p
                 )),
-            () => basketAPI.setCount({id: productId, size: productSize, count})
+            () => basketAPI.setCount({id: productId, count})
         );
     }
 
-    const decrement = (productId: number, productSize: string) => {
+    const decrement = (productId: number) => {
         void executeAction(
             () => setBasket(prev => prev
-                .map(p => (p.id === productId && p.size === productSize)
+                .map(p => (p.id === productId)
                     ? {...p, value: p.count - 1}
                     : p
                 )
                 .filter(p => p.count > 0)
             ),
-            () => basketAPI.decrement({id: productId, size: productSize})
+            () => basketAPI.decrement({id: productId})
         );
     }
 
-    const remove = (productId: number, productSize: string) => {
+    const remove = (productId: number) => {
         void executeAction(
             () => setBasket(prev =>
-                prev.filter(p => p.id !== productId || p.size !== productSize)
+                prev.filter(p => p.id !== productId)
             ),
-            () => basketAPI.remove({id: productId, size: productSize})
+            () => basketAPI.remove({id: productId})
         );
     }
 
@@ -99,13 +98,13 @@ export function BasketProvider({children}: { children: ReactNode }) {
         );
     }
 
-    const toggle = (productId: number, productSize: string) => {
+    const toggle = (productId: number) => {
         if (isPending) return;
 
-        if (basket.find(p => (p.id === productId && p.size === productSize))) {
-            void remove(productId, productSize);
+        if (basket.find(p => (p.id === productId))) {
+            void remove(productId);
         } else {
-            void add(productId, productSize);
+            void add(productId);
         }
     }
 

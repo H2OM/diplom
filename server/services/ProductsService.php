@@ -2,20 +2,20 @@
 
 namespace app\services;
 
-use app\core\Db;
 use app\core\enums\ResponseMessage;
 use app\core\exceptions\ResponseException;
+use app\core\Hydrator;
 use app\core\Session;
 use app\repositories\FiltersRepository;
-use app\repositories\GoodsRepository;
+use app\repositories\ProductsRepository;
 
 /** Сервис для управления товарами */
-class GoodsService {
+class ProductsService {
     public function __construct(
-        private readonly FiltersRepository $filtersRepository,
-        private readonly GoodsRepository   $goodsRepository,
-        private readonly FavoritesService  $favoritesService,
-        private readonly Session           $session,
+        private readonly FiltersRepository  $filtersRepository,
+        private readonly ProductsRepository $productsRepository,
+        private readonly FavoritesService   $favoritesService,
+        private readonly Session            $session,
     ) {}
 
     /**
@@ -24,17 +24,17 @@ class GoodsService {
      * @return array[]
      */
     public function getHitAndSales(): array {
-        $result = $this->goodsRepository->getHitAndSales();
+        $products = $this->productsRepository->getHitAndSales();
 
         $hit = [];
         $sales = [];
 
-        foreach($result as $k => $v) {
-            if($v['hit'] === '1') {
-                $hit[] = $v;
+        foreach($products as $product) {
+            if($product['hit'] === '1') {
+                $hit[] = $product;
             }
-            if($v['sale']) {
-                $sales[] = $v;
+            if((float)$product['price_old'] > 0) {
+                $sales[] = $product;
             }
         }
 
@@ -48,7 +48,7 @@ class GoodsService {
      * @return array
      */
     public function getCatalogByFilters(array $filters): array {
-        $catalog = $this->goodsRepository->getByFilters($filters);
+        $catalog = $this->productsRepository->getByFilters($filters);
 
         if(count($catalog) === 0 || !isset($filters['favorite'])) return $catalog;
 
@@ -183,7 +183,7 @@ class GoodsService {
      * @throws ResponseException
      */
     public function getProductById(int $id): array {
-        $product = $this->goodsRepository->getProductDetailsById($id);
+        $product = $this->productsRepository->getProductDetailsById($id);
 
         if(!$product) {
             throw new ResponseException(ResponseMessage::ERROR_GET_DATA);
@@ -224,6 +224,6 @@ class GoodsService {
      * @return array
      */
     public function getRelatedById(int $id): array {
-        return $this->goodsRepository->getRelatedById($id);
+        return $this->productsRepository->getRelatedById($id);
     }
 }

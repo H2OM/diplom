@@ -4,10 +4,26 @@ namespace app\repositories;
 
 
 use app\core\Db;
+use app\core\Hydrator;
 
 /** Репозиторий по управлению избранными товарами */
 class FavoritesRepository {
-    public function __construct(private readonly Db $db) {}
+    private const FAVORITES_PRODUCTS_WITH_VARIATIONS_SQL = "SELECT products.*, categories_types.name AS category, brands.name as brand, products_stocks.count as stock,
+                    IF(COUNT(var_p.id) > 0,
+                       JSON_ARRAYAGG(JSON_OBJECT('id', var_p.id, 'image', var_p.image)),
+                       JSON_ARRAY()
+                    ) AS variations
+                FROM products 
+                JOIN categories_types ON products.category_type_id = categories_types.id
+                LEFT JOIN products_stocks ON products_stocks.product_id = products.id
+                LEFT JOIN brands ON products.brand_id = brands.id
+                LEFT JOIN favorites ON products.id = favorites.product_id
+                LEFT JOIN products_variations ON (products.id = products_variations.product_id OR products.id = products_variations.variation_id)
+                LEFT JOIN products AS var_p ON (products_variations.variation_id = var_p.id OR products_variations.product_id = var_p.id) AND var_p.id != products.id
+                WHERE favorites.user_id = ? 
+                GROUP BY products.id;";
+
+    public function __construct(private readonly Db $db, private readonly Hydrator $hydrator) {}
 
     /**
      * Получение
@@ -16,12 +32,10 @@ class FavoritesRepository {
      * @return array
      */
     public function get(int $userId): array {
-        return $this->db->fetchAll("SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, categories.code AS category 
-                FROM goods JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
-                AND filters.code = 'size' AND filters_goods.goods_id = goods.id AND filters_goods.goods_id = goods.id 
-                AND filters_goods.filter_value_id = filters_values.id JOIN categories ON goods.category_id = categories.id 
-                JOIN favorites ON goods.id = favorites.product_id WHERE favorites.user_id = ? GROUP BY goods.id",
-        [$userId]);
+        return $this->hydrator->decodeJson(
+            $this->db->fetchAll(self::FAVORITES_PRODUCTS_WITH_VARIATIONS_SQL, [$userId]),
+            ['variations']
+        );
     }
 
     /**

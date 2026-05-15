@@ -6,7 +6,7 @@ use app\core\enums\ResponseMessage;
 use app\core\exceptions\ResponseException;
 use app\core\Session;
 use app\repositories\FavoritesRepository;
-use app\repositories\GoodsRepository;
+use app\repositories\ProductsRepository;
 
 /** Сервис для управления избранным */
 class FavoritesService {
@@ -14,7 +14,7 @@ class FavoritesService {
 
     public function __construct(
         private readonly FavoritesRepository $favoritesRepository,
-        private readonly GoodsRepository     $goodsRepository,
+        private readonly ProductsRepository  $productsRepository,
         private readonly AuthService         $authService,
         private readonly Session             $session
     ) {
@@ -66,7 +66,7 @@ class FavoritesService {
             throw new ResponseException(ResponseMessage::ERROR_DUPLICATE);
         }
 
-        $product = $this->goodsRepository->getProductById($productId);
+        $product = $this->productsRepository->getProductWithVariationsById($productId);
 
         if(!$product) {
             throw new ResponseException(ResponseMessage::ERROR_PRODUCT_NOT_FOUND);

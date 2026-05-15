@@ -6,12 +6,12 @@ use app\core\enums\ResponseMessage;
 use app\core\exceptions\ResponseException;
 use app\core\Request;
 use app\core\Response;
-use app\services\GoodsService;
+use app\services\ProductsService;
 
 
 /** Управление каталогом */
 class CatalogController {
-    public function __construct(private readonly Request $request, private readonly GoodsService $goodsService) {}
+    public function __construct(private readonly Request $request, private readonly ProductsService $productsService) {}
 
     /**
      * Получение каталога товара
@@ -22,8 +22,8 @@ class CatalogController {
         $filters = $this->request->get();
 
         try {
-            $catalog = $this->goodsService->getCatalogByFilters($filters);
-            $filters = $this->goodsService->getFiltersGroupByCode($filters);
+            $catalog = $this->productsService->getCatalogByFilters($filters);
+            $filters = $this->productsService->getFiltersGroupByCode($filters);
 
             return Response::jsonSuccess(data: [
                 'catalog' => $catalog,
@@ -47,8 +47,8 @@ class CatalogController {
         }
 
         try {
-            $product = $this->goodsService->getProductById($id);
-            $relatedProducts = $this->goodsService->getRelatedById($id);
+            $product = $this->productsService->getProductById($id);
+            $relatedProducts = $this->productsService->getRelatedById($id);
 
             return Response::jsonSuccess(data: [
                 'product' => $product,

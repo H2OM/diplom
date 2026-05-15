@@ -3,10 +3,26 @@
 namespace app\repositories;
 
 use app\core\Db;
+use app\core\Hydrator;
 
 /** Репозиторий для управления товарами */
-class GoodsRepository {
-    public function __construct(private readonly Db $db) {}
+class ProductsRepository {
+    private const PRODUCTS_WITH_VARIATIONS_SQL = "SELECT products.*, categories_types.name AS category, brands.name as brand,
+                                            products_stocks.count as stock,
+                                            IF(COUNT(var_p.id) > 0,
+                                               JSON_ARRAYAGG(JSON_OBJECT('id', var_p.id, 'image', var_p.image)),
+                                               JSON_ARRAY()
+                                            ) AS variations
+                                        FROM products 
+                                        JOIN categories_types ON products.category_type_id = categories_types.id
+                                        LEFT JOIN products_stocks ON products_stocks.product_id = products.id
+                                        LEFT JOIN brands ON products.brand_id = brands.id
+                                        LEFT JOIN products_variations ON (products.id = products_variations.product_id OR products.id = products_variations.variation_id)
+                                        LEFT JOIN products AS var_p ON (products_variations.variation_id = var_p.id OR products_variations.product_id = var_p.id) AND var_p.id != products.id
+                                        WHERE (%s)
+                                        GROUP BY products.id;";
+
+    public function __construct(private readonly Db $db, private readonly Hydrator $hydrator) {}
 
     /**
      * Получение популярных и скидочных товаров
@@ -14,12 +30,13 @@ class GoodsRepository {
      * @return array
      */
     public function getHitAndSales(): array {
-        return $this->db->fetchAll("SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, 
-                                    IF(goods.price_old > 0, 1, 0) AS sale, categories.code AS category 
-                                    FROM goods JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
-                                    AND filters.code = 'size' AND filters_goods.goods_id = goods.id AND filters_goods.goods_id = goods.id 
-                                    AND filters_goods.filter_value_id = filters_values.id JOIN categories ON goods.category_id = categories.id 
-                                    WHERE (goods.hit = '1' OR goods.price_old > 0) GROUP BY goods.id");
+        return $this->hydrator->decodeJson(
+            $this->db->fetchAll(sprintf(
+                self::PRODUCTS_WITH_VARIATIONS_SQL,
+                "products.hit = '1' OR products.price_old > 0"
+            )),
+            ['variations']
+        );
     }
 
     /**
@@ -163,42 +180,6 @@ class GoodsRepository {
     }
 
     /**
-     * Получение товаров по id
-     *
-     * @param array $id
-     * @return array
-     */
-    public function getProductsById(array $id): array {
-        return $this->db->fetchAll($this->prepareProductsById([$id]), [$id]);
-    }
-
-    /**
-     * Получение отдельного товара по id
-     *
-     * @param int $id
-     * @return array|null
-     */
-    public function getProductById(int $id): array|null {
-        return $this->db->fetchOne($this->prepareProductsById([$id]), [$id]);
-    }
-
-    /**
-     * Получение товара по id и размеру
-     *
-     * @param string $id
-     * @param string $size
-     * @return array|null
-     */
-    public function getProductByIdAndSize(string $id, string $size): array|null {
-        return $this->db->fetchOne("SELECT goods.*, categories.code AS category 
-                                        FROM goods JOIN filters_goods ON filters_goods.goods_id = goods.id 
-                                        JOIN filters_values ON filters_goods.filter_value_id = filters_values.id AND filters_values.value = ?
-                                        JOIN filters ON filters_values.filter_id = filters.id JOIN categories ON goods.category_id = categories.id
-                                        WHERE goods.id = ? AND filters.code = 'size'",
-            [$size, $id]);
-    }
-
-    /**
      * Получение связанных товаров по id
      *
      * @param int $id
@@ -224,9 +205,64 @@ class GoodsRepository {
      */
     public function getProductId(int $id): int {
         return $this->db->query()
-            ->table('goods')
+            ->table('products')
             ->where('id', $id)
             ->value('id');
+    }
+
+    /**
+     * Получение товаров по id
+     *
+     * @param array $id
+     * @return array
+     */
+    public function getProductsById(array $id): array {
+        return $this->db->fetchAll($this->prepareProductsById([$id]), [$id]);
+    }
+
+    /**
+     * Получение отдельного товара по id
+     *
+     * @param int $id
+     * @return array|null
+     */
+    public function getProductById(int $id): array|null {
+        return $this->db->fetchOne($this->prepareProductsById([$id]), [$id]);
+    }
+
+    /**
+     * Получение товаров по id с вариациями
+     *
+     * @param array $ids
+     * @return array
+     */
+    public function getProductsWithVariationsById(array $ids): array {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        return $this->hydrator->decodeJson(
+            $this->db->fetchAll(sprintf(
+                self::PRODUCTS_WITH_VARIATIONS_SQL,
+                "products.id IN ($placeholders)"
+            ), $ids),
+            ['variations']
+        );
+    }
+
+    /**
+     * Получение отдельного товара по id с вариациями
+     *
+     * @param int $id
+     * @return array|null
+     */
+    public function getProductWithVariationsById(int $id): array|null {
+        $response = $this->db->fetchOne(sprintf(
+            self::PRODUCTS_WITH_VARIATIONS_SQL,
+            "products.id = ?"
+        ), [$id]);
+
+        if(!is_array($response)) return null;
+
+        return $this->hydrator->decodeJson($response, ['variations']);
     }
 
     /**
@@ -238,10 +274,12 @@ class GoodsRepository {
     private function prepareProductsById(array $ids): string {
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
 
-        return "SELECT goods.*, GROUP_CONCAT(filters_values.value SEPARATOR '.') AS size, categories.code AS category 
-                FROM goods JOIN filters_goods JOIN filters_values JOIN filters ON filters_values.filter_id = filters.id 
-                AND filters.code = 'size' AND filters_goods.goods_id = goods.id AND filters_goods.goods_id = goods.id 
-                AND filters_goods.filter_value_id = filters_values.id JOIN categories ON goods.category_id = categories.id 
-                WHERE goods.id IN ($placeholders) GROUP BY goods.id";
+        return "SELECT products.*, categories_types.name AS category, brands.name as brand, products_stocks.count as stock
+                FROM products 
+                JOIN categories_types ON products.category_type_id = categories_types.id
+                LEFT JOIN products_stocks ON products_stocks.product_id = products.id
+                LEFT JOIN brands ON products.brand_id = brands.id
+                WHERE products.id IN ($placeholders)
+                GROUP BY products.id;";
     }
 }

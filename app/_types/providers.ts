@@ -10,12 +10,12 @@ export interface ProviderFavorites {
 
 export interface ProviderBasket {
     basket: ProductBasket[];
-    add: (productId: number, productSize: string, toastSuccess?: boolean, count?: number) => void;
-    setCount: (productId: number, productSize: string, count: number) => void;
-    decrement: (productId: number, productSize: string) => void;
-    remove: (productId: number, productSize: string) => void;
+    add: (productId: number, count?: number, toastSuccess?: boolean) => void;
+    setCount: (productId: number, count: number) => void;
+    decrement: (productId: number) => void;
+    remove: (productId: number) => void;
     clear: () => void;
-    toggle: (productId: number, productSize: string) => void;
+    toggle: (productId: number) => void;
     isPending: boolean;
 }
 

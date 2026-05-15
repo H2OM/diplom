@@ -32,10 +32,9 @@ class BasketController {
      */
     public function addAction(): Response {
         $id    = $this->session->input('id');
-        $size  = $this->session->input('size');
         $count = (int)$this->session->input('count');
 
-        if(!$id || !$size) {
+        if(!$id) {
             return Response::jsonError(message: ResponseMessage::ERROR_NOT_ENOUGH_DATA, status: 403);
         }
 
@@ -46,7 +45,6 @@ class BasketController {
         try {
             $basket = $this->basketService->add(
                 id: $id,
-                size: $size,
                 count: $count
             );
 
